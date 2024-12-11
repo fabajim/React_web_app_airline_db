@@ -1,0 +1,9 @@
+*.env
+node_modules/
+*.json
+db_connector.js
+public/
+eslint.config.js
+vite.config.js
+*.html
+assets/
