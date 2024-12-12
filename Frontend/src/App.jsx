@@ -1,35 +1,37 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+// import components, styles, media
+import Navigation from './components/Navigation';
+import './App.css';
+
+import Home from './pages/home';
+import PilotsPage from './pages/pilots';
+import AircraftPage from './pages/aircraft';
 
 function App() {
-  const [data, setData] = useState([])
-  useEffect(()=>{
-    fetch('http://localhost:8081/pilots')
-    .then(res => res.json())
-    .then(data => setData(data))
-    .catch(err => console.log(err));
-  }, [])
+  //const [data, setData] = useState([])
 
   return (
-    <div>
-      <table>
-        <thead>
-          <th>Pilot ID</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Number of Certificates</th>
-        </thead>
-        <tbody>
-          {data.map((d, i) => (
-            <tr key = {i}>
-              <td>{d.pilotID}</td>
-              <td>{d.fname}</td>
-              <td>{d.lname}</td>
-              <td>{d.totalCertificate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+      <BrowserRouter>
+      <header>
+        <h1>
+          Airline DB
+        </h1>
+      </header>
+      <Navigation />
+      <main>
+        <section>
+          <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/pilots" element={<PilotsPage/>}/>
+            <Route path="/aircraft" element={<AircraftPage/>}/>
+          </Routes>
+        </section>
+      </main>
+      </BrowserRouter>
+    </>
   )
 }
 

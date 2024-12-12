@@ -1,0 +1,45 @@
+body {
+    background-image: url(images/pexels-donaldtong94-133953.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+}
+
+.read-table {
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.read-table thead tr {
+    background-color: cadetblue;
+    color: white;
+    text-align: left;
+    font-weight: bold;
+}
+
+.read-table th,
+.read-table td {
+    padding: 12px 15px;
+}
+
+.read-table tbody tr {
+    background-color: white;
+    border-bottom: 1px solid #dddddd;
+    
+}
+
+.read-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.read-table tbody tr:last-of-type {
+    border-bottom: 2px solid cadetblue;
+}
