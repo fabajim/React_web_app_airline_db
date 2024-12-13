@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 function PilotPage() {
   const [data, setData] = useState([])
@@ -15,6 +16,27 @@ function PilotPage() {
     .catch((err) => console.log(err));
   }
   }, [deleted])
+
+  function handleClick(id, fname, lname){
+    Swal.fire({
+      title: `Delete ${fname} ${lname}?`,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Delete"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+        Swal.fire({
+          title: "Deleted!",
+          text: `${fname} ${lname} successfully deleted.`,
+          icon: "success"
+        });
+      }
+    });
+  }
 
   function handleDelete(id){
     axios.delete(`http://localhost:8081/deletePilot/${id}`)
@@ -52,7 +74,7 @@ function PilotPage() {
                     <button>Edit Pilot</button>
                   </td>
                   <td>
-                    <button className="delete-button" onClick={ () => handleDelete(pilots.pilotID)}>Delete Pilot</button>
+                    <button className="delete-button" onClick={ () => handleClick(pilots.pilotID, pilots.fname, pilots.lname)}>Delete Pilot</button>
                   </td>
                 </tr>)
             })
