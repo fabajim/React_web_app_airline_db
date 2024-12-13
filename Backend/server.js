@@ -5,6 +5,7 @@ const cors = require('cors');
 // create app
 const app = express();
 app.use(cors());
+app.use(express.json());
 
 //connect to mysql
 const db = require('./db_connector');
@@ -15,7 +16,19 @@ app.get('/', (req, res)=>{
 
 // create
 app.post('/addPilot', (req, res) => {
-
+    // get incoming data
+    const insertQuery = "INSERT INTO Pilots (fname, lname, totalCertificate) VALUES (?)";
+    let cert = parseInt(req.body.certs);
+    if (isNaN(cert)){ cert = 0 }
+    const values = [
+        req.body.fname,
+        req.body.lname,
+        req.body.certs
+    ]
+    db.pool.query(insertQuery, [values], (err, data) => {
+        if(err) return res.json(err);
+        return res.json("created");
+    })
 });
 
 

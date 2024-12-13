@@ -1,3 +1,16 @@
+header {
+    height: 70px;
+    background-color: cadetblue;
+    color: white;
+    padding-left: 20px;
+    padding-top: 20px;
+
+}
+
+h1 {
+    font-size: 100px;
+}
+
 body {
     background-image: url(images/pexels-donaldtong94-133953.jpg);
     background-size: cover;
@@ -7,13 +20,13 @@ body {
 
 table {
     border-collapse: collapse;
-    margin: 25px 0;
+    margin: 2px 0 0 10px;
     font-size: 0.9em;
 }
 
 .read-table {
     min-width: 400px;
-    border-radius: 5px 5px 0 0;
+    border-radius: 0 5px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
@@ -42,4 +55,40 @@ table {
 
 .read-table tbody tr:last-of-type {
     border-bottom: 2px solid cadetblue;
+}
+
+.add-element{
+    color: white;
+    background-color: cadetblue;
+    margin-left: 10px;
+    font-size: large;
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    padding: .2em;
+}
+
+.add-element:hover {
+    color: cadetblue;
+    background-color: lightgray;
+}
+
+.delete-button:hover {
+    background-color: red;
+}
+
+form {
+    border: 2px #dddddd;
+}
+
+.containter{
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+}
+
+nav {
+    margin-bottom: 10px;
 }
