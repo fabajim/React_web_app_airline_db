@@ -4,18 +4,31 @@ import { Link } from 'react-router-dom';
 
 function PilotPage() {
   const [data, setData] = useState([])
+  const [deleted, setDeleted] = useState(true)
   useEffect(()=>{
+    if(deleted){
+      setDeleted(false)
     axios.get('http://localhost:8081/pilots')
     .then((res)=> {
       setData(res.data)
     })
     .catch((err) => console.log(err));
-  }, [])
+  }
+  }, [deleted])
+
+  function handleDelete(id){
+    axios.delete(`http://localhost:8081/deletePilot/${id}`)
+    .then((res) => {
+      setDeleted(true)
+    })
+    .catch((err) => console.log(err))
+  }
+
   return (
     <>
     <span> 
     <Link className={'add-element'} to='/addPilot'>Add Pilot</Link>
-      <table class="read-table">
+      <table className="read-table">
         <thead>
           <tr>
             <th>Pilot ID</th>
@@ -28,9 +41,9 @@ function PilotPage() {
         </thead>
         <tbody>
           {
-            data.map((pilots) => {
+            data.map((pilots, i) => {
               return(
-                <tr>
+                <tr key = {i}>
                   <td>{pilots.pilotID}</td>
                   <td>{pilots.fname}</td>
                   <td>{pilots.lname}</td>
@@ -39,7 +52,7 @@ function PilotPage() {
                     <button>Edit Pilot</button>
                   </td>
                   <td>
-                    <button class="delete-button">Delete Pilot</button>
+                    <button className="delete-button" onClick={ () => handleDelete(pilots.pilotID)}>Delete Pilot</button>
                   </td>
                 </tr>)
             })

@@ -35,7 +35,7 @@ function addPilot() {
                 </div>
                 <div className='mb-2'>
                     <label htmlFor="">Total Certificates</label>
-                    <input type='text' name='certs' className='form-control' required 
+                    <input type='number' name='certs' className='form-control' required 
                     onChange={e => setCerts(e.target.value)} />
                 </div>
                 <button className='btn btn-success' >Save</button>

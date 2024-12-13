@@ -23,13 +23,23 @@ app.post('/addPilot', (req, res) => {
     const values = [
         req.body.fname,
         req.body.lname,
-        req.body.certs
+        cert
     ]
     db.pool.query(insertQuery, [values], (err, data) => {
         if(err) return res.json(err);
-        return res.json("created");
+        return res.json("New Pilot Added");
     })
 });
+
+//Delete
+app.delete('/deletePilot/:id', (req, res) => {
+    const deleteQuery = "DELETE FROM Pilots WHERE pilotID = ?";
+    const id = req.params.id;
+    db.pool.query(deleteQuery, [id], (err, data) => {
+        if(err) return res.json(err);
+        return res.json("Pilot Deleted")
+    })
+})
 
 
 // read

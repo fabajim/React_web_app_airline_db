@@ -77,18 +77,6 @@ table {
     background-color: red;
 }
 
-form {
-    border: 2px #dddddd;
-}
-
-.containter{
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-items: center;
-}
-
 nav {
     margin-bottom: 10px;
 }
