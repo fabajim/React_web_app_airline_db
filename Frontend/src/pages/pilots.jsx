@@ -20,7 +20,7 @@ function PilotPage() {
   function handleClick(id, fname, lname){
     Swal.fire({
       title: `Delete ${fname} ${lname}?`,
-      text: "You won't be able to revert this!",
+      text: "This action cannot be undone!",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",

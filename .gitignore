@@ -7,3 +7,4 @@ eslint.config.js
 vite.config.js
 *.html
 assets/
+images/
