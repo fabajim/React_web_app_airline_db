@@ -4,11 +4,15 @@ header {
     color: white;
     padding-left: 20px;
     padding-top: 20px;
-
 }
 
 h1 {
     font-size: 100px;
+}
+
+.page-name{
+    text-align: center;
+    color: #f1f1f1;
 }
 
 body {
@@ -66,17 +70,37 @@ table {
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     padding: .2em;
+    text-decoration: none;
 }
 
 .add-element:hover {
     color: cadetblue;
-    background-color: lightgray;
+    background-color: #f1f1f1;
 }
 
-.delete-button:hover {
-    background-color: red;
-}
-
-nav {
+.nav-bar ul{
+    background-color: #f1f1f1;
+    list-style-type: none;
+    padding: 0px;
     margin-bottom: 10px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.nav-bar .link-style {
+    color: cadetblue;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    padding: 10px;
+}
+
+.nav-bar .link-style:hover{
+    background-color: cadetblue;
+    color: #f1f1f1;
+}
+
+.nav-bar li{
+    float: left;
+    text-align: center;
 }

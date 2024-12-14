@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 
 function Navigation() {
   return (
-    <nav>
-        <Link to="/">Home</Link>
-        <Link to="/pilots">Pilots</Link>
-        <Link to="/aircraft">Aircraft</Link>
+    <nav className='nav-bar'>
+      <ul>
+        <li><Link className={'link-style'} to="/">Home</Link></li>
+       <li><Link className={'link-style'} to="/pilots">Pilots</Link></li> 
+        <li><Link className={'link-style'} to="/aircraft">Aircraft</Link></li>
+      </ul>
     </nav>
   );
 }

@@ -41,11 +41,38 @@ app.delete('/deletePilot/:id', (req, res) => {
     })
 })
 
+//Update
+app.put('/updatePilot/:id', (req, res) => {
+    const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, totalCertificate= ? WHERE pilotID = ?";
+    const id = req.params.id;
+    let cert = parseInt(req.body.certs);
+    if (isNaN(cert)){ cert = 0 }
+    const values = [
+        req.body.fname,
+        req.body.lname,
+        cert,
+        id
+    ]
+    db.pool.query(updateQuery, values, (err, data) => {
+        if(err) return res.json(err);
+        return res.json("Pilot Updated");
+    })
+})
+
 
 // read
 app.get('/pilots', (req, res) => {
     const pilots = "SELECT * FROM Pilots";
     db.pool.query(pilots, (err, data)=> {
+        if(err) return res.json(err);
+        return res.json(data);
+    })
+})
+
+app.get('/getPilot/:id', (req, res) => {
+    const pilotQuery = "SELECT * FROM Pilots WHERE pilotID = ?";
+    const id = req.params.id;
+    db.pool.query(pilotQuery, [id], (err, data) => {
         if(err) return res.json(err);
         return res.json(data);
     })

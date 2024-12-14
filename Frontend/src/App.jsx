@@ -10,6 +10,7 @@ import Home from './pages/home';
 import PilotsPage from './pages/pilots';
 import AircraftPage from './pages/aircraft';
 import AddPilotPage from './pages/addPilot';
+import UpdatePilotPage from './pages/updatePilot';
 
 function App() {
   //const [data, setData] = useState([])
@@ -29,6 +30,7 @@ function App() {
             <Route path="/" element={<Home/>}/>
             <Route path="/pilots" element={<PilotsPage/>}/>
             <Route path="/addPilot" element={<AddPilotPage/>}/>
+            <Route path="/updatePilot/:id" element={<UpdatePilotPage/>}/>
             <Route path="/aircraft" element={<AircraftPage/>}/>
           </Routes>
         </section>
