@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 //import moment from 'moment';
 
 function AircraftPage() {
   const [data, setData] = useState([])
   useEffect(()=>{
-    fetch('http://localhost:8081/aircraft')
-    .then(res => res.json())
-    .then(data => setData(data))
-    .catch(err => console.log(err));
+    axios.get('http://localhost:8081/aircraft')
+    .then((res)=> {
+      setData(res.data);
+      console.log(res.data);
+    })
+    .catch((err)=> console.log(err));
   }, [])
   return (
     <>
@@ -21,14 +24,16 @@ function AircraftPage() {
           </tr>
         </thead>
         <tbody>
-          {data.map((d, i) => (
+          {data.map((d, i) => {
+            return(
             <tr key = {i}>
               <td>{d.aircraftID}</td>
               <td>{d.nextService}</td>
               <td>{d.totalHourFlown}</td>
               <td>{d.aircraftTypeID}</td>
-            </tr>
-          ))}
+            </tr>)
+          }
+)}
         </tbody>
       </table>
     </>
