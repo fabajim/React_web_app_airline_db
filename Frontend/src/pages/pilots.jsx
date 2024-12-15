@@ -57,7 +57,7 @@ function PilotPage() {
             <th>Pilot ID</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Certificates</th>
+            <th>Licenses</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -70,7 +70,7 @@ function PilotPage() {
                   <td>{pilots.pilotID}</td>
                   <td>{pilots.fname}</td>
                   <td>{pilots.lname}</td>
-                  <td>{pilots.totalCertificate}</td>
+                  <td>{pilots.totalLicense}</td>
                   <td>
                     <Link to={`/updatePilot/${pilots.pilotID}`} className="btn btn-secondary btn-sm">Edit Pilot</Link>
                   </td>

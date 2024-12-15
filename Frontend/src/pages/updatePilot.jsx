@@ -59,8 +59,8 @@ function updatePilot() {
                         onChange={(e) => setLname(e.target.value)} />
                     </div>
                     <div className='mb-2'>
-                        <label htmlFor="certs">Total Certificates</label>
-                        <input defaultValue={pilots.totalCertificate} type='number' name='certs' className='form-control' required 
+                        <label htmlFor="certs">Total Licenses</label>
+                        <input defaultValue={pilots.totalLicense} type='number' name='certs' className='form-control' required 
                         onChange={(e) => setCerts(e.target.value)} />
                     </div>
                     <button type="submit" className='btn btn-success'>Update</button>

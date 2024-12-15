@@ -17,7 +17,7 @@ app.get('/', (req, res)=>{
 // create
 app.post('/addPilot', (req, res) => {
     // get incoming data
-    const insertQuery = "INSERT INTO Pilots (fname, lname, totalCertificate) VALUES (?)";
+    const insertQuery = "INSERT INTO Pilots (fname, lname,  totalLicense) VALUES (?)";
     let cert = parseInt(req.body.certs);
     if (isNaN(cert)){ cert = 0 }
     const values = [
@@ -43,7 +43,7 @@ app.delete('/deletePilot/:id', (req, res) => {
 
 //Update
 app.put('/updatePilot/:id', (req, res) => {
-    const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, totalCertificate= ? WHERE pilotID = ?";
+    const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, totalLicense= ? WHERE pilotID = ?";
     const id = req.params.id;
     let cert = parseInt(req.body.certs);
     if (isNaN(cert)){ cert = 0 }
