@@ -27,7 +27,22 @@ app.post('/addPilot', (req, res) => {
     ]
     db.pool.query(insertQuery, [values], (err, data) => {
         if(err) return res.json(err);
-        return res.json("New Pilot Added");
+        return res.json("Success: New Pilot Added");
+    })
+});
+
+app.post('/addAircraft', (req, res) => {
+    const insertQuery = "INSERT INTO Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
+    let hour = parseInt(req.body.hours);
+    let typeID = parseInt(req.body.type);
+    const values = [
+        req.body.serviced,
+        hour,
+        typeID
+    ]
+    db.pool.query(insertQuery, [values], (err, data) => {
+        if(err) return res.json(err);
+        return res.json("Success: New Aircraft Added")
     })
 });
 

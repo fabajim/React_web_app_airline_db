@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function addAircraft() {
-    const [service, setService] = useState('')
+    const [serviced, setService] = useState('')
     const [hours, setHours] = useState('')
     const [type, setType] = useState('')
 
@@ -11,6 +11,11 @@ function addAircraft() {
 
     function handleSubmit(event){
         event.preventDefault();
+        axios.post('http://localhost:8081/addAircraft', {serviced, hours, type})
+        .then(res => {
+            navigate('/aircraft');
+            console.log(res);
+        }).catch(err => console.log(err));
     }
 
   return (
@@ -42,7 +47,7 @@ function addAircraft() {
                     required
                     onChange={e => setType(e.target.value)} />
                 </div>
-                <button className='btn btn-success' >Save</button>
+                <button type='submit' className='btn btn-success' >Save</button>
             </form>
         </div>
     </div>

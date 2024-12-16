@@ -26,7 +26,6 @@ function AircraftPage() {
             <th>Hours Flown</th>
             <th>Aircraft Type</th>
             <th>
-                
             </th>
             <th><Link className={'add-element'} to='/addAircraft' title='Add new aircraft'>ADD+</Link></th>
             <th></th>
