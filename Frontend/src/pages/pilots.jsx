@@ -50,7 +50,7 @@ function PilotPage() {
     <>
     <span> 
     <h2 className='page-name'>Pilots</h2>
-    <Link className={'add-element'} to='/addPilot'>Add Pilot</Link>
+    
       <table className="read-table">
         <thead>
           <tr>
@@ -58,8 +58,9 @@ function PilotPage() {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Licenses</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th></th>
+            <th><Link className={'add-element'} to='/addPilot'>Add Pilot</Link></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -77,6 +78,7 @@ function PilotPage() {
                   <td>
                     <button className="btn btn-danger btn-sm" onClick={ () => handleClick(pilots.pilotID, pilots.fname, pilots.lname)}>Delete Pilot</button>
                   </td>
+                  <td></td>
                 </tr>)
             })
           }

@@ -15,15 +15,21 @@ function AircraftPage() {
   }, [])
   return (
     <>
+   
     <h1 className='page-name'>Aircraft</h1>
-    <Link className={'add-element'} to='/addAircraft'>Add New Aircraft +</Link>
-      <table class="read-table">
+    
+      <table className="read-table">
         <thead>
           <tr>
             <th>Aircraft ID</th>
             <th>Last Serviced</th>
             <th>Hours Flown</th>
             <th>Aircraft Type</th>
+            <th>
+                
+            </th>
+            <th><Link className={'add-element'} to='/addAircraft' title='Add new aircraft'>ADD+</Link></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -31,9 +37,12 @@ function AircraftPage() {
             return(
               <tr key = {i}>
                 <td>{d.aircraftID}</td>
-                <td>{new Date(d.nextService).toLocaleDateString()}</td>
+                <td>{new Date(d.lastService).toLocaleDateString()}</td>
                 <td>{d.totalHourFlown}</td>
                 <td>{d.aircraftTypeID}</td>
+                <td><button>Update</button></td>
+                <td><button>Delete</button></td>
+                <td></td>
               </tr>)
           })}
         </tbody>

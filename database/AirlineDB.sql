@@ -39,7 +39,7 @@ CREATE TABLE AircraftTypes (
 
 CREATE TABLE Aircraft (
     aircraftID int NOT NULL AUTO_INCREMENT,
-    nextService date NOT NULL,
+    lastService date NOT NULL,
     totalHourFlown INT NOT NULL,
     aircraftTypeID INT,
     PRIMARY KEY (aircraftID),
@@ -73,7 +73,7 @@ CREATE TABLE LicenseDetails (
 );
 
 
-INSERT into Aircraft (nextService, totalHourFlown, aircraftTypeID) VALUES ('2024-07-13', 27, 1), ('2024-04-27', 300, 2), ('2025-01-03', 12, 3);
+INSERT into Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES ('2024-07-13', 27, 1), ('2024-04-27', 300, 2), ('2025-01-03', 12, 3);
 
 INSERT into AircraftTypes (model, totalSeating, licenseID) VALUES ("Boeing Max 8", 160, 1), ("Airbus c130", 120, 2), ("Boing Max 7", 180, 3);
 

@@ -33,6 +33,8 @@ table {
     border-radius: 0 5px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .read-table thead tr {
@@ -62,13 +64,18 @@ table {
 }
 
 .add-element{
-    color: white;
+    color: #f1f1f1;
     background-color: cadetblue;
-    margin-left: 10px;
+    margin-left: auto;
+    margin-right: auto;
     font-size: large;
     font-weight: bold;
-    border-radius: 5px 5px 0 0;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px 5px 5px 5px;
+    border-color: #f1f1f1;
     overflow: hidden;
+    box-shadow: 2px 2.5px #888888;
     padding: .2em;
     text-decoration: none;
 }
