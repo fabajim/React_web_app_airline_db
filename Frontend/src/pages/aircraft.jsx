@@ -5,14 +5,28 @@ import axios from 'axios';
 
 function AircraftPage() {
   const [data, setData] = useState([])
+  const [deleted, setDeleted] = useState(true)
+
   useEffect(()=>{
-    axios.get('http://localhost:8081/aircraft')
-    .then((res)=> {
-      setData(res.data);
-      console.log(res.data);
+    if(deleted){
+      setDeleted(false)
+      axios.get('http://localhost:8081/aircraft')
+      .then((res)=> {
+        setData(res.data);
+        console.log(res.data);
+      })
+      .catch((err)=> console.log(err));
+    }
+  }, [deleted])
+
+  function handleDelete(id){
+    axios.delete(`http://localhost:8081/deleteAircraft/${id}`)
+    .then((res) => {
+      setDeleted(true)
     })
-    .catch((err)=> console.log(err));
-  }, [])
+    .catch((err) => console.log(err))
+  }
+
   return (
     <>
    
@@ -40,7 +54,9 @@ function AircraftPage() {
                 <td>{d.totalHourFlown}</td>
                 <td>{d.aircraftTypeID}</td>
                 <td><button>Update</button></td>
-                <td><button>Delete</button></td>
+                <td>
+                <button className="btn btn-danger btn-sm" onClick={ () => handleDelete(d.aircraftID)}>Delete</button>
+                </td>
                 <td></td>
               </tr>)
           })}

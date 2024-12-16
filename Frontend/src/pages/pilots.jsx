@@ -6,6 +6,7 @@ import Swal from 'sweetalert2'
 function PilotPage() {
   const [data, setData] = useState([])
   const [deleted, setDeleted] = useState(true)
+  
   useEffect(()=>{
     if(deleted){
       setDeleted(false)
