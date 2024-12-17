@@ -142,6 +142,14 @@ app.get('/IdAndModel', (req, res) => {
     })
 })
 
+app.get('/aircraftType', (req, res) => {
+    const readTable = "SELECT * FROM AircraftTypes";
+    db.pool.query(readTable, (err, data) =>{
+        if(err) return res.json(err);
+        return res.json(data)
+    })
+})
+
 app.get('/getType/:id', (req, res) => {
     const typeQuery = "SELECT * FROM AircraftTypes WHERE aircraftTypeID = ?";
     const id = req.params.id;
