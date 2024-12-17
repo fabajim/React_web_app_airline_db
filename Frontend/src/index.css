@@ -10,6 +10,13 @@ h1 {
     font-size: 100px;
 }
 
+.add-data-heading{
+    color: #f1f1f1;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
 .page-name{
     text-align: center;
     color: #f1f1f1;
@@ -110,4 +117,11 @@ table {
 .nav-bar li{
     float: left;
     text-align: center;
+}
+
+.link-button {
+    color: #0000FF;
+    border: none;
+    outline: none;
+    background: none;
 }

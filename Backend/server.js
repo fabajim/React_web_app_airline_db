@@ -83,6 +83,20 @@ app.put('/updatePilot/:id', (req, res) => {
     })
 })
 
+app.put('/updateAircraft/:id', (req, res) => {
+    const updateQuery = "UPDATE Aircraft set lastService = ?, totalHourFlown = ? WHERE aircraftID = ?";
+    const id = req.params.id;
+    const value = [
+        req.body.date,
+        req.body.hours,
+        id
+    ]
+    db.pool.query(updateQuery, value, (err, data) => {
+        if(err) return res.json(err);
+        return res.json("Aircraft Updated")
+    })
+})
+
 
 // read
 app.get('/pilots', (req, res) => {
@@ -105,6 +119,33 @@ app.get('/getPilot/:id', (req, res) => {
 app.get('/aircraft', (req, res) => {
     const aircraft = "SELECT * FROM Aircraft";
     db.pool.query(aircraft, (err, data)=> {
+        if(err) return res.json(err);
+        return res.json(data);
+    })
+})
+
+app.get('/getAircraft/:id', (req, res) => {
+    const getQuery = "SELECT lastService, totalHourFlown FROM Aircraft WHERE aircraftID = ?";
+    const id = req.params.id;
+    db.pool.query(getQuery, [id], (err, data) => {
+        if(err) return res.json(err);
+        return res.json(data);
+    })
+})
+
+// get aircraft id an model form Aircraft
+app.get('/IdAndModel', (req, res) => {
+    const getQuery = "SELECT aircraftTypeID, model FROM AircraftTypes";
+    db.pool.query(getQuery, (err, data) => {
+        if(err) return res.json(err);
+        return res.json(data);
+    })
+})
+
+app.get('/getType/:id', (req, res) => {
+    const typeQuery = "SELECT * FROM AircraftTypes WHERE aircraftTypeID = ?";
+    const id = req.params.id;
+    db.pool.query(typeQuery, [id], (err, data) => {
         if(err) return res.json(err);
         return res.json(data);
     })

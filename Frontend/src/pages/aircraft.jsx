@@ -31,7 +31,7 @@ function AircraftPage() {
     <>
    
     <h1 className='page-name'>Aircraft</h1>
-    
+
       <table className="read-table">
         <thead>
           <tr>
@@ -52,8 +52,16 @@ function AircraftPage() {
                 <td>{d.aircraftID}</td>
                 <td>{new Date(d.lastService).toLocaleDateString()}</td>
                 <td>{d.totalHourFlown}</td>
-                <td>{d.aircraftTypeID}</td>
-                <td><button>Update</button></td>
+                <td>
+                  <Link to={`/getType/${d.aircraftTypeID}`} 
+                    className='btn btn-primary btn-sm'
+                    title='View Aircraft Details'>
+                    {d.aircraftTypeID}
+                  </Link>
+                </td>
+                <td>
+                  <Link to={`/updateAircraft/${d.aircraftID}`} className="btn btn-secondary btn-sm">Update</Link>
+                </td>
                 <td>
                 <button className="btn btn-danger btn-sm" onClick={ () => handleDelete(d.aircraftID)}>Delete</button>
                 </td>

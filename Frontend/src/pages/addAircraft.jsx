@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function addAircraft() {
+    const [data, setCraftType] = useState([])
     const [serviced, setService] = useState('')
     const [hours, setHours] = useState('')
     const [type, setType] = useState('')
+    
+    useEffect(() => {
+        axios.get('http://localhost:8081/IdAndModel')
+        .then((res) => {
+            setCraftType(res.data)
+            console.log(res.data)
+        })
+        .catch((err) => console.log(err));
+    }, [])
+    
 
     const navigate = useNavigate();
 
@@ -19,10 +30,22 @@ function addAircraft() {
     }
 
   return (
-    <div className='d-flex vh-100 justify-content-center align-items-center'>
+    <>
+    <h2 className='add-data-heading'>Add New Aircraft</h2>
+    <div className='d-flex  justify-content-center align-items-center'>
         <div className='w-50 bg-white rounded p-3'>
             <form onSubmit={handleSubmit}>
-                <h2>Add New Aircraft</h2>
+                <h3>Fill in all data.</h3>
+                <div className="mb-2">
+                    <select onChange={e => setType(e.target.value)} required>
+                    <option value="">Aircraft Type</option>
+                    {data.map((data) => { return (
+                        <option key={data.aircraftTypeID} value={data.aircraftTypeID}>
+                            {data.model}
+                        </option>
+                    )})}
+                </select>
+                </div>
                 <div className="mb-2">
                     <label htmlFor=''>Last Service</label>
                     <input type="date" 
@@ -39,18 +62,11 @@ function addAircraft() {
                     required 
                     onChange={e => setHours(e.target.value)} />
                 </div>
-                <div className="mb-2">
-                    <label htmlFor="">Aircraft Type</label>
-                    <input type="number"
-                    name="type" 
-                    className="form-control"
-                    required
-                    onChange={e => setType(e.target.value)} />
-                </div>
                 <button type='submit' className='btn btn-success' >Save</button>
             </form>
         </div>
     </div>
+    </>
   )
 }
 
