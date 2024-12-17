@@ -30,11 +30,6 @@ function PilotPage() {
     }).then((result) => {
       if (result.isConfirmed) {
         handleDelete(id);
-        Swal.fire({
-          title: "Deleted!",
-          text: `${fname} ${lname} successfully deleted.`,
-          icon: "success"
-        });
       }
     });
   }

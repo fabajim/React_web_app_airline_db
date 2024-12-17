@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function aircraftType() {
     const [data, setData] = useState([]);
@@ -18,12 +19,19 @@ function aircraftType() {
         }
     }, [deleted])
 
-    function handleDelete(id){
+    function handleDelete(id, model){
         console.log("In Delete")
         axios.delete(`http://localhost:8081/deleteAircraftType/${id}`)
         .then((res) =>{
-            console.log(res)
-            setDeleted(true)
+            setDeleted(true);
+            if (res.data.code === 'ER_ROW_IS_REFERENCED_2') {
+                Swal.fire({
+                    title: `${model} cannot be deleted!`,
+                    text: "An aircraft of this type exists in the database.",
+                    icon: "warning"
+                  });
+            }
+            
         })
         .catch((err) => console.log(err));
 
@@ -51,7 +59,7 @@ function aircraftType() {
                     <td>{d.totalSeating}</td>
                     <td>{d.licenseID}</td>
                     <td>
-                    <button className="btn btn-danger btn-sm" onClick={ () => handleDelete(d.aircraftTypeID)}>Delete</button>
+                    <button className="btn btn-danger btn-sm" onClick={ () => handleDelete(d.aircraftTypeID, d.model)}>Delete</button>
                     </td>
                     </tr>)
                 })}
