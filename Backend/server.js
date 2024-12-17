@@ -46,6 +46,19 @@ app.post('/addAircraft', (req, res) => {
     })
 });
 
+app.post('/addType', (req, res) => {
+    const insertQuery = "INSERT INTO AircraftTypes (model, totalSeating, licenseID) VALUES (?)";
+    const values = [
+        req.body.model,
+        req.body.seating,
+        req.body.license
+    ]
+    db.pool.query(insertQuery, [values], (err, data) => {
+        if(err) return res.json(err);
+        return res.json("Aircraft Type Successfully Added")
+    })
+})
+
 //Delete
 app.delete('/deletePilot/:id', (req, res) => {
     const deleteQuery = "DELETE FROM Pilots WHERE pilotID = ?";
@@ -105,7 +118,6 @@ app.put('/updateAircraft/:id', (req, res) => {
         return res.json("Aircraft Updated")
     })
 })
-
 
 // read
 app.get('/pilots', (req, res) => {
