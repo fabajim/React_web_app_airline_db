@@ -4,17 +4,28 @@ import { Link } from 'react-router-dom';
 
 function aircraftType() {
     const [data, setData] = useState([]);
+    const [deleted, setDeleted] = useState(true)
 
     useEffect(() => {
-        axios.get('http://localhost:8081/aircraftType')
-        .then((res) => {
-            setData(res.data);
-            console.log(res.data);
-        })
-        .catch(err => console.log(err))
-    }, [])
+        if(deleted){
+            setDeleted(false)
+            axios.get('http://localhost:8081/aircraftType')
+            .then((res) => {
+                setData(res.data);
+                console.log(res.data);
+            })
+            .catch(err => console.log(err))
+        }
+    }, [deleted])
 
     function handleDelete(id){
+        console.log("In Delete")
+        axios.delete(`http://localhost:8081/deleteAircraftType/${id}`)
+        .then((res) =>{
+            console.log(res)
+            setDeleted(true)
+        })
+        .catch((err) => console.log(err));
 
     }
 

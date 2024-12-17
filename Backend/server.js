@@ -65,6 +65,15 @@ app.delete('/deleteAircraft/:id', (req, res) => {
     })
 })
 
+app.delete('/deleteAircraftType/:id', (req, res) => {
+    const delQuery = "DELETE FROM AircraftTypes WHERE aircraftTypeID = ?";
+    const id = req.params.id;
+    db.pool.query(delQuery, [id], (err, data) => {
+        if(err) return res.json(err);
+        return res.json("Aircraft Type Successfully Deleted")
+    })
+})
+
 //Update
 app.put('/updatePilot/:id', (req, res) => {
     const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, totalLicense= ? WHERE pilotID = ?";
