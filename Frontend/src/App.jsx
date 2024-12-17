@@ -15,6 +15,7 @@ import AddAircraftPage from './pages/addAircraft';
 import GetType from './pages/getType';
 import UpdateAircraft from './pages/updateAircraft';
 import AircraftTypePage from './pages/aircraftType';
+import AddAircraftTypePage from './pages/addType';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
             <Route path="/getType/:id" element={<GetType/>} />
             <Route path="/updateAircraft/:id" element={<UpdateAircraft/>} />
             <Route path="/aircraftType" element={<AircraftTypePage/>} />
+            <Route path="/addType" element={<AddAircraftTypePage/>} />
           </Routes>
         </section>
       </main>
