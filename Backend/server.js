@@ -27,7 +27,7 @@ app.post('/addPilot', (req, res) => {
     ]
     db.pool.query(insertQuery, [values], (err, data) => {
         if(err) return res.json(err);
-        return res.json("Success: New Pilot Added");
+        return res.json("Insert Successful");
     })
 });
 

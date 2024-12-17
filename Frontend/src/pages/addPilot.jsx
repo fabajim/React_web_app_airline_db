@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 function addPilot() {
     const [fname, setFname] = useState('')
@@ -11,11 +12,12 @@ function addPilot() {
 
     function handleSubmit(event){
         event.preventDefault();
-        console.log("In Submit!")
         axios.post('http://localhost:8081/addPilot', {fname, lname, certs})
         .then(res => {
             navigate('/pilots');
-            console.log(res);
+            if(res.data === 'Insert Successful') {
+                Swal.fire('New pilot added.');
+            }
         }).catch(err =>console.log(err))
     }
   return (

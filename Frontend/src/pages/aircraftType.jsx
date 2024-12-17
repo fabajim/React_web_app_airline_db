@@ -19,8 +19,23 @@ function aircraftType() {
         }
     }, [deleted])
 
+    function handleClick(id, model) {
+        Swal.fire({
+              title: `Delete ${model}?`,
+              text: "This action cannot be undone!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Delete"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                  handleDelete(id, model);
+                }
+              });
+    }
+
     function handleDelete(id, model){
-        console.log("In Delete")
         axios.delete(`http://localhost:8081/deleteAircraftType/${id}`)
         .then((res) =>{
             setDeleted(true);
@@ -34,7 +49,6 @@ function aircraftType() {
             
         })
         .catch((err) => console.log(err));
-
     }
 
   return (
@@ -59,7 +73,7 @@ function aircraftType() {
                     <td>{d.totalSeating}</td>
                     <td>{d.licenseID}</td>
                     <td>
-                    <button className="btn btn-danger btn-sm" onClick={ () => handleDelete(d.aircraftTypeID, d.model)}>Delete</button>
+                    <button className="btn btn-danger btn-sm" onClick={ () => handleClick(d.aircraftTypeID, d.model)}>Delete</button>
                     </td>
                     </tr>)
                 })}
