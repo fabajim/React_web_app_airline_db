@@ -45,8 +45,7 @@ function aircraftType() {
                     text: "An aircraft of this type exists in the database.",
                     icon: "warning"
                   });
-            }
-            
+            } 
         })
         .catch((err) => console.log(err));
     }

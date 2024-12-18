@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-//import moment from 'moment';
+import Swal from 'sweetalert2';
 
 function AircraftPage() {
   const [data, setData] = useState([])
@@ -18,6 +18,22 @@ function AircraftPage() {
       .catch((err)=> console.log(err));
     }
   }, [deleted])
+
+  function handleClick(id){
+    Swal.fire({
+      title: `Delete this aircraft: ${id}?`,
+      text: "This action cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Delete"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleDelete(id);
+      }
+    })
+  }
 
   function handleDelete(id){
     axios.delete(`http://localhost:8081/deleteAircraft/${id}`)
@@ -63,7 +79,7 @@ function AircraftPage() {
                   <Link to={`/updateAircraft/${d.aircraftID}`} className="btn btn-secondary btn-sm">Update</Link>
                 </td>
                 <td>
-                <button className="btn btn-danger btn-sm" onClick={ () => handleDelete(d.aircraftID)}>Delete</button>
+                <button className="btn btn-danger btn-sm" onClick={ () => handleClick(d.aircraftID)}>Delete</button>
                 </td>
                 <td></td>
               </tr>)
