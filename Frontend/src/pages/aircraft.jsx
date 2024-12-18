@@ -52,9 +52,9 @@ function AircraftPage() {
         <thead>
           <tr>
             <th>Aircraft ID</th>
+            <th>Aircraft Type</th>
             <th>Last Serviced</th>
             <th>Hours Flown</th>
-            <th>Aircraft Type</th>
             <th>
             </th>
             <th><Link className={'add-element'} to='/addAircraft' title='Add new aircraft'>ADD+</Link></th>
@@ -66,15 +66,15 @@ function AircraftPage() {
             return(
               <tr key = {i}>
                 <td>{d.aircraftID}</td>
-                <td>{new Date(d.lastService).toLocaleDateString()}</td>
-                <td>{d.totalHourFlown}</td>
                 <td>
                   <Link to={`/getType/${d.aircraftTypeID}`} 
                     className='btn btn-primary btn-sm'
                     title='View Aircraft Details'>
-                    {d.aircraftTypeID}
+                    {d.model}
                   </Link>
                 </td>
+                <td>{new Date(d.lastService).toLocaleDateString()}</td>
+                <td>{d.totalHourFlown}</td>
                 <td>
                   <Link to={`/updateAircraft/${d.aircraftID}`} className="btn btn-secondary btn-sm">Update</Link>
                 </td>

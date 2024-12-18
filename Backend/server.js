@@ -138,7 +138,10 @@ app.get('/getPilot/:id', (req, res) => {
 })
 
 app.get('/aircraft', (req, res) => {
-    const aircraft = "SELECT * FROM Aircraft";
+    const aircraft = 
+                    "SELECT aircraftID, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
+                    "FROM Aircraft \n"+
+                    "INNER JOIN AircraftTypes ON Aircraft.aircraftTypeID = AircraftTypes.aircraftTypeID";
     db.pool.query(aircraft, (err, data)=> {
         if(err) return res.json(err);
         return res.json(data);
