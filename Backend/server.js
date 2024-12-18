@@ -121,7 +121,10 @@ app.put('/updateAircraft/:id', (req, res) => {
 
 // read
 app.get('/pilots', (req, res) => {
-    const pilots = "SELECT * FROM Pilots";
+    const pilots = "SELECT Pilots.*, COUNT(LicenseDetails.pilotID) as totalLicense \n"+
+                    "FROM Pilots \n"+
+                    "INNER JOIN LicenseDetails ON LicenseDetails.pilotID = Pilots.pilotID \n"+
+                    "GROUP BY Pilots.pilotID";
     db.pool.query(pilots, (err, data)=> {
         if(err) return res.json(err);
         return res.json(data);
