@@ -75,7 +75,7 @@ CREATE TABLE LicenseDetails (
 
 INSERT into Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES ('2024-07-13', 27, 1), ('2024-04-27', 300, 2), ('2025-01-03', 12, 3);
 
-INSERT into AircraftTypes (model, totalSeating, licenseID) VALUES ("Boeing Max 8", 160, 1), ("Airbus c130", 120, 2), ("Boing Max 7", 180, 3);
+INSERT into AircraftTypes (model, totalSeating, licenseID) VALUES ("Boeing Max 8", 160, 1), ("Airbus c130", 120, 2), ("Boeing Max 7", 180, 3);
 
 INSERT into Airports (city, totalAircraft, isHub) VALUES ("Los Angeles", 56, 1), ("Chicago", 87, 1), ("San Francisco", 12, 0);
 
