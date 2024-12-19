@@ -23,9 +23,10 @@ CREATE TABLE Licenses (
 
 CREATE TABLE Pilots (
     pilotID int NOT NULL AUTO_INCREMENT,
-    fname varchar(50),
-    lname varchar(50),
-    totalLicense INT,
+    fname varchar(20) NOT NULL,
+    lname varchar(20) NOT NULL,
+    email varchar(50) NOT NULL,
+    phoneNumber varchar(15) NOT NULL,
     PRIMARY KEY (pilotID)
 );
 
@@ -82,7 +83,7 @@ INSERT into AircraftTypes (make, model, totalSeating, licenseID) VALUES ("Boeing
 
 INSERT into Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES ('2024-07-13', 27, 1), ('2024-04-27', 300, 2), ('2025-01-03', 12, 3);
 
-Insert into Pilots (fname, lname) VALUES ("Frank", "Johnson"), ("Michelle", "Jacobs"), ("Andrew", "Garfield");
+Insert into Pilots (fname, lname, email, phoneNumber) VALUES ("Leela", "Turanga", "LeeTuran@airlinedb.com", "(555) 555-7894"), ("Joseph", "Cooper", "JosCoop@airlinedb.com", "(555) 555-1245"), ("Steven", "Miller", "StevMill@airlinedb.com", "(555) 555-3636");
 
 INSERT into AssignmentDetails (aircraftID, pilotID, airportID) VALUES (1, 2, 3), (2, 3, 1), (3, 1, 2);
 
