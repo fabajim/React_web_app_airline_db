@@ -27,6 +27,7 @@ function getType() {
         <thead>
           <tr>
             <th>Aircraft Type ID</th>
+            <th>Make</th>
             <th>Model</th>
             <th>Total Seating</th>
             <th>License Type</th>
@@ -40,6 +41,7 @@ function getType() {
             return(
               <tr key = {i}>
                 <td>{d.aircraftTypeID}</td>
+                <td>{d.make}</td>
                 <td>{d.model}</td>
                 <td>{d.totalSeating}</td>
                 <td>{d.licenseID}</td>

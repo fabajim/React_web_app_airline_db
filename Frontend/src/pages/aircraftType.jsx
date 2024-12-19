@@ -57,6 +57,7 @@ function aircraftType() {
             <thead>
                 <tr>
                 <th>AircraftType ID</th>
+                <th>Make</th>
                 <th>Model</th>
                 <th>Total Seating</th>
                 <th>License Needed</th>
@@ -68,6 +69,7 @@ function aircraftType() {
                 return(
                     <tr key = {i}>
                     <td>{d.aircraftTypeID}</td>
+                    <td>{d.make}</td>
                     <td>{d.model}</td>
                     <td>{d.totalSeating}</td>
                     <td>{d.licenseID}</td>

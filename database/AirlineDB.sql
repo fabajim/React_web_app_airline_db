@@ -14,6 +14,13 @@ CREATE TABLE Airports (
     PRIMARY KEY (airportID)
 );
 
+CREATE TABLE Licenses (
+    licenseID   INT NOT NULL AUTO_INCREMENT,
+    licenseType varchar(50) NOT NULL,
+    hoursNeeded INT, 
+    PRIMARY KEY (licenseID)
+);
+
 CREATE TABLE Pilots (
     pilotID int NOT NULL AUTO_INCREMENT,
     fname varchar(50),
@@ -26,8 +33,10 @@ CREATE TABLE AircraftTypes (
     aircraftTypeID int NOT NULL AUTO_INCREMENT,
     make varchar(50),
     model varchar(100),
+    licenseID INT NOT NULL,
     totalSeating int,
     PRIMARY KEY (aircraftTypeID),
+    FOREIGN KEY (licenseID) REFERENCES Licesnses(licenseID)
 );
 
 CREATE TABLE Aircraft (
@@ -57,24 +66,27 @@ CREATE TABLE AssignmentDetails (
 CREATE TABLE LicenseDetails (
     licenseDetailsID int NOT NULL AUTO_INCREMENT,
     pilotID int NOT NULL,
-    license varchar(50) NOT NULL,
+    licenseID int NOT NULL,
     dateReceived date,
     PRIMARY KEY (licenseDetailsID),
-    FOREIGN KEY (pilotID) REFERENCES Pilots(pilotID) ON DELETE CASCADE
+    FOREIGN KEY (pilotID) REFERENCES Pilots(pilotID) ON DELETE CASCADE,
+    FOREIGN KEY (licenseID) REFERENCES Licenses(licenseID) ON DELETE CASCADE
 );
 
 
-INSERT into Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES ('2024-07-13', 27, 1), ('2024-04-27', 300, 2), ('2025-01-03', 12, 3);
+INSERT into Airports (city, cityCode, totalAircraft, isHub) VALUES ("Los Angeles", "LAX", 0, 1), ("New York", "JFK", 0, 1), ("San Francisco", "SFO", 0, 0);
+
+INSERT into Licenses (licenseType, hoursNeeded) VALUES ("Student License", 75), ("Recreational License", 30), ("Private Pilot", 40), ("Commercial", 250), ("Transportation", 1500);
 
 INSERT into AircraftTypes (make, model, totalSeating, licenseID) VALUES ("Boeing", "Max 8", 160, 1), ("Airbus", "c130", 120, 2), ("Boeing", "Max 7", 180, 3);
 
-INSERT into Airports (city, cityCode, totalAircraft, isHub) VALUES ("Los Angeles", "LAX", 0, 1), ("New York", "JFK", 0, 1), ("San Francisco", "SFO", 0, 0);
+INSERT into Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES ('2024-07-13', 27, 1), ('2024-04-27', 300, 2), ('2025-01-03', 12, 3);
 
 Insert into Pilots (fname, lname) VALUES ("Frank", "Johnson"), ("Michelle", "Jacobs"), ("Andrew", "Garfield");
 
 INSERT into AssignmentDetails (aircraftID, pilotID, airportID) VALUES (1, 2, 3), (2, 3, 1), (3, 1, 2);
 
-INSERT into LicenseDetails (pilotID, license, dateReceived) VALUES (1, "Commercial Pilot License (CMEL)", '2023-06-11'), (2, "Commercial Pilot License (CSEL)", '2022-01-9'), (3, "Airline Transport Pilot", '2024-02-02');
+INSERT into LicenseDetails (pilotID, licenseID, dateReceived) VALUES (1, 5, '2023-06-11'), (2, 4, '2022-01-9'), (3, 5, '2024-02-02');
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
