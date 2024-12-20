@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+const newPilot = require('./modules/addpilot.js') 
 
 // create app
 const app = express();
@@ -15,20 +16,22 @@ app.get('/', (req, res)=>{
 });
 
 // create
-app.post('/addPilot', (req, res) => {
+app.post('/addPilot', async (req, res) => {
     // get incoming data
-    const insertQuery = "INSERT INTO Pilots (fname, lname,  totalLicense) VALUES (?)";
-    let cert = parseInt(req.body.certs);
-    if (isNaN(cert)){ cert = 0 }
     const values = [
         req.body.fname,
         req.body.lname,
-        cert
+        req.body.email,
+        req.body.phone,
     ]
-    db.pool.query(insertQuery, [values], (err, data) => {
-        if(err) return res.json(err);
+    try {
+        const sql1 =  await newPilot.insertPilot(db, values);
+        const sql2 = await newPilot.insertLicenseDetail(db, [sql1.insertId, req.body.license, req.body.date]);
         return res.json("Insert Successful");
-    })
+    } catch(err) {
+        console.log(err);
+        return res.json(err);
+    }
 });
 
 app.post('/addAircraft', (req, res) => {
@@ -123,7 +126,7 @@ app.put('/updateAircraft/:id', (req, res) => {
 app.get('/pilots', (req, res) => {
     const pilots = "SELECT Pilots.*, COUNT(LicenseDetails.pilotID) as totalLicense \n"+
                     "FROM Pilots \n"+
-                    "INNER JOIN LicenseDetails ON LicenseDetails.pilotID = Pilots.pilotID \n"+
+                    "INNER JOIN LicenseDetails ON Pilots.pilotID = LicenseDetails.pilotID \n"+
                     "GROUP BY Pilots.pilotID";
     db.pool.query(pilots, (err, data)=> {
         if(err) return res.json(err);
@@ -138,6 +141,14 @@ app.get('/getPilot/:id', (req, res) => {
         if(err) return res.json(err);
         return res.json(data);
     })
+})
+
+app.get('/getLicenses', (req, res) => {
+    const getQuery = "SELECT * FROM Licenses";
+    db.pool.query(getQuery, (err, data) => {
+        if (err) return res.json(err);
+        return res.json(data);
+    });
 })
 
 app.get('/aircraft', (req, res) => {
