@@ -151,6 +151,21 @@ app.get('/getLicenses', (req, res) => {
     });
 })
 
+app.get('/pilotLicense/:pilotId', (req, res) => {
+    const id = req.params.pilotId
+    console.log(id)
+    const getDetails = `SELECT licenseType, dateReceived, Licenses.licenseID
+                        FROM LicenseDetails
+                        INNER JOIN Licenses ON LicenseDetails.licenseID = Licenses.licenseID
+                        WHERE LicenseDetails.pilotID = ${id}`;
+    db.pool.query(getDetails, (err, data) => {
+        if (err){
+            console.log(err); 
+            return res.json(err); }
+        return res.json(data);
+    });
+})
+
 app.get('/aircraft', (req, res) => {
     const aircraft = 
                     "SELECT aircraftID, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
