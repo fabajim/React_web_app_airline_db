@@ -42,7 +42,7 @@ function App() {
             <Route path="/updateAircraft/:id" element={<UpdateAircraft/>} />
             <Route path="/aircraftType" element={<AircraftTypePage/>} />
             <Route path="/addType" element={<AddAircraftTypePage/>} />
-            <Route path="/viewLicense" element={<LicenseDetailsPage/>} />
+            <Route path="/viewLicense/:id" element={<LicenseDetailsPage/>} />
           </Routes>
         </section>
       </main>

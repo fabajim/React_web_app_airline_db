@@ -76,9 +76,12 @@ function PilotPage() {
                     {pilots.totalLicense}    
                   </td>
                   <td>
-                    <Link to={'/viewLicense'} 
-                    className='btn btn-info btn-sm'
-                    title='View License Details'>Details</Link>
+                    <Link 
+                      to={`/viewLicense/${pilots.pilotID}`} 
+                      className='btn btn-info btn-sm'
+                      title='View License Details'>
+                      Details
+                    </Link>
                   </td>
                   <td>
                     <Link to={`/updatePilot/${pilots.pilotID}`} className="btn btn-secondary btn-sm">Edit Pilot</Link>
