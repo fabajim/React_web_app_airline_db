@@ -39,7 +39,7 @@ function App() {
             <Route path="/aircraft" element={<AircraftPage/>}/>
             <Route path="/addAircraft" element={<AddAircraftPage/>} />
             <Route path="/getType/:id" element={<GetType/>} />
-            <Route path="/updateAircraft/:id" element={<UpdateAircraft/>} />
+            <Route path="/updateAircraft/:id&:fname&:lname" element={<UpdateAircraft/>} />
             <Route path="/aircraftType" element={<AircraftTypePage/>} />
             <Route path="/addType" element={<AddAircraftTypePage/>} />
             <Route path="/viewLicense/:id" element={<LicenseDetailsPage/>} />

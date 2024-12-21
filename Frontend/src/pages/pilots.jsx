@@ -77,17 +77,25 @@ function PilotPage() {
                   </td>
                   <td>
                     <Link 
-                      to={`/viewLicense/${pilots.pilotID}`} 
+                      to={`/viewLicense/${pilots.pilotID}:${pilots.fname}:${pilots.lname}`}
                       className='btn btn-info btn-sm'
                       title='View License Details'>
                       Details
                     </Link>
                   </td>
                   <td>
-                    <Link to={`/updatePilot/${pilots.pilotID}`} className="btn btn-secondary btn-sm">Edit Pilot</Link>
+                    <Link 
+                      to={`/updatePilot/${pilots.pilotID}`} 
+                      className="btn btn-secondary btn-sm">
+                        Edit Pilot
+                    </Link>
                   </td>
                   <td>
-                    <button className="btn btn-danger btn-sm" onClick={ () => handleClick(pilots.pilotID, pilots.fname, pilots.lname)}>Delete Pilot</button>
+                    <button 
+                      className="btn btn-danger btn-sm" 
+                      onClick={ () => handleClick(pilots.pilotID, pilots.fname, pilots.lname)}>
+                        Delete Pilot
+                    </button>
                   </td>
                   <td></td>
                 </tr>)
