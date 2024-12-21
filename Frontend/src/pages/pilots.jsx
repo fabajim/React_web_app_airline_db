@@ -57,6 +57,7 @@ function PilotPage() {
             <th>Phone</th>
             <th>Licenses</th>
             <th></th>
+            <th></th>
             <th><Link className={'add-element'} to='/addPilot'>Add Pilot</Link></th>
             <th></th>
           </tr>
@@ -71,7 +72,14 @@ function PilotPage() {
                   <td>{pilots.lname}</td>
                   <td>{pilots.email}</td>
                   <td>{pilots.phoneNumber}</td>
-                  <td>{pilots.totalLicense}</td>
+                  <td>
+                    {pilots.totalLicense}    
+                  </td>
+                  <td>
+                    <Link to={'/viewLicense'} 
+                    className='btn btn-info btn-sm'
+                    title='View License Details'>Details</Link>
+                  </td>
                   <td>
                     <Link to={`/updatePilot/${pilots.pilotID}`} className="btn btn-secondary btn-sm">Edit Pilot</Link>
                   </td>
