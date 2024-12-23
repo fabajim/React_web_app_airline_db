@@ -70,9 +70,13 @@ table {
     border-bottom: 2px solid cadetblue;
 }
 
+.center-edit{
+    text-align: center;
+}
+
 .add-element{
-    color: #f1f1f1;
-    background-color: cadetblue;
+    color:  cadetblue;
+    background-color: #f1f1f1;
     margin-left: auto;
     margin-right: auto;
     font-size: large;
@@ -88,8 +92,12 @@ table {
 }
 
 .add-element:hover {
-    color: cadetblue;
-    background-color: #f1f1f1;
+    color: #f1f1f1;;
+    background-color: cadetblue;
+}
+
+#hidden-add {
+    display: none;
 }
 
 .nav-bar ul{

@@ -34,6 +34,22 @@ app.post('/addPilot', async (req, res) => {
     }
 });
 
+app.post('/addLicenseDetail', (req, res) => {
+    const insertSQL = `INSERT INTO LicenseDetails (pilotID, licenseID, dateReceived) VALUES (?)`
+    const values = [
+        req.body.strPilotID,
+        req.body.type,
+        req.body.date
+    ]
+    db.pool.query(insertSQL, [values], (err, data) => {
+        if(err) {
+            console.log(err);
+             return res.json(err);
+        }
+        return res.json("Success: New License Detail Added");
+    });
+})
+
 app.post('/addAircraft', (req, res) => {
     const insertQuery = "INSERT INTO Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
     let hour = parseInt(req.body.hours);
@@ -153,7 +169,6 @@ app.get('/getLicenses', (req, res) => {
 
 app.get('/pilotLicense/:pilotId', (req, res) => {
     const id = req.params.pilotId
-    console.log(id)
     const getDetails = `SELECT licenseType, dateReceived, Licenses.licenseID
                         FROM LicenseDetails
                         INNER JOIN Licenses ON LicenseDetails.licenseID = Licenses.licenseID
