@@ -26,6 +26,7 @@ function licenseDetails() {
     axios.get(`http://localhost:8081/getLicenses`)
     .then((res) => {
         setLData(res.data);
+        console.log(res.data);
     })
     .catch((err) => console.log(err));
 }, []);
@@ -34,20 +35,44 @@ function licenseDetails() {
       navigate('/pilots');
   }
 
-  function handleSubmit(event){
+  function verifyData() {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].licenseID == type) {
+        alert ("Cannot add duplicate license.");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async function handleSubmit(event){
     event.preventDefault();
     const strPilotID = pilotId.toString();
-    console.log(strPilotID);
-     if (data[0].licenseID == type) {
-      alert("Pilot Already has this license!");
-     } else {
-        axios.post('http://localhost:8081/addLicenseDetail', { strPilotID, type, date })
-        .then( res => {
-          console.log(res);
-          window.location.reload(); 
-        }).catch(err => console.log(err))
-     }
-}
+    let verify = verifyData();
+    if (!verify){
+      console.log("License not added")
+    } else{
+    axios.post('http://localhost:8081/addLicenseDetail', { strPilotID, type, date })
+    .then( res => {
+      console.log(res);
+      alert("New License added.")
+      navigate('/pilots');
+    }).catch(err => console.log(err))
+    }
+  }
+
+  function handleDelete(id) {
+    if (data.length == 1) {
+      alert("Pilot must have a license!")
+    } else {
+      axios.delete(`http://localhost:8081/deleteLDetail/${id}`)
+      .then((res) => {
+        console.log(res);
+        navigate('/pilots');
+      })
+      .catch((err) => console.log(err))
+    }
+  }
 
   return (
     <>
@@ -72,7 +97,13 @@ function licenseDetails() {
                     <tr key = {i}>
                       <td>{d.licenseType}</td>
                       <td>{new Date(d.dateReceived).toLocaleDateString()}</td>
-                      <td className='center-edit' colSpan={2}>Edit</td>
+                      <td className='center-edit' colSpan={2}>
+                        <button  
+                          className='btn btn-danger btn-sm'
+                          onClick={() => handleDelete(d.licenseDetailsID)}>
+                            Delete
+                        </button>
+                      </td>
                     </tr>)
                 })}
               </tbody>

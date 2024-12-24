@@ -106,6 +106,15 @@ app.delete('/deleteAircraftType/:id', (req, res) => {
     })
 })
 
+app.delete('/deleteLDetail/:id', (req, res) => {
+    const delQuery = "DELETE FROM LicenseDetails WHERE licenseDetailsID = ?";
+    const id = req.params.id;
+    db.pool.query(delQuery, [id], (err, data) => {
+        if(err) return res.json(err);
+        return res.json("License Successfully Deleted")
+    })
+})
+
 //Update
 app.put('/updatePilot/:id', (req, res) => {
     const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, totalLicense= ? WHERE pilotID = ?";
@@ -169,7 +178,7 @@ app.get('/getLicenses', (req, res) => {
 
 app.get('/pilotLicense/:pilotId', (req, res) => {
     const id = req.params.pilotId
-    const getDetails = `SELECT licenseType, dateReceived, Licenses.licenseID
+    const getDetails = `SELECT licenseType, licenseDetailsID, dateReceived, Licenses.licenseID
                         FROM LicenseDetails
                         INNER JOIN Licenses ON LicenseDetails.licenseID = Licenses.licenseID
                         WHERE LicenseDetails.pilotID = ${id}`;
