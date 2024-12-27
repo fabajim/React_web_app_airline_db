@@ -117,18 +117,20 @@ app.delete('/deleteLDetail/:id', (req, res) => {
 
 //Update
 app.put('/updatePilot/:id', (req, res) => {
-    const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, totalLicense= ? WHERE pilotID = ?";
+    const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, email= ?, phoneNumber = ? WHERE pilotID = ?";
     const id = req.params.id;
-    let cert = parseInt(req.body.certs);
-    if (isNaN(cert)){ cert = 0 }
     const values = [
         req.body.fname,
         req.body.lname,
-        cert,
+        req.body.email,
+        req.body.number,
         id
     ]
     db.pool.query(updateQuery, values, (err, data) => {
-        if(err) return res.json(err);
+        if(err) {
+            console.log(err);
+            return res.json(err);
+        }
         return res.json("Pilot Updated");
     })
 })

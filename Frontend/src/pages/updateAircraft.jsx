@@ -44,7 +44,7 @@ function updateAircraft() {
                 <form onSubmit={handleSubmit} key={i}>
                     <h2>Edit Aircraft ID: {id}</h2>
                     <div>
-                      <Link to='/aircraft' title="Back to Aircraft Page" className='btn btn-primary btn-bg'>Back</Link>
+                      <Link to='/aircraft' title="Back to Aircraft Page" className='btn btn-danger btn-bg'>Cancel</Link>
                       </div>
                     <div className='mb-2'>
                         <label htmlFor="date">Update Service Date</label>

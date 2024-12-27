@@ -77,7 +77,6 @@ function addPilot() {
                     <label htmlFor=''>Date Received</label>
                     <input type="date" 
                     name='date' 
-                    autoFocus 
                     className='form-control'
                     required 
                     onChange={e => setDate(e.target.value)} />
