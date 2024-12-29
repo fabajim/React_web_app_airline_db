@@ -3,7 +3,9 @@ const router = express.Router();
 const db = require('../database/db_connector.js');
 
 router.get('/', (req, res) => {
-    const readTable = "SELECT * FROM AircraftTypes";
+    const readTable = `SELECT aircraftTypeID, make, model, totalSeating, licenseType, Licenses.licenseID 
+                       FROM AircraftTypes
+                       INNER JOIN Licenses ON AircraftTypes.licenseID = Licenses.licenseID`;
     db.pool.query(readTable, (err, data) =>{
         if(err) return res.json(err);
         return res.json(data);

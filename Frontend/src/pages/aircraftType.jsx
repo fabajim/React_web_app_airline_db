@@ -72,7 +72,7 @@ function aircraftType() {
                     <td>{d.make}</td>
                     <td>{d.model}</td>
                     <td>{d.totalSeating}</td>
-                    <td>{d.licenseID}</td>
+                    <td>{d.licenseType}</td>
                     <td>
                     <button className="btn btn-danger btn-sm" onClick={ () => handleClick(d.aircraftTypeID, d.model)}>Delete</button>
                     </td>
