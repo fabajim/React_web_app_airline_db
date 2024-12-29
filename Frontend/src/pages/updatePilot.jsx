@@ -13,7 +13,7 @@ function updatePilot() {
     const {id} = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/getPilot/${id}`)
+        axios.get(`http://localhost:8081/pilots/${id}`)
         .then((res) => {
             setData(res.data);
             console.log(res.data)
@@ -36,7 +36,7 @@ function updatePilot() {
         if(number === ""){
             number = data[0].phoneNumber;
         }
-        axios.put(`http://localhost:8081/updatePilot/${id}`, {fname, lname, email, number})
+        axios.put(`http://localhost:8081/pilots/${id}`, {fname, lname, email, number})
         .then(res => {
             navigate('/pilots');
             console.log(res);

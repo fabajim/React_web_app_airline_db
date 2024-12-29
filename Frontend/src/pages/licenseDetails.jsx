@@ -14,7 +14,7 @@ function licenseDetails() {
   const navigate = useNavigate();
   
   useEffect(() => {
-      axios.get(`http://localhost:8081/pilotLicense/${pilotId}`)
+      axios.get(`http://localhost:8081/licenseDetails/${pilotId}`)
       .then((res) => {
           setData(res.data);
           console.log(res.data);
@@ -23,7 +23,7 @@ function licenseDetails() {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/getLicenses`)
+    axios.get(`http://localhost:8081/license`)
     .then((res) => {
         setLData(res.data);
         console.log(res.data);
@@ -52,7 +52,7 @@ function licenseDetails() {
     if (!verify){
       console.log("License not added")
     } else{
-    axios.post('http://localhost:8081/addLicenseDetail', { strPilotID, type, date })
+    axios.post('http://localhost:8081/licenseDetails', { strPilotID, type, date })
     .then( res => {
       console.log(res);
       alert("New License added.")
@@ -65,7 +65,7 @@ function licenseDetails() {
     if (data.length == 1) {
       alert("Pilot must have a license!")
     } else {
-      axios.delete(`http://localhost:8081/deleteLDetail/${id}`)
+      axios.delete(`http://localhost:8081/licenseDetails/${id}`)
       .then((res) => {
         console.log(res);
         navigate('/pilots');

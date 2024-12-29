@@ -1,7 +1,5 @@
 const express = require('express');
-const mysql = require('mysql');
 const cors = require('cors');
-const newPilot = require('./modules/addpilot.js') 
 
 // create app
 const app = express();
@@ -9,46 +7,17 @@ app.use(cors());
 app.use(express.json());
 
 //connect to mysql
-const db = require('./db_connector');
+const db = require('./database/db_connector.js');
+ 
+//routes
+const pilotRoute = require('./routes/pilots.js');
+const licenseRoute = require('./routes/licenses.js');
+const licenseDetailsRoute = require('./routes/licenseDetails.js');
 
-app.get('/', (req, res)=>{
-    return res.send("Hello From Backend!");
-});
-
-// create
-app.post('/addPilot', async (req, res) => {
-    // get incoming data
-    const values = [
-        req.body.fname,
-        req.body.lname,
-        req.body.email,
-        req.body.phone,
-    ]
-    try {
-        const sql1 =  await newPilot.insertPilot(db, values);
-        const sql2 = await newPilot.insertLicenseDetail(db, [sql1.insertId, req.body.license, req.body.date]);
-        return res.json("Insert Successful");
-    } catch(err) {
-        console.log(err);
-        return res.json(err);
-    }
-});
-
-app.post('/addLicenseDetail', (req, res) => {
-    const insertSQL = `INSERT INTO LicenseDetails (pilotID, licenseID, dateReceived) VALUES (?)`
-    const values = [
-        req.body.strPilotID,
-        req.body.type,
-        req.body.date
-    ]
-    db.pool.query(insertSQL, [values], (err, data) => {
-        if(err) {
-            console.log(err);
-             return res.json(err);
-        }
-        return res.json("Success: New License Detail Added");
-    });
-})
+// api routes
+app.use('/pilots', pilotRoute);
+app.use('/license', licenseRoute);
+app.use('/licenseDetails', licenseDetailsRoute);
 
 app.post('/addAircraft', (req, res) => {
     const insertQuery = "INSERT INTO Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
@@ -79,15 +48,6 @@ app.post('/addType', (req, res) => {
 })
 
 //Delete
-app.delete('/deletePilot/:id', (req, res) => {
-    const deleteQuery = "DELETE FROM Pilots WHERE pilotID = ?";
-    const id = req.params.id;
-    db.pool.query(deleteQuery, [id], (err, data) => {
-        if(err) return res.json(err);
-        return res.json("Pilot Deleted")
-    })
-})
-
 app.delete('/deleteAircraft/:id', (req, res) => {
     const delQuery = "DELETE FROM Aircraft WHERE aircraftID = ?";
     const id = req.params.id;
@@ -106,35 +66,9 @@ app.delete('/deleteAircraftType/:id', (req, res) => {
     })
 })
 
-app.delete('/deleteLDetail/:id', (req, res) => {
-    const delQuery = "DELETE FROM LicenseDetails WHERE licenseDetailsID = ?";
-    const id = req.params.id;
-    db.pool.query(delQuery, [id], (err, data) => {
-        if(err) return res.json(err);
-        return res.json("License Successfully Deleted")
-    })
-})
+
 
 //Update
-app.put('/updatePilot/:id', (req, res) => {
-    const updateQuery = "UPDATE Pilots set fname = ?, lname = ?, email= ?, phoneNumber = ? WHERE pilotID = ?";
-    const id = req.params.id;
-    const values = [
-        req.body.fname,
-        req.body.lname,
-        req.body.email,
-        req.body.number,
-        id
-    ]
-    db.pool.query(updateQuery, values, (err, data) => {
-        if(err) {
-            console.log(err);
-            return res.json(err);
-        }
-        return res.json("Pilot Updated");
-    })
-})
-
 app.put('/updateAircraft/:id', (req, res) => {
     const updateQuery = "UPDATE Aircraft set lastService = ?, totalHourFlown = ? WHERE aircraftID = ?";
     const id = req.params.id;
@@ -147,49 +81,6 @@ app.put('/updateAircraft/:id', (req, res) => {
         if(err) return res.json(err);
         return res.json("Aircraft Updated")
     })
-})
-
-// read
-app.get('/pilots', (req, res) => {
-    const pilots = "SELECT Pilots.*, COUNT(LicenseDetails.pilotID) as totalLicense \n"+
-                    "FROM Pilots \n"+
-                    "INNER JOIN LicenseDetails ON Pilots.pilotID = LicenseDetails.pilotID \n"+
-                    "GROUP BY Pilots.pilotID";
-    db.pool.query(pilots, (err, data)=> {
-        if(err) return res.json(err);
-        return res.json(data);
-    })
-})
-
-app.get('/getPilot/:id', (req, res) => {
-    const pilotQuery = "SELECT * FROM Pilots WHERE pilotID = ?";
-    const id = req.params.id;
-    db.pool.query(pilotQuery, [id], (err, data) => {
-        if(err) return res.json(err);
-        return res.json(data);
-    })
-})
-
-app.get('/getLicenses', (req, res) => {
-    const getQuery = "SELECT * FROM Licenses";
-    db.pool.query(getQuery, (err, data) => {
-        if (err) return res.json(err);
-        return res.json(data);
-    });
-})
-
-app.get('/pilotLicense/:pilotId', (req, res) => {
-    const id = req.params.pilotId
-    const getDetails = `SELECT licenseType, licenseDetailsID, dateReceived, Licenses.licenseID
-                        FROM LicenseDetails
-                        INNER JOIN Licenses ON LicenseDetails.licenseID = Licenses.licenseID
-                        WHERE LicenseDetails.pilotID = ${id}`;
-    db.pool.query(getDetails, (err, data) => {
-        if (err){
-            console.log(err); 
-            return res.json(err); }
-        return res.json(data);
-    });
 })
 
 app.get('/aircraft', (req, res) => {
@@ -237,6 +128,10 @@ app.get('/getType/:id', (req, res) => {
         return res.json(data);
     })
 })
+
+app.get('/', (req, res)=>{
+    return res.send("Hello From Backend!");
+});
 
 app.listen(8081, ()=>{
     console.log("Listening on port 8081");

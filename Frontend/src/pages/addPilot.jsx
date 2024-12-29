@@ -15,7 +15,7 @@ function addPilot() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:8081/getLicenses')
+        axios.get('http://localhost:8081/license')
         .then((res) => {
             console.log(res.data)
             setData(res.data);
@@ -23,13 +23,14 @@ function addPilot() {
         .catch((err) => {
             alert("Server Error: " + err);
             console.log(err);
+            navigate('/pilots');
         })
     }, []);
 
     function handleSubmit(event){
         event.preventDefault();
         console.log("in submit")
-        axios.post('http://localhost:8081/addPilot', {fname, lname, email, phone, license, date})
+        axios.post('http://localhost:8081/pilots', {fname, lname, email, phone, license, date})
         .then(res => {
             if(res.data === 'Insert Successful') {
                 Swal.fire('New pilot added.');

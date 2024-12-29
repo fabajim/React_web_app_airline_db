@@ -35,7 +35,7 @@ function PilotPage() {
   }
 
   function handleDelete(id){
-    axios.delete(`http://localhost:8081/deletePilot/${id}`)
+    axios.delete(`http://localhost:8081/pilots/${id}`)
     .then((res) => {
       setDeleted(true)
     })
