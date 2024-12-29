@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function addAircraft() {
     const [data, setCraftType] = useState([])
@@ -36,6 +36,9 @@ function addAircraft() {
         <div className='w-50 bg-white rounded p-3'>
             <form onSubmit={handleSubmit}>
                 <h3>Fill in all data.</h3>
+                <div>Select aircraft type or 
+                <Link to="/addType"> add a new type</Link>
+                </div>
                 <div className="mb-2">
                     <select onChange={e => setType(e.target.value)} required>
                     <option value="">Aircraft Type</option>
@@ -45,6 +48,7 @@ function addAircraft() {
                         </option>
                     )})}
                 </select>
+                
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Last Service</label>

@@ -20,7 +20,7 @@ function addType() {
     .catch((err) => {
         alert("Server Error: " + err);
         console.log(err);
-        navigate('/aircraftType');
+        navigate(-1);
     });
   }, []);
 
@@ -28,7 +28,7 @@ function addType() {
       event.preventDefault();
       axios.post('http://localhost:8081/aircraftType', {make, model, seating, license})
       .then(res => {
-          navigate('/aircraftType');
+          navigate(-1);
           console.log(res);
       }).catch(err => console.log(err));
   }
