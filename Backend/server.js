@@ -13,26 +13,13 @@ const db = require('./database/db_connector.js');
 const pilotRoute = require('./routes/pilots.js');
 const licenseRoute = require('./routes/licenses.js');
 const licenseDetailsRoute = require('./routes/licenseDetails.js');
+const aircraftRoute = require('./routes/aircraft.js');
 
 // api routes
 app.use('/pilots', pilotRoute);
 app.use('/license', licenseRoute);
 app.use('/licenseDetails', licenseDetailsRoute);
-
-app.post('/addAircraft', (req, res) => {
-    const insertQuery = "INSERT INTO Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
-    let hour = parseInt(req.body.hours);
-    let typeID = parseInt(req.body.type);
-    const values = [
-        req.body.serviced,
-        hour,
-        typeID
-    ]
-    db.pool.query(insertQuery, [values], (err, data) => {
-        if(err) return res.json(err);
-        return res.json("Success: New Aircraft Added")
-    })
-});
+app.use('/aircraft', aircraftRoute);
 
 app.post('/addType', (req, res) => {
     const insertQuery = "INSERT INTO AircraftTypes (model, totalSeating, licenseID) VALUES (?)";
@@ -48,14 +35,7 @@ app.post('/addType', (req, res) => {
 })
 
 //Delete
-app.delete('/deleteAircraft/:id', (req, res) => {
-    const delQuery = "DELETE FROM Aircraft WHERE aircraftID = ?";
-    const id = req.params.id;
-    db.pool.query(delQuery, [id], (err, data) => {
-        if(err) return res.json(err);
-        return res.json("Aircraft Successfully Deleted")
-    })
-})
+
 
 app.delete('/deleteAircraftType/:id', (req, res) => {
     const delQuery = "DELETE FROM AircraftTypes WHERE aircraftTypeID = ?";
@@ -69,39 +49,9 @@ app.delete('/deleteAircraftType/:id', (req, res) => {
 
 
 //Update
-app.put('/updateAircraft/:id', (req, res) => {
-    const updateQuery = "UPDATE Aircraft set lastService = ?, totalHourFlown = ? WHERE aircraftID = ?";
-    const id = req.params.id;
-    const value = [
-        req.body.date,
-        req.body.hours,
-        id
-    ]
-    db.pool.query(updateQuery, value, (err, data) => {
-        if(err) return res.json(err);
-        return res.json("Aircraft Updated")
-    })
-})
 
-app.get('/aircraft', (req, res) => {
-    const aircraft = 
-                    "SELECT aircraftID, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
-                    "FROM Aircraft \n"+
-                    "INNER JOIN AircraftTypes ON Aircraft.aircraftTypeID = AircraftTypes.aircraftTypeID";
-    db.pool.query(aircraft, (err, data)=> {
-        if(err) return res.json(err);
-        return res.json(data);
-    })
-})
 
-app.get('/getAircraft/:id', (req, res) => {
-    const getQuery = "SELECT lastService, totalHourFlown FROM Aircraft WHERE aircraftID = ?";
-    const id = req.params.id;
-    db.pool.query(getQuery, [id], (err, data) => {
-        if(err) return res.json(err);
-        return res.json(data);
-    })
-})
+
 
 // get aircraft id an model form Aircraft
 app.get('/IdAndModel', (req, res) => {

@@ -22,7 +22,7 @@ function addAircraft() {
 
     function handleSubmit(event){
         event.preventDefault();
-        axios.post('http://localhost:8081/addAircraft', {serviced, hours, type})
+        axios.post('http://localhost:8081/aircraft', {serviced, hours, type})
         .then(res => {
             navigate('/aircraft');
             console.log(res);

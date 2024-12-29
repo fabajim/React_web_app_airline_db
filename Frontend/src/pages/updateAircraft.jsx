@@ -11,7 +11,7 @@ function updateAircraft() {
   const {id} = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/getAircraft/${id}`)
+    axios.get(`http://localhost:8081/aircraft/${id}`)
     .then((res) => {
       setData(res.data);
     })
@@ -27,7 +27,7 @@ function updateAircraft() {
     if(hours === ""){
       hours = data[0].totalHourFlown;
     }
-    axios.put(`http://localhost:8081/updateAircraft/${id}`, {date, hours})
+    axios.put(`http://localhost:8081/aircraft/${id}`, {date, hours})
     .then(res => {
       navigate('/aircraft');
     })

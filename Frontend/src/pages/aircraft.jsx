@@ -36,7 +36,7 @@ function AircraftPage() {
   }
 
   function handleDelete(id){
-    axios.delete(`http://localhost:8081/deleteAircraft/${id}`)
+    axios.delete(`http://localhost:8081/aircraft/${id}`)
     .then((res) => {
       setDeleted(true)
     })
