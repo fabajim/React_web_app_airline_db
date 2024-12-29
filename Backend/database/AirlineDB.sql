@@ -37,7 +37,7 @@ CREATE TABLE AircraftTypes (
     licenseID INT NOT NULL,
     totalSeating int,
     PRIMARY KEY (aircraftTypeID),
-    FOREIGN KEY (licenseID) REFERENCES Licesnses(licenseID)
+    FOREIGN KEY (licenseID) REFERENCES Licenses(licenseID)
 );
 
 CREATE TABLE Aircraft (
