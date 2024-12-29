@@ -9,7 +9,7 @@ function getType() {
     const {id} = useParams();
 
     useEffect(() => {
-        axios.get(`http://localhost:8081/getType/${id}`)
+        axios.get(`http://localhost:8081/aircraftType/${id}`)
         .then((res) => {
             setData(res.data);
         })

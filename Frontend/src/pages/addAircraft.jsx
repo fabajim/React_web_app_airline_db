@@ -9,7 +9,7 @@ function addAircraft() {
     const [type, setType] = useState('')
     
     useEffect(() => {
-        axios.get('http://localhost:8081/IdAndModel')
+        axios.get('http://localhost:8081/aircraftType')
         .then((res) => {
             setCraftType(res.data)
             console.log(res.data)

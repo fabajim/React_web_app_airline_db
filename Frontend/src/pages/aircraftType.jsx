@@ -36,7 +36,7 @@ function aircraftType() {
     }
 
     function handleDelete(id, model){
-        axios.delete(`http://localhost:8081/deleteAircraftType/${id}`)
+        axios.delete(`http://localhost:8081/aircraftType/${id}`)
         .then((res) =>{
             setDeleted(true);
             if (res.data.code === 'ER_ROW_IS_REFERENCED_2') {
