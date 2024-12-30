@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 function addAircraft() {
-    const [data, setCraftType] = useState([])
-    const [serviced, setService] = useState('')
-    const [hours, setHours] = useState('')
-    const [type, setType] = useState('')
+    const [data, setCraftType] = useState([]);
+    const [serial, setSerial] = useState('');
+    const [serviced, setService] = useState('');
+    const [hours, setHours] = useState('');
+    const [type, setType] = useState('');
     
     useEffect(() => {
         axios.get('http://localhost:8081/aircraftType')
@@ -22,7 +23,7 @@ function addAircraft() {
 
     function handleSubmit(event){
         event.preventDefault();
-        axios.post('http://localhost:8081/aircraft', {serviced, hours, type})
+        axios.post('http://localhost:8081/aircraft', {serial, serviced, hours, type})
         .then(res => {
             navigate('/aircraft');
             console.log(res);
@@ -48,7 +49,14 @@ function addAircraft() {
                         </option>
                     )})}
                 </select>
-                
+                </div>
+                <div className="mb-2">
+                    <label htmlFor=''>Serial Number</label>
+                    <input type="text" 
+                    name='serial' 
+                    className="form-control" 
+                    required 
+                    onChange={e => setSerial(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Last Service</label>

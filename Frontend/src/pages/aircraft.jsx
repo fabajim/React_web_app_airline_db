@@ -52,6 +52,7 @@ function AircraftPage() {
         <thead>
           <tr>
             <th>Aircraft ID</th>
+            <th>Serial Number</th>
             <th>Aircraft Type</th>
             <th>Last Serviced</th>
             <th>Hours Flown</th>
@@ -66,6 +67,7 @@ function AircraftPage() {
             return(
               <tr key = {i}>
                 <td>{d.aircraftID}</td>
+                <td>{d.serialNum}</td>
                 <td>
                   <Link to={`/getType/${d.aircraftTypeID}`} 
                     className='btn btn-primary btn-sm'

@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 
+/* 
+  The getType page gets the aircraft type of a user specified aircraft from the 
+  aircraft page. 
+*/
 function getType() {
     const [data, setData] = useState([])
 

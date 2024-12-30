@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require('../database/db_connector.js');
 
 router.get('/', (req, res) => {
-    const aircraft = "SELECT aircraftID, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
+    const aircraft = "SELECT aircraftID, serialNum, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
                      "FROM Aircraft \n"+
                      "INNER JOIN AircraftTypes ON Aircraft.aircraftTypeID = AircraftTypes.aircraftTypeID";
     db.pool.query(aircraft, (err, data)=> {
@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const getQuery = "SELECT lastService, totalHourFlown FROM Aircraft WHERE aircraftID = ?";
+    const getQuery = "SELECT serialNum, lastService, totalHourFlown FROM Aircraft WHERE aircraftID = ?";
     const id = req.params.id;
     db.pool.query(getQuery, [id], (err, data) => {
         if(err) return res.json(err);
@@ -22,10 +22,11 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const insertQuery = "INSERT INTO Aircraft (lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
+    const insertQuery = "INSERT INTO Aircraft (serialNum, lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
     let hour = parseInt(req.body.hours);
     let typeID = parseInt(req.body.type);
     const values = [
+        req.body.serial,
         req.body.serviced,
         hour,
         typeID
