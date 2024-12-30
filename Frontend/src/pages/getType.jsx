@@ -12,9 +12,10 @@ function getType() {
         axios.get(`http://localhost:8081/aircraftType/${id}`)
         .then((res) => {
             setData(res.data);
+            console.log(res.data);
         })
         .catch((err) => console.log(err));
-    })
+    }, []);
 
     function handleClick() {
         navigate('/aircraft');
@@ -44,7 +45,7 @@ function getType() {
                 <td>{d.make}</td>
                 <td>{d.model}</td>
                 <td>{d.totalSeating}</td>
-                <td>{d.licenseID}</td>
+                <td>{d.licenseType}</td>
                 <td></td>
               </tr>)
           })}

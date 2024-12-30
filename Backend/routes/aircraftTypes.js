@@ -13,7 +13,10 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const typeQuery = "SELECT * FROM AircraftTypes WHERE aircraftTypeID = ?";
+    const typeQuery = `SELECT aircraftTypeID, make, model, totalSeating, licenseType, Licenses.licenseID 
+                       FROM AircraftTypes
+                       INNER JOIN Licenses ON AircraftTypes.licenseID = Licenses.licenseID
+                       WHERE aircraftTypeID = ?`;
     const id = req.params.id;
     db.pool.query(typeQuery, [id], (err, data) => {
         if(err) return res.json(err);
