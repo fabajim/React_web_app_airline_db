@@ -20,7 +20,7 @@ app.use('/license', licenseRoute);
 app.use('/licenseDetails', licenseDetailsRoute);
 app.use('/aircraft', aircraftRoute);
 app.use('/aircraftType', aircraftTypeRoute);
-app.use('./airports', airportsRoute);
+app.use('/airports', airportsRoute);
 
 app.get('/', (req, res)=>{
     return res.send("Hello From Backend!");
