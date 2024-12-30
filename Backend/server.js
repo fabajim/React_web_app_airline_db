@@ -13,6 +13,7 @@ const licenseDetailsRoute = require('./routes/licenseDetails.js');
 const aircraftRoute = require('./routes/aircraft.js');
 const aircraftTypeRoute = require('./routes/aircraftTypes.js');
 const airportsRoute = require('./routes/airports.js');
+const assignmentsRoute = require('./routes/assignmentDetails.js');
 
 // api routes
 app.use('/pilots', pilotRoute);
@@ -21,6 +22,7 @@ app.use('/licenseDetails', licenseDetailsRoute);
 app.use('/aircraft', aircraftRoute);
 app.use('/aircraftType', aircraftTypeRoute);
 app.use('/airports', airportsRoute);
+app.use('/assignmentDetails', assignmentsRoute);
 
 app.get('/', (req, res)=>{
     return res.send("Hello From Backend!");
