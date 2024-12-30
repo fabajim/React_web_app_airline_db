@@ -3,7 +3,8 @@ const router = express.Router();
 const db = require('../database/db_connector.js');
 
 router.get('/', (req, res) => {
-    const readTable = `SELECT aircraftTypeID, make, model, totalSeating, licenseType, Licenses.licenseID 
+    const readTable = `SELECT aircraftTypeID, make, model, IF(totalSeating = 0, 'CARGO', totalSeating) AS totalSeating,
+                       licenseType, Licenses.licenseID 
                        FROM AircraftTypes
                        INNER JOIN Licenses ON AircraftTypes.licenseID = Licenses.licenseID`;
     db.pool.query(readTable, (err, data) =>{
@@ -13,7 +14,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const typeQuery = `SELECT aircraftTypeID, make, model, totalSeating, licenseType, Licenses.licenseID 
+    const typeQuery = `SELECT aircraftTypeID, make, model, IF(totalSeating = 0, 'CARGO', totalSeating) AS totalSeating, 
+                       licenseType, Licenses.licenseID 
                        FROM AircraftTypes
                        INNER JOIN Licenses ON AircraftTypes.licenseID = Licenses.licenseID
                        WHERE aircraftTypeID = ?`;
