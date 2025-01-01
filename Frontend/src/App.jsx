@@ -18,6 +18,7 @@ import AircraftTypePage from './pages/aircraftType';
 import AddAircraftTypePage from './pages/addType';
 import LicenseDetailsPage from './pages/licenseDetails';
 import AirportsPage from './pages/airports';
+import AssignmentDetailsPage from './pages/assignmentDetails';
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
             <Route path="/addType" element={<AddAircraftTypePage/>} />
             <Route path="/viewLicense/:id" element={<LicenseDetailsPage/>} />
             <Route path="/airports" element={<AirportsPage/>} />
+            <Route path="/assignments" element={<AssignmentDetailsPage/>} />
           </Routes>
         </section>
       </main>

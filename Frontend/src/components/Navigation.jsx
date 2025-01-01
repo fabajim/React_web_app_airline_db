@@ -7,10 +7,11 @@ function Navigation() {
     <nav className='nav-bar'>
       <ul>
         <li><Link className={'link-style'} to="/">Home</Link></li>
-       <li><Link className={'link-style'} to="/pilots">Pilots</Link></li> 
+        <li><Link className={'link-style'} to="/pilots">Pilots</Link></li> 
         <li><Link className={'link-style'} to="/aircraft">Aircraft</Link></li>
         <li><Link className={'link-style'} to="/aircraftType">Aircraft Type</Link></li>
         <li><Link className={'link-style'} to="/airports">Airports</Link></li>
+        <li><Link className={'link-style'} to="/assignments">Assignments</Link></li>
       </ul>
     </nav>
   );
