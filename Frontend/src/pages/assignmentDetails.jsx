@@ -24,6 +24,7 @@ function assignmentDetails() {
             <th>Pilot</th>
             <th>Aircraft</th>
             <th>Current Location</th>
+            <th>Current</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@ function assignmentDetails() {
                 <td>{d.fname} {d. lname}</td>
                 <td>{d.serialNum}</td>
                 <td>{d.cityCode}</td>
+                <td>{d.isActive}</td>
               </tr>)
           })}
         </tbody>
