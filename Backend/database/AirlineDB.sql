@@ -56,6 +56,7 @@ CREATE TABLE AssignmentDetails (
     aircraftID int NOT NULL,
     pilotID int,
     airportID int NOT NULL,
+    isActive tinyint NOT NULL,
     PRIMARY KEY (assignmentDetailID),
     FOREIGN KEY (airportID) REFERENCES Airports(airportID)
     ON DELETE CASCADE,
@@ -86,7 +87,7 @@ INSERT into Aircraft (serialNum, lastService, totalHourFlown, aircraftTypeID) VA
 
 Insert into Pilots (fname, lname, email, phoneNumber) VALUES ("Leela", "Turanga", "LeeTuran@airlinedb.com", "(555) 555-7894"), ("Joseph", "Cooper", "JosCoop@airlinedb.com", "(555) 555-1245"), ("Steven", "Miller", "StevMill@airlinedb.com", "(555) 555-3636");
 
-INSERT into AssignmentDetails (aircraftID, pilotID, airportID) VALUES (1, 2, 3), (2, 3, 1), (3, 1, 2);
+INSERT into AssignmentDetails (aircraftID, pilotID, airportID, isActive) VALUES (1, 2, 3, 1), (2, 3, 1, 1), (3, 1, 2, 0);
 
 INSERT into LicenseDetails (pilotID, licenseID, dateReceived) VALUES (1, 5, '2023-06-11'), (2, 4, '2022-01-9'), (3, 5, '2024-02-02');
 
