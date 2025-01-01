@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function assignmentDetails() {
@@ -25,6 +25,7 @@ function assignmentDetails() {
             <th>Aircraft</th>
             <th>Current Location</th>
             <th>Current</th>
+            <th><Link className={'add-element'} to='/addAssignment'>ADD</Link></th>
           </tr>
         </thead>
         <tbody>
@@ -36,6 +37,9 @@ function assignmentDetails() {
                 <td>{d.serialNum}</td>
                 <td>{d.cityCode}</td>
                 <td>{d.isActive}</td>
+                <td>
+                    <Link className='btn btn-secondary btn-sm' to={`/`}>Update</Link>
+                </td>
               </tr>)
           })}
         </tbody>
