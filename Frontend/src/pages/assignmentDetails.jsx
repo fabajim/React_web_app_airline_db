@@ -25,7 +25,7 @@ function assignmentDetails() {
             <th>Aircraft</th>
             <th>Current Location</th>
             <th>Current</th>
-            <th><Link className={'add-element'} to='/addAssignment'>ADD</Link></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -33,7 +33,7 @@ function assignmentDetails() {
             return(
               <tr key = {i}>
                 <td>{d.assignmentDetailID}</td>
-                <td>{d.fname} {d. lname}</td>
+                <td>{d.fname|| ''} {d. lname || "NONE"}</td>
                 <td>{d.serialNum}</td>
                 <td>{d.cityCode}</td>
                 <td>{d.isActive}</td>

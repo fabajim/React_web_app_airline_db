@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require('../database/db_connector.js');
+const newAircraft = require('../utils/createAircraft.js');
 
 router.get('/', (req, res) => {
     const aircraft = "SELECT aircraftID, serialNum, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
@@ -21,8 +22,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
-    const insertQuery = "INSERT INTO Aircraft (serialNum, lastService, totalHourFlown, aircraftTypeID) VALUES (?)";
+router.post('/', async (req, res) => {
     let hour = parseInt(req.body.hours);
     let typeID = parseInt(req.body.type);
     const values = [
@@ -31,10 +31,14 @@ router.post('/', (req, res) => {
         hour,
         typeID
     ];
-    db.pool.query(insertQuery, [values], (err, data) => {
-        if(err) return res.json(err);
-        return res.json("Success: New Aircraft Added");
-    });
+    try {
+        const sql1 = await newAircraft.insertAircraft(db, values);
+        const sql2 = await newAircraft.insertAssignmentDetail(db, [sql1.insertId, null, req.body.airport, 1]);
+        return res.json("Insert Successful");
+    } catch(err) {
+        console.log(err);
+        return res.json(err);
+    }
 });
 
 router.delete('/:id', (req, res) => {

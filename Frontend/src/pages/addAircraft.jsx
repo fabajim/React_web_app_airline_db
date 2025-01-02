@@ -4,26 +4,43 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function addAircraft() {
     const [data, setCraftType] = useState([]);
+    const [airports, setAirports] = useState([]);
     const [serial, setSerial] = useState('');
     const [serviced, setService] = useState('');
     const [hours, setHours] = useState('');
     const [type, setType] = useState('');
+    const [airport, setAirport] = useState('');
     
+    const navigate = useNavigate();
+
     useEffect(() => {
         axios.get('http://localhost:8081/aircraftType')
         .then((res) => {
-            setCraftType(res.data)
-            console.log(res.data)
+            setCraftType(res.data);
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+            navigate('/aircraft');
+            alert("Server error: " + err.status + " - aircraftTypes");
+        });
     }, [])
-    
 
-    const navigate = useNavigate();
+    useEffect(() => {
+        axios.get('http://localhost:8081/airports')
+        .then((res) => {
+            setAirports(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+            navigate('/aircraft');
+            alert("Server error: " + err.status + " - airports");
+        });
+    }, [])
+
 
     function handleSubmit(event){
         event.preventDefault();
-        axios.post('http://localhost:8081/aircraft', {serial, serviced, hours, type})
+        axios.post('http://localhost:8081/aircraft', {serial, serviced, hours, type, airport})
         .then(res => {
             navigate('/aircraft');
             console.log(res);
@@ -73,6 +90,17 @@ function addAircraft() {
                     className="form-control" 
                     required 
                     onChange={e => setHours(e.target.value)} />
+                </div>
+                <div className="mb-2">
+                    <div><label>Current Location</label></div>
+                    <select onChange={e => setAirport(e.target.value)} required>
+                    <option value="">Select an Airport</option>
+                    {airports.map((d) => { return (
+                        <option key={d.airportID} value={d.airportID}>
+                            {d.cityCode}
+                        </option>
+                    )})}
+                </select>
                 </div>
                 <button type='submit' className='btn btn-success' >Save</button>
             </form>

@@ -8,11 +8,13 @@ router.get('/', (req, res) => {
                         Airports.airportID, Airports.cityCode,
                         IF(isActive = 1, 'YES', 'NO') AS isActive
 	                    FROM AssignmentDetails
-                        INNER JOIN Pilots ON AssignmentDetails.pilotID = Pilots.pilotID
-                        INNER JOIN Aircraft ON AssignmentDetails.aircraftID = Aircraft.aircraftID
-                        INNER JOIN Airports ON AssignmentDetails.airportID = Airports.airportID`;
+                        LEFT JOIN Pilots ON AssignmentDetails.pilotID = Pilots.pilotID
+                        LEFT JOIN Aircraft ON AssignmentDetails.aircraftID = Aircraft.aircraftID
+                        LEFT JOIN Airports ON AssignmentDetails.airportID = Airports.airportID
+                        ORDER BY isActive DESC`;
     db.pool.query(getQuery, (err, data) => {
         if (err) return res.json(err);
+        console.log(data);
         return res.json(data);
     });
 });
