@@ -14,9 +14,11 @@ const aircraftRoute = require('./routes/aircraft.js');
 const aircraftTypeRoute = require('./routes/aircraftTypes.js');
 const airportsRoute = require('./routes/airports.js');
 const assignmentsRoute = require('./routes/assignmentDetails.js');
+const filterPilot = require('./routes/filterPilot.js');
 
 // api routes
 app.use('/pilots', pilotRoute);
+app.use('/filterPilot', filterPilot);
 app.use('/license', licenseRoute);
 app.use('/licenseDetails', licenseDetailsRoute);
 app.use('/aircraft', aircraftRoute);
