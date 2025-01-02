@@ -19,4 +19,13 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+    const pilotQuery = "SELECT * FROM AssignmentDetails WHERE assignmentDetailID = ?";
+    const id = req.params.id;
+    db.pool.query(pilotQuery, [id], (err, data) => {
+        if(err) return res.json(err);
+        return res.json(data);
+    });
+});
+
 module.exports = router;
