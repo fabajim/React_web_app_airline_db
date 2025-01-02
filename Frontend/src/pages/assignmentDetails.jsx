@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function assignmentDetails() {
     const [data, setData] = useState([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get('http://localhost:8081/assignmentDetails')
@@ -13,6 +15,14 @@ function assignmentDetails() {
         })
         .catch((err)=> console.log(err));
     }, []);
+
+    function updateClick(id, curr) {
+      if (curr === 'NO'){
+        alert("Cannot update non current rows");
+      } else {
+        navigate(`/updateAssignment/${id}`);
+      }
+    }
 
   return (
     <>
@@ -38,7 +48,10 @@ function assignmentDetails() {
                 <td>{d.cityCode}</td>
                 <td>{d.isActive}</td>
                 <td>
-                    <Link className='btn btn-secondary btn-sm' to={`/`}>Update</Link>
+                    <button className='btn btn-secondary btn-sm' 
+                      onClick={ () => updateClick(d.assignmentDetailID, d.isActive)}>
+                        Update
+                    </button>
                 </td>
               </tr>)
           })}
