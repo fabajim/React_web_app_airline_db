@@ -60,6 +60,10 @@ table {
     padding: 12px 15px;
 }
 
+.total-aircraft {
+    text-align: center;
+}
+
 .read-table tbody tr {
     background-color: white;
     border-bottom: 1px solid #dddddd;

@@ -22,6 +22,7 @@ import AssignmentDetailsPage from './pages/assignmentDetails';
 import UpdateAssignmentPage from './pages/updateAssignment';
 import PastAssignmentsPage from './pages/pastAssignments';
 import CurrentAssignmentsPage from './pages/currentAssignments';
+import AddAirportPage from './pages/addAirport';
 
 function App() {
 
@@ -49,6 +50,7 @@ function App() {
             <Route path="/addType" element={<AddAircraftTypePage/>} />
             <Route path="/viewLicense/:id" element={<LicenseDetailsPage/>} />
             <Route path="/airports" element={<AirportsPage/>} />
+            <Route path="/addAirport" element={<AddAirportPage/>} />
             <Route path="/assignments" element={<AssignmentDetailsPage/>} />
             <Route path="/updateAssignment/:id" element={<UpdateAssignmentPage/>} />
             <Route path="/currentAssignments" element={<CurrentAssignmentsPage/>} />

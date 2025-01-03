@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-//import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function airports() {
@@ -25,6 +25,12 @@ function airports() {
             <th>City Code</th>
             <th>Hub</th>
             <th>Total Aircraft</th>
+            <th>
+              <Link className={'add-element'} 
+                to='/addAirport'>
+                    ADD+
+              </Link>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -35,7 +41,8 @@ function airports() {
                 <td>{d.city}</td>
                 <td>{d.cityCode}</td>
                 <td>{d.isHub}</td>
-                <td>{d.totalAircraft}</td>
+                <td className='total-aircraft'>{d.totalAircraft}</td>
+                <td></td>
               </tr>)
           })}
         </tbody>
