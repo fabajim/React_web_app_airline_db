@@ -111,6 +111,7 @@ function updateAssignment() {
                 </select>
                 </div>
                 <button type='submit' className='btn btn-success' >Save</button>
+                <Link to='/assignments' className='btn btn-danger'>Cancel</Link>
             </form>
         </div>
     </div>
