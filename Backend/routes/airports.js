@@ -20,4 +20,20 @@ router.get('/', (req, res) => {
     });
 });
 
+router.post('/', (req, res) => {
+    const insertQuery = "INSERT INTO Airports (city, cityCode, isHub) VALUES (?)";
+    const values = [
+        req.body.city,
+        req.body.code,
+        req.body.hub
+    ];
+    db.pool.query(insertQuery, [values], (err, data) => {
+        if(err){ 
+            console.log(err);
+            return res.json(err);
+        }
+        return res.json("Airport Type Successfully Added");
+    });
+});
+
 module.exports = router;
