@@ -9,7 +9,6 @@ CREATE TABLE Airports (
     airportID int NOT NULL AUTO_INCREMENT,
     city varchar(45) NOT NULL,
     cityCode varchar(10) NOT NULL,
-    totalAircraft int,
     isHub tinyint(1),
     PRIMARY KEY (airportID)
 );
@@ -77,7 +76,7 @@ CREATE TABLE LicenseDetails (
 );
 
 
-INSERT into Airports (city, cityCode, totalAircraft, isHub) VALUES ("Los Angeles", "LAX", 0, 1), ("New York", "JFK", 0, 1), ("San Francisco", "SFO", 0, 0);
+INSERT into Airports (city, cityCode, isHub) VALUES ("Los Angeles", "LAX", 1), ("New York", "JFK", 1), ("San Francisco", "SFO", 0);
 
 INSERT into Licenses (licenseType, hoursNeeded) VALUES ("Student License", 75), ("Recreational License", 30), ("Private Pilot", 40), ("Commercial", 250), ("Transportation", 1500);
 
