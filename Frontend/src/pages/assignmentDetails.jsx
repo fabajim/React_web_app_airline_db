@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function assignmentDetails() {
     const [data, setData] = useState([]);
@@ -26,37 +26,49 @@ function assignmentDetails() {
 
   return (
     <>
-    <h1 className='page-name'>Assignments Log</h1>
-      <table className="read-table">
-        <thead>
-          <tr>
-            <th>Assignment ID</th>
-            <th>Pilot</th>
-            <th>Aircraft</th>
-            <th>Current Location</th>
-            <th>Current</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d, i) => {
-            return(
-              <tr key = {i}>
-                <td>{d.assignmentDetailID}</td>
-                <td>{d.fname|| ''} {d. lname || "NONE"}</td>
-                <td>{d.serialNum}</td>
-                <td>{d.cityCode}</td>
-                <td>{d.isActive}</td>
-                <td>
-                    <button className='btn btn-secondary btn-sm' 
-                      onClick={ () => updateClick(d.assignmentDetailID, d.serialNum, d.cityCode, d.isActive)}>
-                        Update
-                    </button>
-                </td>
-              </tr>)
-          })}
-        </tbody>
-      </table>
+      <h1 className='page-name'>Assignments Log</h1>
+      <div className='table-container'>
+        <table className="read-table">
+          <thead>
+            <tr>
+              <th>Assignment ID</th>
+              <th>Pilot</th>
+              <th>Aircraft</th>
+              <th>Current Location</th>
+              <th>Current</th>
+              <th>
+                <Link
+                  to='/currentAssignments'
+                  className='btn btn-sm btn-light'
+                  title='View all current assignments'>Current</Link>
+                <Link
+                  to='/pastAssignments'
+                  className='btn btn-sm btn-dark'
+                  title='View all past assignments'>Past</Link>
+                  
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((d, i) => {
+              return(
+                <tr key = {i}>
+                  <td>{d.assignmentDetailID}</td>
+                  <td>{d.fname|| ''} {d. lname || "NONE"}</td>
+                  <td>{d.serialNum}</td>
+                  <td>{d.cityCode}</td>
+                  <td>{d.isActive}</td>
+                  <td>
+                      <button className='btn btn-secondary btn-sm' 
+                        onClick={ () => updateClick(d.assignmentDetailID, d.serialNum, d.cityCode, d.isActive)}>
+                          Update
+                      </button>
+                  </td>
+                </tr>)
+            })}
+          </tbody>
+        </table>
+      </div>
     </>
   )
 }
