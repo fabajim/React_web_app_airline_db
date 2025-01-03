@@ -23,7 +23,7 @@ function airports() {
             <th>Airport ID</th>
             <th>City</th>
             <th>City Code</th>
-            <th>Is Hub?</th>
+            <th>Hub</th>
             <th>Total Aircraft</th>
           </tr>
         </thead>
