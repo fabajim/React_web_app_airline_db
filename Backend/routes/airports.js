@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
             console.log(err);
             return res.json(err);
         }
-        console.log(data);
+        //console.log(data);
         return res.json(data);
     });
 });
@@ -34,6 +34,19 @@ router.post('/', (req, res) => {
         }
         return res.json("Airport Type Successfully Added");
     });
+});
+
+router.put('/:id', (req, res) => {
+    const id = req.params.id;
+    const values = [req.body.updateHub, id];
+    const updateSql = `UPDATE Airports SET isHub = ? WHERE airportID = ?`;
+    db.pool.query(updateSql, values, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.json(err);
+        }
+        return res.json('Airport Updated.');
+    })
 });
 
 module.exports = router;
