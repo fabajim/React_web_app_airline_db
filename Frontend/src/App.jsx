@@ -20,6 +20,8 @@ import LicenseDetailsPage from './pages/licenseDetails';
 import AirportsPage from './pages/airports';
 import AssignmentDetailsPage from './pages/assignmentDetails';
 import UpdateAssignmentPage from './pages/updateAssignment';
+import PastAssignmentsPage from './pages/pastAssignments';
+import CurrentAssignmentsPage from './pages/currentAssignments';
 
 function App() {
 
@@ -49,6 +51,8 @@ function App() {
             <Route path="/airports" element={<AirportsPage/>} />
             <Route path="/assignments" element={<AssignmentDetailsPage/>} />
             <Route path="/updateAssignment/:id" element={<UpdateAssignmentPage/>} />
+            <Route path="/currentAssignments" element={<CurrentAssignmentsPage/>} />
+            <Route path="/pastAssignments" element={<PastAssignmentsPage/>} />
           </Routes>
         </section>
       </main>

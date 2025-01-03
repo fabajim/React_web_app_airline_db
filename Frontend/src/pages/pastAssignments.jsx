@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
-function assignmentDetails() {
+function pastAssignments() {
     const [data, setData] = useState([]);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('http://localhost:8081/assignmentDetails')
+        axios.get('http://localhost:8081/assignmentPast')
         .then((res)=> {
             setData(res.data);
             console.log(res.data);
@@ -23,10 +23,9 @@ function assignmentDetails() {
         navigate(`/updateAssignment/${id}:${serial}:${city}`)
       }
     }
-
   return (
     <>
-      <h1 className='page-name'>All Assignments Log</h1>
+      <h1 className='page-name'>Past Assignments Log</h1>
       <div className='table-container'>
         <table className="read-table">
           <thead>
@@ -39,14 +38,13 @@ function assignmentDetails() {
               <Link
                   to='/currentAssignments'
                   className='btn btn-sm btn-light'
-                  title='View all current assignments'>Current</Link>
+                  title='View Current assignments'>Current</Link>
               </th>
               <th>
                 <Link
-                  to='/pastAssignments'
+                  to='/assignments'
                   className='btn btn-sm btn-dark'
-                  title='View all past assignments'>Past</Link>
-                  
+                  title='View all assignments'>All</Link>
               </th>
             </tr>
           </thead>
@@ -74,4 +72,4 @@ function assignmentDetails() {
   )
 }
 
-export default assignmentDetails
+export default pastAssignments
