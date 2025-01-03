@@ -20,11 +20,42 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-    const pilotQuery = "SELECT * FROM AssignmentDetails WHERE assignmentDetailID = ?";
+    const getAssignment = "SELECT * FROM AssignmentDetails WHERE assignmentDetailID = ?";
     const id = req.params.id;
-    db.pool.query(pilotQuery, [id], (err, data) => {
+    db.pool.query(getAssignment, [id], (err, data) => {
         if(err) return res.json(err);
         return res.json(data);
+    });
+});
+
+router.post('/', (req, res) => {
+    const values = [
+        req.body.aircraft,
+        req.body.pilot,
+        req.body.airport,
+        1
+    ];
+    const addAssignment = `INSERT into AssignmentDetails (aircraftID, pilotID, airportID, isActive) 
+                            VALUES (?)`;
+    db.pool.query(addAssignment, [values], (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.json(err);
+        }
+        return res.json(data);
+    })
+})
+
+router.put('/:id', (req, res) => {
+    const updateQuery = `UPDATE AssignmentDetails SET isActive = ?
+                            WHERE assignmentDetailID = ?`;
+    const value = [0, req.params.id];
+    db.pool.query(updateQuery, value, (err, data) => {
+        if (err) {
+            console.log(err);
+            return res.json(err);
+        }
+        return res.json(err);
     });
 });
 

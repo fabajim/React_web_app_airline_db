@@ -16,11 +16,11 @@ function assignmentDetails() {
         .catch((err)=> console.log(err));
     }, []);
 
-    function updateClick(id, curr) {
+    function updateClick(id, serial, city, curr) {
       if (curr === 'NO'){
         alert("Cannot update non current rows");
       } else {
-        navigate(`/updateAssignment/${id}`);
+        navigate(`/updateAssignment/${id}:${serial}:${city}`)
       }
     }
 
@@ -49,7 +49,7 @@ function assignmentDetails() {
                 <td>{d.isActive}</td>
                 <td>
                     <button className='btn btn-secondary btn-sm' 
-                      onClick={ () => updateClick(d.assignmentDetailID, d.isActive)}>
+                      onClick={ () => updateClick(d.assignmentDetailID, d.serialNum, d.cityCode, d.isActive)}>
                         Update
                     </button>
                 </td>
