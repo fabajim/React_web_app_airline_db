@@ -51,9 +51,10 @@ function updateAssignment() {
 
   function handleSubmit(event){
     event.preventDefault();
-    if (data[0].pilotID === null && pilot === "NONE"){
+    if (pilot === "Current") pilot = data[0].pilotID;
+    if (data[0].pilotID === null && (pilot === "NONE" || pilot === null)){
         alert('A pilot must be assigned before updating the airport!')
-    } else if (data[0].pilotID === null && airport != data[0].airportID) {
+    } else if ((data[0].pilotID === null || pilot === "NONE") && airport != data[0].airportID) {
         alert(`A pilot must first be assigned before changing airports!
         Select the current airport: ${vals[2]}`)
     } else {
@@ -90,6 +91,7 @@ function updateAssignment() {
                     <select onChange={e => setPilot(e.target.value)} required>
                     <option value="">Pilot</option>
                     <option value="NONE">NONE</option>
+                    <option value="Current">Current Pilot</option>
                     {pilots.map((data) => { return (
                         <option key={data.pilotID} value={data.pilotID}>
                             {data.fname} {data.lname}
