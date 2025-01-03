@@ -23,8 +23,8 @@ function airports() {
             <th>Airport ID</th>
             <th>City</th>
             <th>City Code</th>
-            <th>Total Aircraft</th>
             <th>Is Hub?</th>
+            <th>Total Aircraft</th>
           </tr>
         </thead>
         <tbody>
@@ -34,8 +34,8 @@ function airports() {
                 <td>{d.airportID}</td>
                 <td>{d.city}</td>
                 <td>{d.cityCode}</td>
-                <td>{d.totalAircraft}</td>
                 <td>{d.isHub}</td>
+                <td>{d.totalAircraft}</td>
               </tr>)
           })}
         </tbody>
