@@ -54,7 +54,8 @@ function updateAssignment() {
     if (pilot === "Current") pilot = data[0].pilotID;
     if (data[0].pilotID === null && (pilot === "NONE" || pilot === null)){
         alert('A pilot must be assigned before updating the airport!')
-    } else if ((data[0].pilotID === null || pilot === "NONE") && airport != data[0].airportID) {
+    } else if ((data[0].pilotID === null || pilot === "NONE" || pilot !==data[0].pilotID) && 
+                airport != data[0].airportID) {
         alert(`A pilot must first be assigned before changing airports!
         Select the current airport: ${vals[2]}`)
     } else {
