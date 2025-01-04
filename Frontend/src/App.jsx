@@ -7,22 +7,22 @@ import Navigation from './components/Navigation';
 import './App.css';
 
 import Home from './pages/home';
-import PilotsPage from './pages/pilots';
-import AddPilotPage from './pages/addPilot';
-import UpdatePilotPage from './pages/updatePilot';
-import AircraftPage from './pages/aircraft';
-import AddAircraftPage from './pages/addAircraft';
-import GetType from './pages/getType';
-import UpdateAircraft from './pages/updateAircraft';
-import AircraftTypePage from './pages/aircraftType';
-import AddAircraftTypePage from './pages/addType';
-import LicenseDetailsPage from './pages/licenseDetails';
-import AirportsPage from './pages/airports';
-import AssignmentDetailsPage from './pages/assignmentDetails';
-import UpdateAssignmentPage from './pages/updateAssignment';
-import PastAssignmentsPage from './pages/pastAssignments';
-import CurrentAssignmentsPage from './pages/currentAssignments';
-import AddAirportPage from './pages/addAirport';
+import PilotsPage from './pages/PilotPages/pilots';
+import AddPilotPage from './pages/PilotPages/addPilot';
+import UpdatePilotPage from './pages/PilotPages/updatePilot';
+import AircraftPage from './pages/AircraftPages/aircraft';
+import AddAircraftPage from './pages/AircraftPages/addAircraft';
+import UpdateAircraft from './pages/AircraftPages/updateAircraft';
+import GetType from './pages/AircraftTypePages/getType';
+import AircraftTypePage from './pages/AircraftTypePages/aircraftType';
+import AddAircraftTypePage from './pages/AircraftTypePages/addType';
+import LicenseDetailsPage from './pages/PilotPages/licenseDetails';
+import AirportsPage from './pages/AirportPages/airports';
+import AssignmentDetailsPage from './pages/AssignmentDetailsPages/assignmentDetails';
+import UpdateAssignmentPage from './pages/AssignmentDetailsPages/updateAssignment';
+import PastAssignmentsPage from './pages/AssignmentDetailsPages/pastAssignments';
+import CurrentAssignmentsPage from './pages/AssignmentDetailsPages/currentAssignments';
+import AddAirportPage from './pages/AirportPages/addAirport';
 
 function App() {
 
@@ -42,13 +42,13 @@ function App() {
             <Route path="/pilots" element={<PilotsPage/>}/>
             <Route path="/addPilot" element={<AddPilotPage/>}/>
             <Route path="/updatePilot/:id" element={<UpdatePilotPage/>}/>
+            <Route path="/viewLicense/:id" element={<LicenseDetailsPage/>} />
             <Route path="/aircraft" element={<AircraftPage/>}/>
             <Route path="/addAircraft" element={<AddAircraftPage/>} />
             <Route path="/getType/:id" element={<GetType/>} />
             <Route path="/updateAircraft/:id" element={<UpdateAircraft/>} />
             <Route path="/aircraftType" element={<AircraftTypePage/>} />
             <Route path="/addType" element={<AddAircraftTypePage/>} />
-            <Route path="/viewLicense/:id" element={<LicenseDetailsPage/>} />
             <Route path="/airports" element={<AirportsPage/>} />
             <Route path="/addAirport" element={<AddAirportPage/>} />
             <Route path="/assignments" element={<AssignmentDetailsPage/>} />
