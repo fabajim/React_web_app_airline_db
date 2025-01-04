@@ -74,7 +74,7 @@ function updateAssignment() {
 
         console.log(post_response);
         console.log(put_response);
-        navigate('/assignments');
+        navigate('/currentAssignments');
     } catch (error) {
         console.log(error);
     }
