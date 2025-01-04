@@ -4,9 +4,15 @@ const db = require('../database/db_connector.js');
 const newAircraft = require('../utils/createAircraft.js');
 
 router.get('/', (req, res) => {
-    const aircraft = "SELECT aircraftID, serialNum, lastService, totalHourFlown, model, AircraftTypes.aircraftTypeID \n"+
-                     "FROM Aircraft \n"+
-                     "INNER JOIN AircraftTypes ON Aircraft.aircraftTypeID = AircraftTypes.aircraftTypeID";
+    const aircraft = `SELECT Aircraft.aircraftID, serialNum, lastService, totalHourFlown, model, 
+                            AircraftTypes.aircraftTypeID,
+                            Airports.cityCode AS location
+                        FROM Aircraft
+                        INNER JOIN AircraftTypes ON Aircraft.aircraftTypeID = AircraftTypes.aircraftTypeID
+                        INNER JOIN AssignmentDetails ON Aircraft.aircraftID = AssignmentDetails.aircraftID
+                            AND AssignmentDetails.isActive = 1
+                        INNER JOIN Airports ON airports.airportID = AssignmentDetails.airportID
+                            AND AssignmentDetails.aircraftID = Aircraft.aircraftID`;
     db.pool.query(aircraft, (err, data)=> {
         if(err) return res.json(err);
         return res.json(data);
