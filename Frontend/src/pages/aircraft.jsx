@@ -54,6 +54,7 @@ function AircraftPage() {
             <th>Aircraft ID</th>
             <th>Serial Number</th>
             <th>Aircraft Type</th>
+            <th>Current Location</th>
             <th>Last Serviced</th>
             <th>Hours Flown</th>
             <th>
@@ -75,6 +76,7 @@ function AircraftPage() {
                     {d.model}
                   </Link>
                 </td>
+                <td>{d.location}</td>
                 <td>{new Date(d.lastService).toLocaleDateString()}</td>
                 <td>{d.totalHourFlown}</td>
                 <td>
