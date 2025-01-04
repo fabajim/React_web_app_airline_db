@@ -11,7 +11,8 @@ router.get('/', (req, res) => {
                         LEFT JOIN Pilots ON AssignmentDetails.pilotID = Pilots.pilotID
                         LEFT JOIN Aircraft ON AssignmentDetails.aircraftID = Aircraft.aircraftID
                         LEFT JOIN Airports ON AssignmentDetails.airportID = Airports.airportID
-                        WHERE isActive = 1`;
+                        WHERE isActive = 1
+                        ORDER BY assignmentDetailID DESC`;
     db.pool.query(getQuery, (err, data) => {
         if (err) return res.json(err);
         return res.json(data);
