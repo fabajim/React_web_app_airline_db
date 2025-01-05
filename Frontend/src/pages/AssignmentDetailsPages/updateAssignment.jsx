@@ -4,14 +4,17 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 
 function updateAssignment() {
   const [data, setData] = useState([]);
+  const [license, setLicense] = useState([])
   const [pilots, setPilots] = useState([]);
   const [airports, setAirports] = useState([]);
-  let [pilot, setPilot] = useState('');
+  let [pilot, setPilot] = useState([]);
   const [airport, setAirport] = useState('');
 
   const navigate = useNavigate();
   const {id} = useParams();
   const vals = id.split(":");
+  const sn = vals[1];
+  
 
   useEffect(() => {
     axios.get(`http://localhost:8081/assignmentDetails/${id}`)
@@ -48,6 +51,18 @@ function updateAssignment() {
         alert("Server error: " + err.status + " - Airports");
     });
   }, []);
+  
+  useEffect(() => {
+    axios.get(`http://localhost:8081/aircraftLicense/${sn}`)
+    .then((res) => {
+        setLicense(res.data);
+        console.log(res.data);
+    })
+    .catch((err) => {
+        navigate(-1);
+        alert("Server error: " + err.status + " - License");
+    })
+  }, []);
 
   function handleSubmit(event){
     event.preventDefault();
@@ -59,12 +74,25 @@ function updateAssignment() {
         alert(`A pilot must first be assigned before changing airports!
         Select the current airport: ${vals[2]}`)
     } else {
-        handleUpdate();
+        validatePilot();
     }
   }
 
+  function validatePilot() {
+    if (pilot === "NONE") {
+        pilot = null;
+    } else if(pilot != data[0].pilotID) {
+        let pilotInfo = pilot.split(',');
+        if (pilotInfo[1] < license[0].licenseID){
+            alert("Pilot is not licensed to fly this aircraft!")
+            return
+        }
+        pilot = pilotInfo[0];
+    }
+    handleUpdate();
+  }
+
   async function handleUpdate() {
-    if (pilot === "NONE") pilot = null;
     let aircraft = data[0].aircraftID;
     let post_response;
     let put_response;
@@ -94,7 +122,7 @@ function updateAssignment() {
                     <option value="NONE">NONE</option>
                     <option value="Current">Current Pilot</option>
                     {pilots.map((data) => { return (
-                        <option key={data.pilotID} value={data.pilotID}>
+                        <option key={data.pilotID} value={[data.pilotID, data.license]}>
                             {data.fname} {data.lname}
                         </option>
                     )})}
