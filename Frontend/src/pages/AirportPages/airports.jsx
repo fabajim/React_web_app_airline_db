@@ -18,7 +18,11 @@ function airports() {
             setData(res.data);
             console.log(res.data);
         })
-        .catch((err)=> console.log(err));
+        .catch((err)=> {
+          console.log(err);
+          alert(`Server Error: ${err.status}`);
+          navigate('/')
+        });
     }, []);
 
     /*

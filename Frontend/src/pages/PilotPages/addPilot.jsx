@@ -25,7 +25,7 @@ function addPilot() {
             setLicenseData(res.data);
         })
         .catch((err) => {
-            alert("Server Error: " + err);
+            alert(`Server Error: ${err.status}`);;
             console.log(err);
             navigate('/pilots');
         })
@@ -47,7 +47,7 @@ function addPilot() {
             navigate('/pilots');
         }).catch((err) => {
             console.log(err);
-            alert(`Server Error: ${err}`);
+            alert(`Server Error: ${err.status}`);
             navigate('/');
         });
     }

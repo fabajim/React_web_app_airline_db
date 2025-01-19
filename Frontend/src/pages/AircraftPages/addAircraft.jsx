@@ -61,7 +61,7 @@ function addAircraft() {
             console.log(res);
         }).catch(err => {
             console.log(err);
-            alert(`Server Error: ${err}`);
+            alert(`Server Error: ${err.status}`);
         });
     }
 

@@ -21,7 +21,11 @@ function updatePilot() {
             setData(res.data);
             console.log(res.data)
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+            alert(`Server Error: ${err.status}`);
+            navigate(-1)
+        });
     }, [id]);
 
     /*
@@ -55,7 +59,11 @@ function updatePilot() {
             navigate('/pilots');
             console.log(res);
         })
-        .catch(err => console.log(err))
+        .catch((err) => {
+            console.log(err);
+            alert(`Server Error: ${err.status}`);
+            navigate(-1);
+          });
     }
 
   return (

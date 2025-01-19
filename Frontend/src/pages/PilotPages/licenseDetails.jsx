@@ -28,7 +28,11 @@ function licenseDetails() {
           setData(res.data);
           console.log(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        alert(`Server Error: ${err.status}`);
+        navigate(-1);
+      });
   }, []);
 
   /*
@@ -42,7 +46,11 @@ function licenseDetails() {
         setLData(res.data);
         console.log(res.data);
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert(`Server Error: ${err.status}`);
+      navigate(-1);
+    });
 }, []);
 
   function handleClick() {
@@ -82,7 +90,12 @@ function licenseDetails() {
       console.log(res);
       alert("New License added.")
       navigate('/pilots');
-    }).catch(err => console.log(err))
+    })
+    .catch((err) => {
+      console.log(err);
+      alert(`Server Error: ${err.status}`);
+      navigate(-1);
+    });
     }
   }
 
@@ -100,7 +113,11 @@ function licenseDetails() {
         console.log(res);
         navigate('/pilots');
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err);
+        alert(`Server Error: ${err.status}`);
+        navigate(-1);
+      });
     }
   }
 

@@ -27,7 +27,7 @@ function AircraftPage() {
       })
       .catch((err)=> {
         console.log(err);
-        alert(`Server Error: ${err}`)
+        alert(`Server Error: ${err.status}`)
         navigate('/')
       });
     }
@@ -64,7 +64,7 @@ function AircraftPage() {
     })
     .catch((err) => {
       console.log(err);
-      alert(`Server Error - ${err}`)
+      alert(`Server Error - ${err.status}`)
       navigate(0)
       
     })

@@ -28,7 +28,7 @@ function addType() {
         setData(res.data);
     })
     .catch((err) => {
-        alert("Server Error: " + err);
+        alert("Server Error: " + err.status);
         console.log(err);
         navigate(-1);
     });
@@ -43,7 +43,10 @@ function addType() {
       .then(res => {
           navigate(-1);
           console.log(res);
-      }).catch(err => console.log(err));
+      }).catch((err) => {
+        console.log(err);
+        alert(`Server Error: ${err.status}`)
+    });
   }
 
   return (

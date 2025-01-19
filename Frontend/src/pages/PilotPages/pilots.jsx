@@ -21,7 +21,7 @@ function PilotPage() {
     })
     .catch((err) => {
       console.log(err);
-      alert(`Server Error: ${err}`);
+      alert(`Server Error: ${err.status}`);
       navigate('/');
     });
   }
@@ -58,7 +58,8 @@ function PilotPage() {
     })
     .catch((err) => {
       console.log(err);
-      alert(`Server Error: ${err}`);
+      alert(`Server Error: ${err.status}`);
+      navigate('/');
     });
   }
 

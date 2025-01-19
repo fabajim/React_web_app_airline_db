@@ -26,7 +26,7 @@ function aircraftType() {
             })
             .catch(err => {
                 console.log(err);
-                alert(` Server Error: ${err}`);
+                alert(` Server Error: ${err.status}`);
                 navigate('/');
             })
         }
@@ -70,7 +70,7 @@ function aircraftType() {
         })
         .catch((err) => {
             console.log(err);
-            alert(`Error: ${err}`);
+            alert(`Server Error: ${err.status}`);
             navigate(0);
         });
     }
