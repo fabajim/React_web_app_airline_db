@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 
 function PilotPage() {
-  const [data, setData] = useState([])
-  const [deleted, setDeleted] = useState(true)
+  const [data, setData] = useState([]);
+  const [deleted, setDeleted] = useState(true);
+
+  const navigate = useNavigate();
   
   /*
       Fetch Api call to get all the data from pilots
@@ -17,7 +19,11 @@ function PilotPage() {
     .then((res)=> {
       setData(res.data)
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      alert(`Server Error: ${err}`);
+      navigate('/');
+    });
   }
   }, [deleted])
 
@@ -50,7 +56,10 @@ function PilotPage() {
     .then((res) => {
       setDeleted(true)
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      console.log(err);
+      alert(`Server Error: ${err}`);
+    });
   }
 
   return (
