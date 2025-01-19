@@ -7,6 +7,9 @@ function PilotPage() {
   const [data, setData] = useState([])
   const [deleted, setDeleted] = useState(true)
   
+  /*
+      Fetch Api call to get all the data from pilots
+  */
   useEffect(()=>{
     if(deleted){
       setDeleted(false)
@@ -18,6 +21,11 @@ function PilotPage() {
   }
   }, [deleted])
 
+  /*
+      Handles delete button click: Gives a warning to the user
+      and waits for a conformation.
+      If confirmed, handelDelete is called 
+  */
   function handleClick(id, fname, lname){
     Swal.fire({
       title: `Delete ${fname} ${lname}?`,
@@ -34,6 +42,9 @@ function PilotPage() {
     });
   }
 
+  /*
+      Deletes pilot with a Delete api using the pilots ID
+  */
   function handleDelete(id){
     axios.delete(`http://localhost:8081/pilots/${id}`)
     .then((res) => {
