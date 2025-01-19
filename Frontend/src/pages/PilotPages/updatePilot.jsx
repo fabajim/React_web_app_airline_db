@@ -12,6 +12,9 @@ function updatePilot() {
     const navigate = useNavigate();
     const {id} = useParams();
 
+    /*
+        Fetch api call to get data from the selected pilot. 
+    */
     useEffect(() => {
         axios.get(`http://localhost:8081/pilots/${id}`)
         .then((res) => {
@@ -21,9 +24,11 @@ function updatePilot() {
         .catch((err) => console.log(err));
     }, [id]);
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        //use default values if no change was made
+    /*
+        Checks if value is missing. If so,
+        use default data.
+    */
+    function checkEmptyValues() {
         if(fname === ""){
             fname = data[0].fname;
         }
@@ -36,6 +41,15 @@ function updatePilot() {
         if(number === ""){
             number = data[0].phoneNumber;
         }
+    }
+    
+    /*
+        Handles save button click. Calls checkEmptyValues then
+        uses a put api to update pilot
+    */
+    function handleSubmit(event) {
+        event.preventDefault();
+        checkEmptyValues();
         axios.put(`http://localhost:8081/pilots/${id}`, {fname, lname, email, number})
         .then(res => {
             navigate('/pilots');
@@ -54,32 +68,56 @@ function updatePilot() {
                 <form onSubmit={handleSubmit} key={i}>
                     <h2>Edit Pilot Info: {pilots.fname} {pilots.lname}</h2>
                     <div>
-                        <Link to='/pilots' 
-                        title="Cancel and go back to pilots page"
-                        className='btn btn-danger btn-bg'>
-                         Cancel
+                        <Link 
+                            to='/pilots' 
+                            title="Cancel and go back to pilots page"
+                            className='btn btn-danger btn-bg'>
+                            Cancel
                         </Link>
                     </div>
                     <div className='mb-2'>
                         <label htmlFor="fname">First Name</label>
-                        <input defaultValue={pilots.fname} key={pilots.fname} type='text' name='fname' 
-                        autoFocus className='form-control' required 
-                        onChange={(e) => setFname(e.target.value)} />
+                        <input 
+                            autoFocus
+                            defaultValue={pilots.fname} 
+                            key={pilots.fname} 
+                            type='text' name='fname' 
+                            className='form-control' 
+                            required 
+                            onChange={(e) => setFname(e.target.value)} 
+                        />
                     </div>
                     <div className='mb-2'>
                         <label htmlFor="lname">Last Name</label>
-                        <input defaultValue={pilots.lname} type='text' name='lname' className='form-control' required 
-                        onChange={(e) => setLname(e.target.value)} />
+                        <input 
+                            defaultValue={pilots.lname} 
+                            type='text' 
+                            name='lname' 
+                            className='form-control' 
+                            required 
+                            onChange={(e) => setLname(e.target.value)} 
+                        />
                     </div>
                     <div className='mb-2'>
                         <label htmlFor="email">Email</label>
-                        <input defaultValue={pilots.email} type='email' name='email' className='form-control' required 
-                        onChange={(e) => setEmail(e.target.value)} />
+                        <input 
+                            defaultValue={pilots.email} 
+                            type='email' name='email' 
+                            className='form-control' 
+                            required 
+                            onChange={(e) => setEmail(e.target.value)} 
+                        />
                     </div>
                     <div className='mb-2'>
                         <label htmlFor="number">Phone Number</label>
-                        <input defaultValue={pilots.phoneNumber} type='tel' name='number' className='form-control' required 
-                        onChange={(e) => setNumber(e.target.value)} />
+                        <input 
+                            defaultValue={pilots.phoneNumber}  
+                            type='tel' 
+                            name='number' 
+                            className='form-control' 
+                            required 
+                            onChange={(e) => setNumber(e.target.value)} 
+                        />
                     </div>
                     <button type="submit" className='btn btn-success'>Update</button>
                 </form>

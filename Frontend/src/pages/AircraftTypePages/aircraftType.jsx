@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
+/*
+    Shows the aircraft types that the airline has
+    Airline can have many of the same type
+*/
 function aircraftType() {
     const [data, setData] = useState([]);
     const [deleted, setDeleted] = useState(true)
 
+    const navigate = useNavigate();
+
+    /*
+        get api call to set the data for the table
+    */
     useEffect(() => {
         if(deleted){
             setDeleted(false)
@@ -15,10 +24,18 @@ function aircraftType() {
                 setData(res.data);
                 console.log(res.data);
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+                console.log(err);
+                alert(` Server Error: ${err}`);
+                navigate('/');
+            })
         }
     }, [deleted])
 
+    /*
+        Handles when a user clicks on the delete button.
+        Warns user that action cannot be undone
+    */
     function handleClick(id, model) {
         Swal.fire({
               title: `Delete ${model}?`,
@@ -35,6 +52,10 @@ function aircraftType() {
               });
     }
 
+    /*
+        Deletes selected aircraft type only if 
+        an aircraft of this type is not in the aircraft table
+    */
     function handleDelete(id, model){
         axios.delete(`http://localhost:8081/aircraftType/${id}`)
         .then((res) =>{
@@ -47,7 +68,11 @@ function aircraftType() {
                   });
             } 
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            console.log(err);
+            alert(`Error: ${err}`);
+            navigate(0);
+        });
     }
 
   return (
@@ -56,26 +81,37 @@ function aircraftType() {
             <table className="read-table">
             <thead>
                 <tr>
-                <th>AircraftType ID</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Total Seating</th>
-                <th>License Needed</th>
-                <th><Link className={'add-element'} to='/addType' title='Add new aircraft type'>ADD+</Link></th>
+                    <th>AircraftType ID</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Total Seating</th>
+                    <th>License Needed</th>
+                    <th>
+                        <Link 
+                            className={'add-element'} 
+                            to='/addType' 
+                            title='Add new aircraft type'>
+                                ADD+
+                        </Link>
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 {data.map((d, i) => {
                 return(
                     <tr key = {i}>
-                    <td>{d.aircraftTypeID}</td>
-                    <td>{d.make}</td>
-                    <td>{d.model}</td>
-                    <td>{d.totalSeating}</td>
-                    <td>{d.licenseType}</td>
-                    <td>
-                    <button className="btn btn-danger btn-sm" onClick={ () => handleClick(d.aircraftTypeID, d.model)}>Delete</button>
-                    </td>
+                        <td>{d.aircraftTypeID}</td>
+                        <td>{d.make}</td>
+                        <td>{d.model}</td>
+                        <td>{d.totalSeating}</td>
+                        <td>{d.licenseType}</td>
+                        <td>
+                            <button 
+                                className="btn btn-danger btn-sm" 
+                                onClick={ () => handleClick(d.aircraftTypeID, d.model)}
+                                >Delete
+                            </button>
+                        </td>
                     </tr>)
                 })}
             </tbody>

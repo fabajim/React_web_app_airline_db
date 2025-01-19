@@ -12,6 +12,8 @@ function getType() {
     const navigate = useNavigate();
     const {id} = useParams();
 
+    // api call to get data from selected type id
+    // set data to data
     useEffect(() => {
         axios.get(`http://localhost:8081/aircraftType/${id}`)
         .then((res) => {
@@ -21,6 +23,7 @@ function getType() {
         .catch((err) => console.log(err));
     }, []);
 
+    // Handle click of back button
     function handleClick() {
         navigate('/aircraft');
     }
@@ -37,7 +40,11 @@ function getType() {
             <th>Total Seating</th>
             <th>License Type</th>
             <th>
-                <button className='btn btn-dark btn-sm' onClick={() => handleClick()}>Back</button>
+                <button 
+                  className='btn btn-dark btn-sm' 
+                  onClick={() => handleClick()}
+                    >Back
+                </button>
             </th>
           </tr>
         </thead>

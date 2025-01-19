@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+/**
+    Add new aircraftType page
+    Form lets user add a new aircraft Type
+ */
+
 function addType() {
   const [data, setData] = useState([]);
   const [make, setMake] = useState('');
@@ -11,6 +16,11 @@ function addType() {
 
   const navigate = useNavigate();
 
+  /*
+        Get api to get pilot licenses
+        Used to select the type of license needed to
+        fly the new aircraft type
+  */
   useEffect(() => {
     axios.get('http://localhost:8081/license')
     .then((res) => {
@@ -24,6 +34,9 @@ function addType() {
     });
   }, []);
 
+  /*
+        Post Api to add a new aircraft type
+  */
   function handleSubmit(event){
       event.preventDefault();
       axios.post('http://localhost:8081/aircraftType', {make, model, seating, license})
@@ -42,27 +55,32 @@ function addType() {
                 <h3>Fill in all data.</h3>
                 <div className="mb-2">
                     <label htmlFor=''>Make</label>
-                    <input type="text" 
-                    name='make' 
-                    autoFocus 
-                    className='form-control' 
-                    required onChange={e => setMake(e.target.value)} />
+                    <input 
+                        type="text" 
+                        name='make' 
+                        autoFocus 
+                        className='form-control' 
+                        required 
+                        onChange={e => setMake(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Model</label>
-                    <input type="text" 
-                    name='model' 
-                    autoFocus 
-                    className='form-control' 
-                    required onChange={e => setModel(e.target.value)} />
+                    <input 
+                        type="text" 
+                        name='model'  
+                        className='form-control' 
+                        required 
+                        onChange={e => setModel(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Total Seating</label>
-                    <input type="number" 
-                    name='seating' 
-                    min="0" 
-                    className='form-control' 
-                    required onChange={e => setSeating(e.target.value)} />
+                    <input 
+                        type="number" 
+                        name='seating' 
+                        min="0" 
+                        className='form-control' 
+                        required 
+                        onChange={e => setSeating(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <div><label>License Needed: </label></div>

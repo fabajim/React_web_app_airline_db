@@ -2,6 +2,11 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+/*
+    Add aircraft page
+    lets user fill a form to add a new aircraft
+*/
+
 function addAircraft() {
     const [data, setCraftType] = useState([]);
     const [airports, setAirports] = useState([]);
@@ -13,6 +18,9 @@ function addAircraft() {
     
     const navigate = useNavigate();
 
+    /*
+        Get api to get the aircraft to use type id and make/model
+    */
     useEffect(() => {
         axios.get('http://localhost:8081/aircraftType')
         .then((res) => {
@@ -25,6 +33,10 @@ function addAircraft() {
         });
     }, [])
 
+    /**
+        Get api to get the airports to set
+        the current location of the aircraft
+     */
     useEffect(() => {
         axios.get('http://localhost:8081/airports')
         .then((res) => {
@@ -37,14 +49,20 @@ function addAircraft() {
         });
     }, [])
 
-
+    /*
+        Handles save button click
+        uses post api to add new row to aircraft table
+    */
     function handleSubmit(event){
         event.preventDefault();
         axios.post('http://localhost:8081/aircraft', {serial, serviced, hours, type, airport})
         .then(res => {
             navigate('/aircraft');
             console.log(res);
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            console.log(err);
+            alert(`Server Error: ${err}`);
+        });
     }
 
   return (
@@ -69,27 +87,30 @@ function addAircraft() {
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Serial Number</label>
-                    <input type="text" 
-                    name='serial' 
-                    className="form-control" 
-                    required 
-                    onChange={e => setSerial(e.target.value)} />
+                    <input 
+                        type="text" 
+                        name='serial' 
+                        className="form-control" 
+                        required 
+                        onChange={e => setSerial(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Last Service</label>
-                    <input type="date" 
-                    name='service' 
-                    autoFocus 
-                    className='form-control' 
-                    required onChange={e => setService(e.target.value)} />
+                    <input 
+                        type="date" 
+                        name='service' 
+                        autoFocus 
+                        className='form-control' 
+                        required onChange={e => setService(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Hours Flown</label>
-                    <input type="number" 
-                    name='hours' 
-                    className="form-control" 
-                    required 
-                    onChange={e => setHours(e.target.value)} />
+                    <input 
+                        type="number" 
+                        name='hours' 
+                        className="form-control" 
+                        required 
+                        onChange={e => setHours(e.target.value)} />
                 </div>
                 <div className="mb-2">
                     <div><label>Current Location</label></div>

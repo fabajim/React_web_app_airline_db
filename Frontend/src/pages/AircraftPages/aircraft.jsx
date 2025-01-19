@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+
+/*
+   Displays all the aircraft owned by the airline
+*/
 function AircraftPage() {
   const [data, setData] = useState([])
   const [deleted, setDeleted] = useState(true)
 
+  const navigate = useNavigate()
+
+  /*
+    Get api to get all data from aircraft table
+    uses setData to to set data
+  */
   useEffect(()=>{
     if(deleted){
       setDeleted(false)
@@ -15,10 +25,18 @@ function AircraftPage() {
         setData(res.data);
         console.log(res.data);
       })
-      .catch((err)=> console.log(err));
+      .catch((err)=> {
+        console.log(err);
+        alert(`Server Error: ${err}`)
+        navigate('/')
+      });
     }
   }, [deleted])
 
+  /*
+    Handles when a user clicks delete button.
+    Warns user and waits for a conformation.
+  */
   function handleClick(id){
     Swal.fire({
       title: `Delete this aircraft: ${id}?`,
@@ -35,12 +53,21 @@ function AircraftPage() {
     })
   }
 
+  /*
+      Called from handleClick
+      Uses delete api to delete selected aircraft
+  */
   function handleDelete(id){
     axios.delete(`http://localhost:8081/aircraft/${id}`)
     .then((res) => {
       setDeleted(true)
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      console.log(err);
+      alert(`Server Error - ${err}`)
+      navigate(0)
+      
+    })
   }
 
   return (

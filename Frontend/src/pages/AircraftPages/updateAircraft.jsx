@@ -10,6 +10,9 @@ function updateAircraft() {
   const navigate = useNavigate()
   const {id} = useParams();
 
+  /*
+    Get api to get data on selected aircraft
+  */
   useEffect(() => {
     axios.get(`http://localhost:8081/aircraft/${id}`)
     .then((res) => {
@@ -18,20 +21,35 @@ function updateAircraft() {
     .catch((err) => console.log(err));
   }, []);
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log(date)
+  /*
+    Called from handleSubmit to set
+    default data
+  */
+  function checkDefaultData() {
     if(date === ""){
       date = data[0].lastService;
     }
     if(hours === ""){
       hours = data[0].totalHourFlown;
     }
+  }
+
+  /*
+      Handles update button click
+      calls checkDefaultData to set default data.
+      Ues put api to make update
+  */
+  function handleSubmit(event) {
+    event.preventDefault();
+    checkDefaultData();
     axios.put(`http://localhost:8081/aircraft/${id}`, {date, hours})
     .then(res => {
       navigate('/aircraft');
     })
-    .catch(err => console.log(err))
+    .catch((err) => {
+      console.log(err);
+      alert(`Server Error: ${err}`);
+    });
   }
 
   return (
@@ -44,23 +62,38 @@ function updateAircraft() {
                 <form onSubmit={handleSubmit} key={i}>
                     <h2>Edit Aircraft ID: {id}</h2>
                     <div>
-                      <Link to='/aircraft' title="Back to Aircraft Page" className='btn btn-danger btn-bg'>Cancel</Link>
-                      </div>
+                      <Link 
+                        to='/aircraft' 
+                        title="Back to Aircraft Page" 
+                        className='btn btn-danger btn-bg'
+                        >Cancel
+                      </Link>
+                    </div>
                     <div className='mb-2'>
                         <label htmlFor="date">Update Service Date</label>
-                        <input type='date' name='date' 
-                        autoFocus className='form-control' 
-                        required
+                        <input 
+                          type='date' 
+                          name='date' 
+                          autoFocus 
+                          className='form-control' 
+                          required
                         onChange={(e) => setDate(e.target.value)} />
                     </div>
                     <div className='mb-2'>
                         <label htmlFor="hours">Update Hours</label>
-                        <input defaultValue={d.totalHourFlown} type='number' name='hours' className='form-control' required 
-                        onChange={(e) => setHours(e.target.value)} />
+                        <input 
+                          defaultValue={d.totalHourFlown} 
+                          type='number' 
+                          name='hours' 
+                          className='form-control' required 
+                          onChange={(e) => setHours(e.target.value)} />
                     </div>
-                    <button type="submit"
-                     className='btn btn-success'
-                     title="save changes">Update</button>
+                      <button 
+                        type="submit"
+                        className='btn btn-success'
+                        title="save changes"
+                          >Update
+                      </button>
                 </form>
                 )
             })}

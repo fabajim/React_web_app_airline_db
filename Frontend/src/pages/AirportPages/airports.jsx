@@ -8,6 +8,10 @@ function airports() {
 
     const navigate = useNavigate();
 
+    /**
+        Get api call to airports 
+        data used to fill table data
+     */
     useEffect(() => {
         axios.get('http://localhost:8081/airports')
         .then((res)=> {
@@ -17,6 +21,10 @@ function airports() {
         .catch((err)=> console.log(err));
     }, []);
 
+    /*
+      Handles click on update button
+      lets the user know that the action updates the hub status
+    */
     function update(id, hub, code) {
       Swal.fire({
         title: `Update Hub status?`,
@@ -33,6 +41,10 @@ function airports() {
       });
     }
 
+    /*
+        called from update
+        Only updates the hub status of the airport
+    */
     function handleUpdate(id, hub) {
       let updateHub =  hub === 'YES' ? 0 : 1;
       axios.put(`http://localhost:8081/airports/${id}`, {updateHub})
