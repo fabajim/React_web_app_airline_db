@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 
+/*
+    Displays the licenses held by the selected pilot.
+    A form appears if the user clicks the add button.
+    A license can also be deleted from this page. 
+*/
+
 function licenseDetails() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [data, setData] = useState([]);
@@ -13,6 +19,9 @@ function licenseDetails() {
   const pilotId = vals[0];
   const navigate = useNavigate();
   
+  /*
+    Fetch api call to get the licenses held by this->pilotID
+   */
   useEffect(() => {
       axios.get(`http://localhost:8081/licenseDetails/${pilotId}`)
       .then((res) => {
@@ -22,6 +31,11 @@ function licenseDetails() {
       .catch((err) => console.log(err));
   }, []);
 
+  /*
+    Gets all the licenses form the license table so a 
+    user can use a drop down menu to set a new license
+    held by this pilot in the licenseDetail table. 
+  */
   useEffect(() => {
     axios.get(`http://localhost:8081/license`)
     .then((res) => {
@@ -35,6 +49,10 @@ function licenseDetails() {
       navigate('/pilots');
   }
 
+  /*
+    Called from handleSubmit: prevents duplicate
+    licenses from this pilot into the licenseDetails table.
+  */
   function verifyData() {
     for (let i = 0; i < data.length; i++) {
       if (data[i].licenseID == type) {
@@ -45,6 +63,13 @@ function licenseDetails() {
     return true;
   }
 
+
+  /*
+      Handles when a user clicks save in the add license Form.
+      Calls verifyData to prevent a duplicate license.
+      Then makes a POST request to add the submitted data into
+      the licenseDetails table. 
+   */
   async function handleSubmit(event){
     event.preventDefault();
     const strPilotID = pilotId.toString();
@@ -61,6 +86,11 @@ function licenseDetails() {
     }
   }
 
+  /*
+      Handles the Delete button click: Will not delete a license
+      if it is the pilots only license. 
+      Makes a delete request to delete this pilots license
+  */
   function handleDelete(id) {
     if (data.length == 1) {
       alert("Pilot must have a license!")
@@ -127,11 +157,13 @@ function licenseDetails() {
                       </div>
                       <div className="mb-2">
                           <label htmlFor=''>Date Received</label>
-                          <input type="date" 
-                          name='service' 
-                          autoFocus 
-                          className='form-control' 
-                          required onChange={e => setDate(e.target.value)} />
+                          <input 
+                            type="date" 
+                            name='service' 
+                            autoFocus 
+                            className='form-control' 
+                            required onChange={e => setDate(e.target.value)} 
+                          />
                       </div>
                       <button type='submit' className='btn btn-success' >Save</button>
                   </form>
