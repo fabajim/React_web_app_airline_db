@@ -45,7 +45,11 @@ function addPilot() {
                 Swal.fire('New pilot added.');
             }
             navigate('/pilots');
-        }).catch(err =>console.log(err))
+        }).catch((err) => {
+            console.log(err);
+            alert(`Server Error: ${err}`);
+            navigate('/');
+        });
     }
 
   return (
