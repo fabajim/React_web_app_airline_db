@@ -11,7 +11,7 @@ function Navigation() {
         <li><Link className={'link-style'} to="/aircraft">Aircraft</Link></li>
         <li><Link className={'link-style'} to="/aircraftType">Aircraft Type</Link></li>
         <li><Link className={'link-style'} to="/airports">Airports</Link></li>
-        <li><Link className={'link-style'} to="/assignments">Assignments</Link></li>
+        <li><Link className={'link-style'} to="/currentAssignments">Assignments</Link></li>
       </ul>
     </nav>
   );
