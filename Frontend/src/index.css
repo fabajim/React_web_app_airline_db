@@ -60,6 +60,10 @@ table {
     padding: 12px 15px;
 }
 
+td[colspan="2"] {
+    text-align: center;
+}
+
 .total-aircraft {
     text-align: center;
 }
