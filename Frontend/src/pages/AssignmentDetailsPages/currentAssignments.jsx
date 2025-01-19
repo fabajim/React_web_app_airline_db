@@ -7,6 +7,9 @@ function currentAssignments() {
 
     const navigate = useNavigate();
 
+    /*
+      Fetch and set data from the current assignments api
+    */
     useEffect(() => {
         axios.get('http://localhost:8081/assignmentCurrent')
         .then((res)=> {
@@ -16,6 +19,11 @@ function currentAssignments() {
         .catch((err)=> console.log(err));
     }, []);
 
+    /*
+      Handles the click on the update button,
+      only updates assignments marked as current.
+      Past assignments cannot be updated.
+    */
     function updateClick(id, serial, city, curr) {
       if (curr === 'NO'){
         alert("Cannot update non current rows");
@@ -23,9 +31,13 @@ function currentAssignments() {
         navigate(`/updateAssignment/${id}:${serial}:${city}`)
       }
     }
+    
   return (
     <>
-      <h1 className='page-name'>Current Assignments Log</h1>
+      <h1 
+        className='page-name'>
+          Current Assignments Log
+      </h1>
       <div className='table-container'>
         <table className="read-table">
           <thead>
@@ -34,18 +46,20 @@ function currentAssignments() {
               <th>Pilot</th>
               <th>Aircraft</th>
               <th>Current Location</th>
-              <th>
-              <Link
-                  to='/assignments'
-                  className='btn btn-sm btn-light'
-                  title='View all assignments'>Current</Link>
-              </th>
+              <th>Current</th>
               <th>
                 <Link
                   to='/pastAssignments'
                   className='btn btn-sm btn-dark'
                   title='View all past assignments'>Past</Link>
-                  
+              </th>
+              <th>
+                <Link
+                  to='/assignments'
+                  className='btn btn-sm btn-light'
+                  title='View all assignments'>
+                  All    
+                </Link> 
               </th>
             </tr>
           </thead>
@@ -58,7 +72,7 @@ function currentAssignments() {
                   <td>{d.serialNum}</td>
                   <td>{d.cityCode}</td>
                   <td>{d.isActive}</td>
-                  <td>
+                  <td colSpan="2">
                       <button className='btn btn-secondary btn-sm' 
                         onClick={ () => updateClick(d.assignmentDetailID, d.serialNum, d.cityCode, d.isActive)}>
                           Update
