@@ -7,6 +7,10 @@ function assignmentDetails() {
 
     const navigate = useNavigate();
 
+
+    /*
+      Fetch and set data from assignmentDetails
+    */
     useEffect(() => {
         axios.get('http://localhost:8081/assignmentDetails')
         .then((res)=> {
@@ -16,6 +20,10 @@ function assignmentDetails() {
         .catch((err)=> console.log(err));
     }, []);
 
+    /*
+      Handles the update button click, For fraud
+      Protection, only current assignments can be updated.
+    */
     function updateClick(id, serial, city, curr) {
       if (curr === 'NO'){
         alert("Cannot update non current rows");
@@ -35,18 +43,18 @@ function assignmentDetails() {
               <th>Pilot</th>
               <th>Aircraft</th>
               <th>Current Location</th>
+              <th>Current</th>
               <th>
               <Link
                   to='/currentAssignments'
                   className='btn btn-sm btn-light'
-                  title='View all current assignments'>Current</Link>
+                  title='View all current assignments'>View Current</Link>
               </th>
               <th>
                 <Link
                   to='/pastAssignments'
                   className='btn btn-sm btn-dark'
                   title='View all past assignments'>Past</Link>
-                  
               </th>
             </tr>
           </thead>
@@ -59,7 +67,7 @@ function assignmentDetails() {
                   <td>{d.serialNum}</td>
                   <td>{d.cityCode}</td>
                   <td>{d.isActive}</td>
-                  <td>
+                  <td colSpan={2}>
                       <button className='btn btn-secondary btn-sm' 
                         onClick={ () => updateClick(d.assignmentDetailID, d.serialNum, d.cityCode, d.isActive)}>
                           Update
