@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 function addPilot() {
-    const [data, setData] = useState([])
+    const [licenseData, setLicenseData] = useState([])
     const [fname, setFname] = useState('')
     const [lname, setLname] = useState('')
     const [email, setEmail] = useState('')
@@ -14,11 +14,15 @@ function addPilot() {
 
     const navigate = useNavigate();
 
+    /*
+        Fetch and set the licenses to have available in the drop down menu
+        when selecting the type of license the pilot has.
+    */
     useEffect(() => {
         axios.get('http://localhost:8081/license')
         .then((res) => {
             console.log(res.data)
-            setData(res.data);
+            setLicenseData(res.data);
         })
         .catch((err) => {
             alert("Server Error: " + err);
@@ -27,6 +31,11 @@ function addPilot() {
         })
     }, []);
 
+    /*
+        Handles the save button click.
+        uses a POST call to add a new pilot to the table.
+        User gets a success alert when the pilot is successfully added.
+    */
     function handleSubmit(event){
         event.preventDefault();
         console.log("in submit")
@@ -38,6 +47,7 @@ function addPilot() {
             navigate('/pilots');
         }).catch(err =>console.log(err))
     }
+
   return (
     <div className='d-flex vh-100 justify-content-center align-items-center'>
         <div className='w-50 bg-white rounded p-3'>
@@ -45,42 +55,66 @@ function addPilot() {
                 <h2>Add a new pilot</h2>
                 <div className='mb-2'>
                     <label htmlFor="">First Name</label>
-                    <input type='text' name='fname' autoFocus placeholder='First name' className='form-control' required 
-                    onChange={e => setFname(e.target.value)} />
+                    <input 
+                        type='text' 
+                        name='fname' 
+                        autoFocus placeholder='First name'
+                        className='form-control' 
+                        required 
+                        onChange={e => setFname(e.target.value)} 
+                    />
                 </div>
                 <div className='mb-2'>
                     <label htmlFor="">Last Name</label>
-                    <input type='text' name='lname' placeholder='Last name' className='form-control' required 
-                    onChange={e => setLname(e.target.value)} />
+                    <input 
+                        type='text' 
+                        name='lname' 
+                        placeholder='Last name' 
+                        className='form-control' required 
+                        onChange={e => setLname(e.target.value)} 
+                    />
                 </div>
                 <div className='mb-2'>
                     <label htmlFor="">Email</label>
-                    <input type='email' name='email' className='form-control' required 
-                    onChange={e => setEmail(e.target.value)} />
+                    <input 
+                        type='email'
+                        name='email' 
+                        className='form-control' 
+                        required 
+                        onChange={e => setEmail(e.target.value)} 
+                    />
                 </div>
                 <div className='mb-2'>
                     <label htmlFor="">Phone Number</label>
-                    <input type='tel' name='phone' className='form-control' required 
-                    onChange={e => setPhone(e.target.value)} />
+                    <input 
+                        type='tel' 
+                        name='phone' 
+                        className='form-control' 
+                        required 
+                        onChange={e => setPhone(e.target.value)} 
+                    />
                 </div>
                 <div className="mb-2">
                     <div><label>Add Pilots License: </label></div>
                     <select onChange={e => setLicense(e.target.value)} required>
                     <option value="">Select License</option>
-                    {data.map((data) => { return (
-                        <option key={data.licenseID} value={data.licenseID}>
-                            {data.licenseType}
-                        </option>
-                    )})}
-                </select>
+                        {licenseData.map((data) => 
+                        { return (
+                            <option key={data.licenseID} value={data.licenseID}>
+                                {data.licenseType}
+                            </option>
+                        )})}
+                    </select>
                 </div>
                 <div className="mb-2">
                     <label htmlFor=''>Date Received</label>
-                    <input type="date" 
-                    name='date' 
-                    className='form-control'
-                    required 
-                    onChange={e => setDate(e.target.value)} />
+                    <input 
+                        type="date" 
+                        name='date' 
+                        className='form-control'
+                        required 
+                        onChange={e => setDate(e.target.value)} 
+                    />
                 </div>
                 <button className='btn btn-success' >Save</button>
             </form>
