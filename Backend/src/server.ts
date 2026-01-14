@@ -21,8 +21,11 @@ const filterYes = require('./routes/assignmentsFilterYes.js');
 const filterNo = require('./routes/assignmentsFilterNo.js');
 const aircraftLicense = require('./routes/aircraftLicense.js');
 
-import router from './routes/PilotRouts';
-app.use('/PilotPage', router);
+import pilotRouter from './routes/PilotRouts';
+import airportRouter from './routes/AirportRoutes';
+
+app.use('/api/pilot', pilotRouter);
+app.use('/api/airport', airportRouter);
 
 // api routes
 app.use('/pilots', pilotRoute);

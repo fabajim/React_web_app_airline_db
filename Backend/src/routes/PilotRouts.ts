@@ -3,12 +3,12 @@ import { SequelizePilotRepository } from "../database/repositories/SequelizePilo
 import { PilotServices } from "../services/PilotServices";
 import { PilotController } from "../controllers/PilotController";
 
-const router = Router();
+const pilotRouter = Router();
 
 const repo = new SequelizePilotRepository();
 const service = new PilotServices(repo);
 const controller = new PilotController(service);
 
-router.get('/', controller.getAll.bind(controller));
+pilotRouter.get('/', controller.getAll.bind(controller));
 
-export default router;
+export default pilotRouter;
