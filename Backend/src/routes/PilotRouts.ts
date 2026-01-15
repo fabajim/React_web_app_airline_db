@@ -22,6 +22,28 @@ const controller = new PilotController(service);
  */
 pilotRouter.get('/', controller.getAll.bind(controller));
 
+/**
+ * @openapi
+ * /api/pilots/{id}:
+ *   get:
+ *     summary: Get a pilot by ID
+ *     tags:
+ *       - Pilots
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Pilot ID
+ *     responses:
+ *       200:
+ *         description: Pilot found
+ *       404:
+ *         description: Pilot not found
+ */
+pilotRouter.get('/:id', controller.getById.bind(controller));
+
 
 /**
  * @openapi

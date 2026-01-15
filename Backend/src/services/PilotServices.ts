@@ -15,4 +15,8 @@ export class PilotServices {
     async getAllPilots(): Promise<Pilot[]> {
         return this.pilotRepo.findAll();
     }
+
+    async getPilotById(id: number): Promise<Pilot> {
+        return this.pilotRepo.findById(id);
+    }
 }
