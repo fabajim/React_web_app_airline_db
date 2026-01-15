@@ -1,12 +1,23 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize';
 
-export class PilotModel extends Model {
-  declare pilotID: number;
-  declare fname: string;
-  declare lname: string;
-  declare email: string;
-  declare phoneNumber: string;
+interface PilotAttributes {
+  pilotID: number;
+  fname: string;
+  lname: string;
+  email: string;
+  phoneNumber: string;
+}
+
+interface PilotCreationAttributes extends Optional<PilotAttributes, 'pilotID'> {}
+
+export class PilotModel extends Model<PilotAttributes, PilotCreationAttributes>
+  implements PilotAttributes {
+  public pilotID!: number;
+  public fname!: string;
+  public lname!: string;
+  public email!: string;
+  public phoneNumber!: string;
 }
 
 PilotModel.init({

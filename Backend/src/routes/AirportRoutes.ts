@@ -9,6 +9,17 @@ const repo = new SequelizeAirportRepository();
 const service = new AirportServices(repo)
 const controller = new AirportController(service);
 
+/**
+ * @openapi
+ * /api/airports:
+ *   get:
+ *     summary: Get all airports
+ *     tags:
+ *       - Airports
+ *     responses:
+ *       200:
+ *         description: List of airports
+ */
 airportRouter.get('/', controller.getAll.bind(controller));
 
 export default airportRouter;
