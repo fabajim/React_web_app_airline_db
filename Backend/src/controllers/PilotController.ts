@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { PilotServices } from "../services/PilotServices"
 import { PilotMappers } from "../mappers/PilotMappers";
+import { NotFoundError } from "../shared/Errors";
 
 export class PilotController {
     constructor(private readonly service: PilotServices) {}
@@ -42,6 +43,23 @@ export class PilotController {
         } catch (error) {
             console.error('ERROR in getById:', error);
             return res.status(500).json({ message: 'Failed to get pilot.' })
+        }
+    }
+
+    async deleteById(req: Request, res: Response): Promise<Response> {
+        try{
+            const id = Number(req.params.id);
+
+            if (isNaN(id)) {
+                return res.status(400).json({ message: `Bad Request` });
+            }
+            const deletedPilot = await this.service.deletePilotById(id);
+            console.log(`From controller: ${deletedPilot}`);
+            return res.status(200).json({ message: 'Pilot Deleted' })
+        } catch (error) {
+            if (error instanceof Error && error.name == 'NotFoundError')
+                return res.status(404).json({ message: `Pilot not found` })
+            return res.status(500).json({ message: 'Failed to delete pilot.'})
         }
     }
 }

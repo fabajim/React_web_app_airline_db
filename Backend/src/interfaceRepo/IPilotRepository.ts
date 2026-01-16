@@ -5,4 +5,5 @@ export interface IPilotRepository {
     create(data: CreatePilotDto): Promise<Pilot>;
     findAll(): Promise<Pilot[]>;
     findById(id: number): Promise<Pilot>;
+    deleteById(id: number): void;
 }

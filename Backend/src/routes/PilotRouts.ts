@@ -47,7 +47,7 @@ pilotRouter.get('/:id', controller.getById.bind(controller));
 
 /**
  * @openapi
- * /api/pilots:
+ * /api/pilots/:
  *   post:
  *     summary: Create a new pilot
  *     tags: [Pilots]
@@ -62,5 +62,23 @@ pilotRouter.get('/:id', controller.getById.bind(controller));
  *         description: Pilot created
  */
 pilotRouter.post('/', controller.create.bind(controller));
+
+/**
+ * @openapi
+ * /api/pilots/{id}:
+ *   delete:
+ *     tags: [Pilots]
+ *     summary: Delete pilot by id.
+  *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Pilot Deleted
+ *       404:
+ *         description: Pilot not found
+ */
+pilotRouter.delete('/:id', controller.deleteById.bind(controller));
 
 export default pilotRouter;

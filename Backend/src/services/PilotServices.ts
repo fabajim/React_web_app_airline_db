@@ -19,4 +19,8 @@ export class PilotServices {
     async getPilotById(id: number): Promise<Pilot> {
         return this.pilotRepo.findById(id);
     }
+
+    async deletePilotById(id: number) {
+        await this.pilotRepo.deleteById(id);
+    }
 }
