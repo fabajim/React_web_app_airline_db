@@ -1,15 +1,19 @@
-import { error } from 'node:console';
 import { CreatePilotDto } from '../dtos/Pilot/CreatePilotDto';
+import { UpdatePilotDto } from '../dtos/Pilot/UpdatePilotDto';
 import { IPilotRepository } from '../interfaceRepo/IPilotRepository'
-import { PilotMappers } from '../mappers/PilotMappers';
 import { Pilot } from '../models/Pilot';
 
 export class PilotServices {
     constructor(private readonly pilotRepo: IPilotRepository) {}
 
-    async createPilot(dto: CreatePilotDto) {
-        const pilot = await this.pilotRepo.create(dto);
-        return PilotMappers.toPilotDto(pilot);
+    async createPilot(dto: CreatePilotDto): Promise<Pilot> {
+        const pilot: Pilot = await this.pilotRepo.create(dto);
+        return pilot;
+    }
+
+    async updatePilot(id: number, dto: UpdatePilotDto): Promise<Pilot> {
+        const pilot: Pilot = await this.pilotRepo.update(id, dto);
+        return pilot;
     }
 
     async getAllPilots(): Promise<Pilot[]> {

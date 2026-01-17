@@ -66,6 +66,28 @@ pilotRouter.post('/', controller.create.bind(controller));
 /**
  * @openapi
  * /api/pilots/{id}:
+ *   put:
+ *     summary: Update existing pilot by id.
+ *     tags: [Pilots]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdatePilotDto'
+ *     responses:
+ *       201:
+ *         description: Pilot Updated
+ */
+pilotRouter.put('/:id', controller.updateById.bind(controller));
+
+/**
+ * @openapi
+ * /api/pilots/{id}:
  *   delete:
  *     tags: [Pilots]
  *     summary: Delete pilot by id.

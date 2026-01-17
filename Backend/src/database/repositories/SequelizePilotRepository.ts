@@ -4,11 +4,29 @@ import { IPilotRepository } from "../../interfaceRepo/IPilotRepository";
 import { Pilot } from "../../models/Pilot";
 import { PilotModel } from "../models/PilotModel";
 import { NotFoundError } from "../../shared/Errors";
+import { UpdatePilotDto } from "../../dtos/Pilot/UpdatePilotDto";
 
 export class SequelizePilotRepository implements IPilotRepository {
 
+    async update(id: number, pilot: UpdatePilotDto): Promise<Pilot> {
+        const pilotToUpdate: PilotModel | null = await PilotModel.findByPk(id);
+
+        if (!pilotToUpdate) {
+            throw new NotFoundError('Pilot', id);
+        }
+        
+        await pilotToUpdate.update({
+            fname: pilot.fname,
+            lname: pilot.lname,
+            email: pilot.email,
+            phoneNumber: pilot.phoneNumber
+        });
+
+        return this.toPilot(pilotToUpdate);
+    }
+
     async deleteById(id: number): Promise<void> {
-        const pilotToDelete = await PilotModel.findByPk(id);
+        const pilotToDelete: PilotModel | null = await PilotModel.findByPk(id);
         if (!pilotToDelete) {
             throw new NotFoundError('Pilot', id);
         }
@@ -17,43 +35,34 @@ export class SequelizePilotRepository implements IPilotRepository {
     }
 
     async findById(id: number): Promise<Pilot> {
-        const pilot = await PilotModel.findByPk(id);
+        const pilot: PilotModel | null = await PilotModel.findByPk(id);
 
         if (!pilot) {
             throw new NotFoundError('Pilot', id);
         }
 
-        return new Pilot({
-            pilotID: pilot.pilotID,
-            fname: pilot.fname,
-            lname: pilot.lname,
-            email: pilot.email,
-            phoneNumber: pilot.phoneNumber
-        });
+        return this.toPilot(pilot);
     }
     
     async create(data: CreatePilotDto): Promise<Pilot> {
-        const pilot = await PilotModel.create(data);
+        const pilot: PilotModel = await PilotModel.create(data);
 
-        return new Pilot({
-            pilotID: pilot.pilotID,
-            fname: pilot.fname,
-            lname: pilot.lname,
-            email: pilot.email,
-            phoneNumber: pilot.phoneNumber
-        });
+        return this.toPilot(pilot);
     }
     
     async findAll(): Promise<Pilot[]> {
-        const rows = await PilotModel.findAll();
+        const rows: PilotModel[] = await PilotModel.findAll();
 
-        return rows.map(row => new Pilot({
-            pilotID: row.pilotID,
-            fname: row.fname,
-            lname: row.lname,
-            email: row.email,
-            phoneNumber: row.phoneNumber
-        }));
+        return rows.map(row => this.toPilot(row));
     }
 
+    private toPilot(model: PilotModel): Pilot {
+        return new Pilot({
+            pilotID: model.pilotID,
+            fname: model.fname,
+            lname: model.lname,
+            email: model.email,
+            phoneNumber: model.phoneNumber
+        })
+    }
 }
