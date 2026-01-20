@@ -1,5 +1,6 @@
+import { AirportQueryObject } from "../helpers/queryObjects/AirportQueryObject";
 import { Airport } from "../models/Airport";
 
 export interface IAirportRepository {
-    findAll(): Promise<Airport[]>;
+    findAll(query: AirportQueryObject): Promise<Airport[]>;
 }

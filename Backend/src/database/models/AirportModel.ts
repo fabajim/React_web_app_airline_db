@@ -1,11 +1,21 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize';
 
-export class AirportModel extends Model {
-  declare airportID: number;
-  declare city: string;
-  declare cityCode: string;
-  declare isHub: number;
+interface AirportAttributes {
+  airportID: number;
+  city: string;
+  cityCode: string;
+  isHub: number;
+}
+
+interface AirportCreationAttributes extends Optional<AirportAttributes, 'airportID'> {}
+
+export class AirportModel extends Model<AirportAttributes, AirportCreationAttributes> 
+implements AirportAttributes {
+  public airportID!: number;
+  public city!: string;
+  public cityCode!: string;
+  public isHub!: number;
 }
 
 AirportModel.init({

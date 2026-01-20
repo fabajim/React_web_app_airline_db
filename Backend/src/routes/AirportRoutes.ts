@@ -16,6 +16,19 @@ const controller = new AirportController(service);
  *     summary: Get all airports
  *     tags:
  *       - Airports
+ *     parameters:
+ *      - in: query
+ *        name: city
+ *        schema:
+ *          type: string
+ *      - in: query
+ *        name: cityCode
+ *        schema: 
+ *          type: string
+ *      - in: query
+ *        name: isHub
+ *        schema:
+ *          type: integer
  *     responses:
  *       200:
  *         description: List of airports

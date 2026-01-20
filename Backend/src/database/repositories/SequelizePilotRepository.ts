@@ -5,7 +5,7 @@ import { Pilot } from "../../models/Pilot";
 import { PilotModel } from "../models/PilotModel";
 import { NotFoundError } from "../../shared/Errors";
 import { UpdatePilotDto } from "../../dtos/Pilot/UpdatePilotDto";
-import { PilotQueryObject } from "../../helpers/PilotQueryObject";
+import { PilotQueryObject } from "../../helpers/queryObjects/PilotQueryObject";
 
 export class SequelizePilotRepository implements IPilotRepository {
 
