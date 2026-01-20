@@ -1,10 +1,11 @@
-import { where } from "sequelize";
+import { where, Op } from "sequelize";
 import { CreatePilotDto } from "../../dtos/Pilot/CreatePilotDto";
 import { IPilotRepository } from "../../interfaceRepo/IPilotRepository";
 import { Pilot } from "../../models/Pilot";
 import { PilotModel } from "../models/PilotModel";
 import { NotFoundError } from "../../shared/Errors";
 import { UpdatePilotDto } from "../../dtos/Pilot/UpdatePilotDto";
+import { PilotQueryObject } from "../../helpers/PilotQueryObject";
 
 export class SequelizePilotRepository implements IPilotRepository {
 
@@ -50,8 +51,18 @@ export class SequelizePilotRepository implements IPilotRepository {
         return this.toPilot(pilot);
     }
     
-    async findAll(): Promise<Pilot[]> {
-        const rows: PilotModel[] = await PilotModel.findAll();
+    async findAll(pilotQuery: PilotQueryObject): Promise<Pilot[]> {
+        const where: any = {};
+
+        if (pilotQuery.fname) {
+            where.fname = { [Op.like]: `${pilotQuery.fname}%` };
+        }
+
+        if (pilotQuery.lname) {
+            where.lname = { [Op.like]: `${pilotQuery.lname}%` };
+        }
+
+        const rows: PilotModel[] = await PilotModel.findAll({ where });
 
         return rows.map(row => this.toPilot(row));
     }

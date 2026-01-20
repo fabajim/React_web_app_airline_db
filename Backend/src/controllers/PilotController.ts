@@ -48,7 +48,14 @@ export class PilotController {
 
     async getAll(req: Request, res: Response): Promise<Response> {
         try {
-            const pilots: Pilot[] = await this.service.getAllPilots();
+            const { fname, lname } = req.query;
+
+            const pilotQuery: {fname?: string; lname?: string} = {};
+
+            if (typeof fname === 'string') pilotQuery.fname = fname;
+            if (typeof lname === 'string') pilotQuery.lname = lname;
+
+            const pilots: Pilot[] = await this.service.getAllPilots(pilotQuery);
             const pilotDto: PilotDto[] = PilotMappers.toPilotDtoList(pilots);
             return res.status(200).json(pilotDto)
         } catch (error) {

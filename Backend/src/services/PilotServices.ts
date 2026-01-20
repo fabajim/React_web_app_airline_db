@@ -1,5 +1,6 @@
 import { CreatePilotDto } from '../dtos/Pilot/CreatePilotDto';
 import { UpdatePilotDto } from '../dtos/Pilot/UpdatePilotDto';
+import { PilotQueryObject } from '../helpers/PilotQueryObject';
 import { IPilotRepository } from '../interfaceRepo/IPilotRepository'
 import { Pilot } from '../models/Pilot';
 
@@ -16,8 +17,8 @@ export class PilotServices {
         return pilot;
     }
 
-    async getAllPilots(): Promise<Pilot[]> {
-        return this.pilotRepo.findAll();
+    async getAllPilots(pilotQuery: PilotQueryObject): Promise<Pilot[]> {
+        return this.pilotRepo.findAll(pilotQuery);
     }
 
     async getPilotById(id: number): Promise<Pilot> {

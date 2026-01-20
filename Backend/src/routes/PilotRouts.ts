@@ -16,6 +16,15 @@ const controller = new PilotController(service);
  *     summary: Get all pilots
  *     tags:
  *       - Pilots
+ *     parameters:
+ *       - in: query
+ *         name: fname
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: lname
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
  *         description: List of pilots
