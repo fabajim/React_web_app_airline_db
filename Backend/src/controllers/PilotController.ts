@@ -60,7 +60,7 @@ export class PilotController {
             const pilotDto: PilotDto[] = PilotMappers.toPilotDtoList(pilots);
             return res.status(200).json(pilotDto)
         } catch (error) {
-            return res.status(500).json({ message: 'Failed to get pilots.' })
+            return res.status(500).json({ message: 'Failed to get pilots.' });
         }
     }
 
@@ -68,9 +68,7 @@ export class PilotController {
         const value: number | any = Number(req.params.id);
 
         if (isNaN(value))
-            return res.status(400).json({ message: 'Bad Request Body.' })
-        
-        console.log(value)
+            return res.status(400).json({ message: 'Bad Request Body.' });
 
         try {
             const pilot: Pilot = await this.service.getPilotById(value);
@@ -80,7 +78,7 @@ export class PilotController {
             return res.status(200).json(pilotDto)
         } catch (error) {
             console.error('ERROR in getById:', error);
-            return res.status(500).json({ message: 'Failed to get pilot.' })
+            return res.status(500).json({ message: 'Failed to get pilot.' });
         }
     }
 
@@ -93,11 +91,11 @@ export class PilotController {
 
             await this.service.deletePilotById(id);
 
-            return res.status(200).json({ message: 'Pilot Deleted' })
+            return res.status(200).json({ message: 'Pilot Deleted' });
         } catch (error) {
             if (error instanceof Error && error.name == 'NotFoundError')
-                return res.status(404).json({ message: `Pilot not found` })
-            return res.status(500).json({ message: 'Failed to delete pilot.'})
+                return res.status(404).json({ message: `Pilot not found` });
+            return res.status(500).json({ message: 'Failed to delete pilot.'});
         }
     }
 }

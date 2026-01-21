@@ -57,7 +57,6 @@ export class AirportController {
     }
 
     async updateAirportById(req: Request, res: Response): Promise<Response<AirportDto>> {
-        //throw Error();
         try {
             const id: number = Number(req.params.id)
             
@@ -75,6 +74,22 @@ export class AirportController {
 
         } catch (error) {
             return res.status(500).json({ message: `Server Error: Failed to update airport.` } )
+        }
+    }
+
+    async deleteById(req: Request, res: Response): Promise<Response> {
+        try {
+            const id: number = Number(req.params.id);
+
+            if (isNaN(id))
+                return res.status(400).json({ message: `Bad Request` })
+
+            await this.service.deleteAirportById(id);
+            return res.status(200).json({ message: `Airport Deleted: ${id}` });
+        } catch (error) {
+            if (error instanceof Error && error.name === 'NotFoundError')
+                return res.status(404).json({ message: `Airport not found` });
+            return res.status(500).json({ message: `Server Error: Failed to Delete airport` });
         }
     }
 }

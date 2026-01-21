@@ -18,4 +18,8 @@ export class AirportServices {
     async updateAirport(id: number, airportDto: UpdateAirportDto) {
         return this.airportRepo.updateAirport(id, airportDto);
     }
+
+    async deleteAirportById(id: number) {
+        return this.airportRepo.deleteAirport(id);
+    }
 }

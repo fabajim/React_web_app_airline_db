@@ -31,7 +31,7 @@ export class SequelizePilotRepository implements IPilotRepository {
         if (!pilotToDelete) {
             throw new NotFoundError('Pilot', id);
         }
-        console.log("Pilot found")
+
         await pilotToDelete.destroy();
     }
 

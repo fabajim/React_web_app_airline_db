@@ -75,4 +75,22 @@ airportRouter.post('/', controller.create.bind(controller));
  */
 airportRouter.put('/:id', controller.updateAirportById.bind(controller));
 
+/**
+ * @openapi
+ * /api/airports/{id}:
+ *   delete:
+ *     tags: [Airports]
+ *     summary: Delete airport by id.
+  *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Airport Deleted
+ *       404:
+ *         description: Airport not found
+ */
+airportRouter.delete('/:id', controller.deleteById.bind(controller));
+
 export default airportRouter;
