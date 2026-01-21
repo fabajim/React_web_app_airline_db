@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { PilotServices } from "../services/PilotServices"
 import { PilotMappers } from "../mappers/PilotMappers";
 import { plainToInstance } from 'class-transformer';
-import { Validate, validate } from 'class-validator';
+import { validate, ValidationError } from 'class-validator';
 import { CreatePilotDto } from "../dtos/Pilot/CreatePilotDto";
 import { Pilot } from "../models/Pilot";
 import { PilotDto } from "../dtos/Pilot/PilotDto";
 import { UpdatePilotDto } from "../dtos/Pilot/UpdatePilotDto";
+import { PilotQueryObject } from "../helpers/queryObjects/PilotQueryObject";
 
 export class PilotController {
     constructor(private readonly service: PilotServices) {}
@@ -14,7 +15,7 @@ export class PilotController {
     async create(req: Request, res: Response): Promise<Response> {
         try {
             const pilotDto: CreatePilotDto = plainToInstance(CreatePilotDto, req.body);
-            const errors = await validate(pilotDto);
+            const errors: ValidationError[] = await validate(pilotDto);
 
             if (errors.length > 0)
                 return res.status(400).json({ message: `Bad request` });
@@ -34,7 +35,7 @@ export class PilotController {
                 return res.status(400).json({ message: 'Bad Request Body.' })            
 
             const pilotDto: UpdatePilotDto = plainToInstance(UpdatePilotDto, req.body);
-            const errors = await validate(pilotDto);
+            const errors: ValidationError[] = await validate(pilotDto);
 
             if (errors.length)
                 return res.status(400).json({ message: `Bad request` });
@@ -50,7 +51,7 @@ export class PilotController {
         try {
             const { fname, lname } = req.query;
 
-            const pilotQuery: {fname?: string; lname?: string} = {};
+            const pilotQuery: PilotQueryObject = {};
 
             if (typeof fname === 'string') pilotQuery.fname = fname;
             if (typeof lname === 'string') pilotQuery.lname = lname;

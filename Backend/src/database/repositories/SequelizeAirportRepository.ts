@@ -1,14 +1,31 @@
-import { Op } from "sequelize";
+import { Op, WhereOptions } from "sequelize";
 import { AirportQueryObject } from "../../helpers/queryObjects/AirportQueryObject";
 import { IAirportRepository } from "../../interfaceRepo/IAirportRepository";
 import { Airport } from "../../models/Airport";
-import { AirportModel } from "../models/AirportModel";
+import { AirportAttributes, AirportModel } from "../models/AirportModel";
 import { CreateAirportDto } from "../../dtos/airport/CreateAirportDto";
+import { UpdateAirportDto } from "../../dtos/airport/UpdateAirportDto";
+import { NotFoundError } from "../../shared/Errors";
 
 export class SequelizeAirportRepository implements IAirportRepository {
 
+    async updateAirport(id: number, data: UpdateAirportDto): Promise<Airport> {
+        const airportToUpdate: AirportModel | null = await AirportModel.findByPk(id);
+
+        if (!airportToUpdate)
+            throw new NotFoundError('Airport', id);
+
+        await airportToUpdate.update({
+            city: data.city,
+            cityCode: data.cityCode,
+            isHub: data.isHub
+        });
+
+        return this.toAirport(airportToUpdate);
+    }
+
     async findAll(query: AirportQueryObject): Promise<Airport[]> {
-        const where: any = {};
+        const where: WhereOptions<AirportAttributes> | undefined = {};
 
         if (query.city) {
             where.city = { [Op.like]: `${query.city}%` };
@@ -18,11 +35,9 @@ export class SequelizeAirportRepository implements IAirportRepository {
             where.cityCode = { [Op.like]: `${query.cityCode}%` };
         }
 
-        if (query.isHub) {
-            where.isHub = query.isHub;
+        if (query.isHub !== undefined) {
+            where.isHub = { [Op.eq]: query.isHub };
         }
-
-        console.log(where);
         
         const rows: AirportModel[] = await AirportModel.findAll({ where });
 

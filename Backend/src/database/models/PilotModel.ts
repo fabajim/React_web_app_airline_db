@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize';
 
-interface PilotAttributes {
+export interface PilotAttributes {
   pilotID: number;
   fname: string;
   lname: string;

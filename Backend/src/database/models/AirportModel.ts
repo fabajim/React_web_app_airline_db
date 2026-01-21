@@ -1,7 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize';
 
-interface AirportAttributes {
+export interface AirportAttributes {
   airportID: number;
   city: string;
   cityCode: string;

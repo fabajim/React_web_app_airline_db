@@ -53,4 +53,26 @@ airportRouter.get('/', controller.getAll.bind(controller));
  */
 airportRouter.post('/', controller.create.bind(controller));
 
+/**
+ * @openapi
+ * /api/airports/{id}:
+ *   put:
+ *     summary: Update existing airport by id.
+ *     tags: [Airports]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateAirportDto'
+ *     responses:
+ *       201:
+ *         description: Airport Updated
+ */
+airportRouter.put('/:id', controller.updateAirportById.bind(controller));
+
 export default airportRouter;

@@ -1,4 +1,5 @@
 import { CreateAirportDto } from "../dtos/airport/CreateAirportDto";
+import { UpdateAirportDto } from "../dtos/airport/UpdateAirportDto";
 import { AirportQueryObject } from "../helpers/queryObjects/AirportQueryObject";
 import { IAirportRepository } from "../interfaceRepo/IAirportRepository";
 import { Airport } from "../models/Airport";
@@ -12,5 +13,9 @@ export class AirportServices {
 
     async createAirport(airportDto: CreateAirportDto): Promise<Airport> {
         return this.airportRepo.createAirport(airportDto);
+    }
+
+    async updateAirport(id: number, airportDto: UpdateAirportDto) {
+        return this.airportRepo.updateAirport(id, airportDto);
     }
 }
