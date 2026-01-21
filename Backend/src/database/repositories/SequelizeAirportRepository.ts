@@ -64,6 +64,6 @@ export class SequelizeAirportRepository implements IAirportRepository {
             city: model.city,
             cityCode: model.cityCode,
             isHub: model.isHub
-        })
+        });
     }
 }

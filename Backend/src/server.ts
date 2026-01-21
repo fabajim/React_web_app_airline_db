@@ -35,10 +35,12 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 import pilotRouter from './routes/PilotRouts';
 import airportRouter from './routes/AirportRoutes';
+import licenseRouter from './routes/LicenseRoute';
 
 
 app.use('/api/pilots', pilotRouter);
 app.use('/api/airports', airportRouter);
+app.use('/api/licenses', licenseRouter);
 
 // api routes
 // app.use('/pilots', pilotRoute);

@@ -3,11 +3,11 @@ import { SequelizePilotRepository } from "../database/repositories/SequelizePilo
 import { PilotServices } from "../services/PilotServices";
 import { PilotController } from "../controllers/PilotController";
 
-const pilotRouter = Router();
+const pilotRouter: Router = Router();
 
-const repo = new SequelizePilotRepository();
-const service = new PilotServices(repo);
-const controller = new PilotController(service);
+const repo: SequelizePilotRepository = new SequelizePilotRepository();
+const service: PilotServices = new PilotServices(repo);
+const controller: PilotController = new PilotController(service);
 
 /**
  * @openapi

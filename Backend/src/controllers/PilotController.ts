@@ -41,9 +41,9 @@ export class PilotController {
                 return res.status(400).json({ message: `Bad request` });
             
             const pilot: Pilot = await this.service.updatePilot(id, pilotDto);
-            return res.status(201).json(PilotMappers.toPilotDto(pilot))
+            return res.status(201).json(PilotMappers.toPilotDto(pilot));
         } catch (error) {
-            return res.status(500).json({ message: 'Server Error: Failed to update pilots.' })
+            return res.status(500).json({ message: 'Server Error: Failed to update pilots.' });
         }
     }
 
