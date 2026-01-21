@@ -1,6 +1,6 @@
 export interface AirportDto {
-    airportID: number;
+    airportId: number;
     city: string;
     cityCode: string;
-    isHub: Number;
+    isHub: number;
 }

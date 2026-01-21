@@ -35,4 +35,22 @@ const controller = new AirportController(service);
  */
 airportRouter.get('/', controller.getAll.bind(controller));
 
+/**
+ * @openapi
+ * /api/airports/:
+ *   post:
+ *     summary: Create a new airport
+ *     tags: [Airports]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateAirportDto'
+ *     responses:
+ *       201:
+ *         description: Airport created
+ */
+airportRouter.post('/', controller.create.bind(controller));
+
 export default airportRouter;

@@ -3,6 +3,7 @@ import { AirportQueryObject } from "../../helpers/queryObjects/AirportQueryObjec
 import { IAirportRepository } from "../../interfaceRepo/IAirportRepository";
 import { Airport } from "../../models/Airport";
 import { AirportModel } from "../models/AirportModel";
+import { CreateAirportDto } from "../../dtos/airport/CreateAirportDto";
 
 export class SequelizeAirportRepository implements IAirportRepository {
 
@@ -25,12 +26,20 @@ export class SequelizeAirportRepository implements IAirportRepository {
         
         const rows: AirportModel[] = await AirportModel.findAll({ where });
 
-        return rows.map(row => new Airport({
-            airportID: row.airportID,
-            city: row.city,
-            cityCode: row.cityCode,
-            isHub: row.isHub
-        }));
+        return rows.map(row => this.toAirport(row));
     }
 
+    async createAirport(data: CreateAirportDto): Promise<Airport> {
+        const airport: AirportModel = await AirportModel.create(data);
+        return this.toAirport(airport);
+    }
+
+    private toAirport(model: AirportModel): Airport {
+        return new Airport({
+            airportID: model.airportID,
+            city: model.city,
+            cityCode: model.cityCode,
+            isHub: model.isHub
+        })
+    }
 }

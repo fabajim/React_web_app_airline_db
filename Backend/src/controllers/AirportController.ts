@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { AirportServices } from "../services/AirportServices";
 import { AirportMappers } from "../mappers/AirportMApper";
-import { parseIsHub } from "../helpers/validator/airpoirtValidators";
+import { parseIsHub } from "../helpers/validator/airportValidators";
+import { CreateAirportDto } from "../dtos/airport/CreateAirportDto";
+import { plainToInstance } from "class-transformer";
+import { validate } from "class-validator";
+import { Airport } from "../models/Airport";
 
 export class AirportController {
     constructor(private readonly service: AirportServices) {}
@@ -27,6 +31,21 @@ export class AirportController {
             if (error instanceof Error && error.name === 'BadRequestError')
                 return res.status(400).json({ message: error.message })
             return res.status(500).json({ message: 'Failed to get all airports' })
+        }
+    }
+
+    async create(req: Request, res: Response): Promise<Response> {
+        try {
+            const airportDto: CreateAirportDto = plainToInstance(CreateAirportDto, req.body);
+            const errors = await validate(airportDto);
+
+            if (errors.length > 0)
+                return res.status(400).json({ message: 'Bad request' })
+
+            const airport: Airport = await this.service.createAirport(airportDto);
+            return res.status(201).json(AirportMappers.toAirportDto(airport))
+        } catch (error) {
+            return res.status(500).json({ message: `Failed to create new airport.` })
         }
     }
 }
