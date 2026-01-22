@@ -1,4 +1,4 @@
-import { ILicenseRepository } from "../interfaceRepo/ILicenseRepository";
+import { ILicenseRepository } from "../iRepositories/ILicenseRepository";
 import { License } from "../models/License";
 
 export class LicenseServices {

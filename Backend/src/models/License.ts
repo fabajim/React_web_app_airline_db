@@ -1,36 +1,26 @@
-import { LicenseProps } from "../props/LicenseProps";
+import { LicenseProps } from "./props/LicenseProps";
 
 export class License {
-    private readonly _licenseId: number;
 
-    private _licenseType: string;
-
-    private _hoursNeeded: number;
-
-
-    constructor(props: LicenseProps) {
-        this._licenseId = props.licenseId;
-        this._licenseType = props.licenseType;
-        this._hoursNeeded = props.hoursNeeded;
-    }
+    constructor(private props: LicenseProps) {}
 
     public get licenseId(): number {
-        return this._licenseId;
+        return this.props.licenseId;
     }
 
     public get licenseType(): string {
-        return this._licenseType;
+        return this.props.licenseType;
     }
 
     public set licenseType(value: string) {
-        this._licenseType = value;
+        this.props.licenseType = value;
     }
 
     public get hoursNeeded(): number {
-        return this._hoursNeeded;
+        return this.props.hoursNeeded;
     }
     
     public set hoursNeeded(value: number) {
-        this._hoursNeeded = value;
+        this.props.hoursNeeded = value;
     }
 }

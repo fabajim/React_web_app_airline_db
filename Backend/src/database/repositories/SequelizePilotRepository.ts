@@ -1,6 +1,6 @@
 import { where, Op, WhereOptions } from "sequelize";
 import { CreatePilotDto } from "../../dtos/Pilot/CreatePilotDto";
-import { IPilotRepository } from "../../interfaceRepo/IPilotRepository";
+import { IPilotRepository } from "../../iRepositories/IPilotRepository";
 import { Pilot } from "../../models/Pilot";
 import { PilotAttributes, PilotModel } from "../models/PilotModel";
 import { NotFoundError } from "../../shared/Errors";

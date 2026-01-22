@@ -1,6 +1,6 @@
 import { Op, WhereOptions } from "sequelize";
 import { AirportQueryObject } from "../../helpers/queryObjects/AirportQueryObject";
-import { IAirportRepository } from "../../interfaceRepo/IAirportRepository";
+import { IAirportRepository } from "../../iRepositories/IAirportRepository";
 import { Airport } from "../../models/Airport";
 import { AirportAttributes, AirportModel } from "../models/AirportModel";
 import { CreateAirportDto } from "../../dtos/airport/CreateAirportDto";

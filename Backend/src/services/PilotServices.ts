@@ -1,7 +1,7 @@
 import { CreatePilotDto } from '../dtos/Pilot/CreatePilotDto';
 import { UpdatePilotDto } from '../dtos/Pilot/UpdatePilotDto';
 import { PilotQueryObject } from '../helpers/queryObjects/PilotQueryObject';
-import { IPilotRepository } from '../interfaceRepo/IPilotRepository'
+import { IPilotRepository } from '../iRepositories/IPilotRepository'
 import { Pilot } from '../models/Pilot';
 
 export class PilotServices {
