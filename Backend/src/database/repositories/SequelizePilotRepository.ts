@@ -6,6 +6,9 @@ import { PilotAttributes, PilotModel } from "../models/PilotModel";
 import { NotFoundError } from "../../shared/Errors";
 import { UpdatePilotDto } from "../../dtos/Pilot/UpdatePilotDto";
 import { PilotQueryObject } from "../../helpers/queryObjects/PilotQueryObject";
+import { LicenseModel } from "../models/LicenseModel";
+import { PilotLicense } from "../../models/props/PilotProps";
+import { LicenseDetailModel } from "../models/LicenseDetailModel";
 
 export class SequelizePilotRepository implements IPilotRepository {
 
@@ -36,7 +39,15 @@ export class SequelizePilotRepository implements IPilotRepository {
     }
 
     async findById(id: number): Promise<Pilot> {
-        const pilot: PilotModel | null = await PilotModel.findByPk(id);
+        const pilot: PilotModel | null = await PilotModel.findByPk(id, {
+            include: [{
+                model: LicenseModel,
+                as: 'licenses',
+                through: { 
+                    attributes: ['dateReceived'] 
+                }
+            }]
+        });
 
         if (!pilot) {
             throw new NotFoundError('Pilot', id);
@@ -68,12 +79,22 @@ export class SequelizePilotRepository implements IPilotRepository {
     }
 
     private toPilot(model: PilotModel): Pilot {
+
+        console.log(JSON.stringify(model, null, 2));
+
+        const pilotLicenses = model.licenses?.map((l) => ({
+            licenseID: l.licenseId,
+            licenseType: l.licenseType,
+            dateReceived: new Date(l.LicenseDetailModel!.dateReceived)
+        })) ?? [];
+
         return new Pilot({
             pilotID: model.pilotID,
             fname: model.fname,
             lname: model.lname,
             email: model.email,
-            phoneNumber: model.phoneNumber
+            phoneNumber: model.phoneNumber,
+            licenses: pilotLicenses
         })
     }
 }

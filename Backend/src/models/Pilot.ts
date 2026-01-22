@@ -1,4 +1,4 @@
-import { PilotProps } from "./props/PilotProps"
+import { PilotLicense, PilotProps } from "./props/PilotProps"
 
 export class Pilot {
 
@@ -22,5 +22,9 @@ export class Pilot {
 
     get pilotPhoneNumber(): string {
         return this.props.phoneNumber;
+    }
+
+    get pilotLicense(): PilotLicense[] {
+        return this.props.licenses;
     }
 }

@@ -36,6 +36,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 import pilotRouter from './routes/PilotRouts';
 import airportRouter from './routes/AirportRoutes';
 import licenseRouter from './routes/LicenseRoute';
+import { initDatabase } from './database';
 
 
 app.use('/api/pilots', pilotRouter);
@@ -55,11 +56,18 @@ app.use('/api/licenses', licenseRouter);
 // app.use('/assignmentPast', filterNo);
 // app.use('/aircraftLicense', aircraftLicense);
 
-app.get('/', (req: Request, res: Response)=>{
-    return res.send("Hello From Backend!");
-});
 
-app.listen(8081, ()=>{
-    console.log("Listening on port 8081");
-})
+async function startServer() {
+  try {
+    await initDatabase();   // 👈 associations + connection
+    app.listen(8081, () => {
+      console.log('Server running on port 8081');
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 

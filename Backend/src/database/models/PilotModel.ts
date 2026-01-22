@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize';
+import { LicenseModel } from './LicenseModel';
 
 export interface PilotAttributes {
   pilotID: number;
@@ -7,6 +8,7 @@ export interface PilotAttributes {
   lname: string;
   email: string;
   phoneNumber: string;
+  licenses?: LicenseModel[];
 }
 
 interface PilotCreationAttributes extends Optional<PilotAttributes, 'pilotID'> {}
@@ -18,6 +20,8 @@ export class PilotModel extends Model<PilotAttributes, PilotCreationAttributes>
   public lname!: string;
   public email!: string;
   public phoneNumber!: string;
+
+  public licenses?: LicenseModel[];
 }
 
 PilotModel.init({

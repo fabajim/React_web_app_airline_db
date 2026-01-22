@@ -8,7 +8,12 @@ export class PilotMappers {
             fname: pilot.firstName,
             lname: pilot.lastName,
             email: pilot.pilotEmail,
-            phoneNumber: pilot.pilotPhoneNumber
+            phoneNumber: pilot.pilotPhoneNumber,
+            licenses: pilot.pilotLicense?.map(l => ({
+                licenseID: l.licenseID,
+                licenseType: l.licenseType,
+                dateReceived: l.dateReceived
+            }))
         };
     }
 
