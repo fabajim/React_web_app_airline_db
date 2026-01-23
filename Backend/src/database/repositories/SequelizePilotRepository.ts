@@ -7,8 +7,6 @@ import { NotFoundError } from "../../shared/Errors";
 import { UpdatePilotDto } from "../../dtos/Pilot/UpdatePilotDto";
 import { PilotQueryObject } from "../../helpers/queryObjects/PilotQueryObject";
 import { LicenseModel } from "../models/LicenseModel";
-import { PilotLicense } from "../../models/props/PilotProps";
-import { LicenseDetailModel } from "../models/LicenseDetailModel";
 
 export class SequelizePilotRepository implements IPilotRepository {
 
@@ -73,7 +71,13 @@ export class SequelizePilotRepository implements IPilotRepository {
             where.lname = { [Op.like]: `${pilotQuery.lname}%` };
         }
 
-        const rows: PilotModel[] = await PilotModel.findAll({ where });
+        const rows: PilotModel[] = await PilotModel.findAll({ where, 
+            include: [{
+                model: LicenseModel,
+                as: 'licenses',
+                through: { attributes: ['dateReceived']  }
+            }]
+         });
 
         return rows.map(row => this.toPilot(row));
     }
