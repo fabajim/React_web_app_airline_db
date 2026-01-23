@@ -27,4 +27,10 @@ export class Pilot {
     get pilotLicense(): PilotLicense[] {
         return this.props.licenses;
     }
+
+    public hasLicense(licenseId: number): boolean {
+        return this.props.licenses.some(l => 
+            l.licenseID === licenseId
+        );
+    }
 }

@@ -1,11 +1,21 @@
-import { DataTypes, Model } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../sequelize';
 
-export class LicenseDetailModel extends Model {
-  declare licenseDetailsID: number;
-  declare pilotID: number;
-  declare licenseID: number;
-  declare dateReceived: Date;
+export interface LicenseDetailsAttributes {
+  licenseDetailsID: number;
+  pilotID: number;
+  licenseID: number;
+  dateReceived: Date;
+}
+
+interface LicenseDetailCreationAttributes extends Optional<LicenseDetailsAttributes, 'licenseDetailsID'> {}
+
+export class LicenseDetailModel extends Model<LicenseDetailsAttributes, LicenseDetailCreationAttributes>
+implements LicenseDetailsAttributes {
+  public licenseDetailsID!: number;
+  public pilotID!: number;
+  public licenseID!: number;
+  public dateReceived!: Date;
 }
 
 LicenseDetailModel.init(

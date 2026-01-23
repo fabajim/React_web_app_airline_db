@@ -1,6 +1,8 @@
 import express, { NextFunction, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './config/swagger';
+import 'reflect-metadata';
+
 
 //const express = require('express');
 const cors = require('cors');
@@ -37,11 +39,13 @@ import pilotRouter from './routes/PilotRouts';
 import airportRouter from './routes/AirportRoutes';
 import licenseRouter from './routes/LicenseRoute';
 import { initDatabase } from './database';
+import licenseDetailsRouter from './routes/LicenseDetailsRout';
 
 
 app.use('/api/pilots', pilotRouter);
 app.use('/api/airports', airportRouter);
 app.use('/api/licenses', licenseRouter);
+app.use('/api/licenseDetails', licenseDetailsRouter)
 
 // api routes
 // app.use('/pilots', pilotRoute);
