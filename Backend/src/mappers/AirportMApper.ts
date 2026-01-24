@@ -1,4 +1,4 @@
-import { AirportDto } from "../dtos/airport/airportDto";
+import { AirportDto } from "../dtos/airport/AirportDto";
 import { Airport } from "../models/Airport";
 
 export class AirportMappers {

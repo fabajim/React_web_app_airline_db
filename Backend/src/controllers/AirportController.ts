@@ -8,8 +8,7 @@ import { validate, ValidationError } from "class-validator";
 import { Airport } from "../models/Airport";
 import { AirportQueryObject } from "../helpers/queryObjects/AirportQueryObject";
 import { UpdateAirportDto } from "../dtos/airport/UpdateAirportDto";
-import { AirportDto } from "../dtos/airport/airportDto";
-import { PilotMappers } from "../mappers/PilotMappers";
+import { AirportDto } from "../dtos/airport/AirportDto";
 
 
 export class AirportController {

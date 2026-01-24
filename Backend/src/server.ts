@@ -40,12 +40,14 @@ import airportRouter from './routes/AirportRoutes';
 import licenseRouter from './routes/LicenseRoute';
 import { initDatabase } from './database';
 import licenseDetailsRouter from './routes/LicenseDetailsRout';
+import aircraftRouter from './routes/AircraftRouts';
 
 
 app.use('/api/pilots', pilotRouter);
 app.use('/api/airports', airportRouter);
 app.use('/api/licenses', licenseRouter);
 app.use('/api/licenseDetails', licenseDetailsRouter)
+app.use('/api/aircraft', aircraftRouter);
 
 // api routes
 // app.use('/pilots', pilotRoute);
@@ -63,7 +65,7 @@ app.use('/api/licenseDetails', licenseDetailsRouter)
 
 async function startServer() {
   try {
-    await initDatabase();   // 👈 associations + connection
+    await initDatabase();   
     app.listen(8081, () => {
       console.log('Server running on port 8081');
     });
