@@ -7,4 +7,8 @@ export class AircraftServices {
     async getAllAircraft(): Promise<Aircraft[]> {
         return this.aircraftRepo.findAll();
     }
+
+    async getAircraftById(id: number): Promise<Aircraft> {
+        return this.aircraftRepo.getById(id)
+    }
 }

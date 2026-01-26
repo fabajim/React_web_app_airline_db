@@ -94,7 +94,7 @@ export class PilotController {
             return res.status(200).json({ message: 'Pilot Deleted' });
         } catch (error) {
             if (error instanceof Error && error.name == 'NotFoundError')
-                return res.status(404).json({ message: `Pilot not found` });
+                return res.status(404).json({ message: error.message });
             return res.status(500).json({ message: 'Failed to delete pilot.'});
         }
     }

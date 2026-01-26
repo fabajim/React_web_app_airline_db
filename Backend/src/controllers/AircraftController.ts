@@ -17,4 +17,23 @@ export class AircraftController {
             return res.status(500).json({ message: `Server Error Failed to get Aircraft.` })
         }
     }
+
+    async getById(req: Request, res: Response): Promise<Response<AircraftDto>> {
+        try {
+            const id: number = Number(req.params.id);
+
+            if (isNaN(id))
+                return res.status(400).json({ message: `Bad Request` })
+
+            const aircraft: Aircraft = await this.service.getAircraftById(id);
+            const aircraftDto: AircraftDto = AircraftMappers.toAircraftDto(aircraft);
+
+            return res.status(200).json(aircraftDto);
+        } catch (error) {
+            if (error instanceof Error && error.name == 'NotFoundError') {
+                return res.status(404).json({ message: `${error.message}`});
+            }
+            return res.status(500).json({ message: `Server Error failed to get Aircraft.` })
+        }
+    }
 }

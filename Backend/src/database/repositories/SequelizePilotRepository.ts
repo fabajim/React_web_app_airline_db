@@ -84,8 +84,6 @@ export class SequelizePilotRepository implements IPilotRepository {
 
     private toPilot(model: PilotModel): Pilot {
 
-        console.log(JSON.stringify(model, null, 2));
-
         const pilotLicenses = model.licenses?.map((l) => ({
             licenseID: l.licenseId,
             licenseType: l.licenseType,
