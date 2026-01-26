@@ -1,3 +1,4 @@
+import { CreateAircraftDto } from "../../dtos/aircraft/CreateAircraftDto";
 import { IAircraftRepository } from "../../iRepositories/IAircraftRepository";
 import { Aircraft } from "../../models/Aircraft";
 import { NotFoundError } from "../../shared/Errors";
@@ -5,6 +6,17 @@ import { AircraftModel } from "../models/AircraftModel";
 import { AircraftTypeModel } from "../models/AircraftTypeModel";
 
 export class SequelizeAircraftRepository implements IAircraftRepository {
+
+    async create(data: CreateAircraftDto): Promise<Aircraft> {
+        const aircraft: AircraftModel = await AircraftModel.create({
+            serialNum: data.serialNum,
+            lastService: data.lastService,
+            totalHourFlown: data.totalHourFlown,
+            aircraftTypeID: data.aircraftTypeID
+        });
+
+        return this.getById(aircraft.aircraftID);
+    }
 
     async getById(id: number): Promise<Aircraft> {
         const row: AircraftModel | null = await AircraftModel.findByPk(id, {

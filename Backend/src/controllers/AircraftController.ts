@@ -3,6 +3,9 @@ import { AircraftServices } from "../services/AircraftServices";
 import { AircraftDto } from "../dtos/aircraft/AircraftDto";
 import { Aircraft } from "../models/Aircraft";
 import { AircraftMappers } from "../mappers/AircraftMappers";
+import { CreateAircraftDto } from "../dtos/aircraft/CreateAircraftDto";
+import { plainToInstance } from "class-transformer";
+import { validate, ValidationError } from "class-validator";
 
 export class AircraftController {
     constructor(private readonly service: AircraftServices) {}
@@ -34,6 +37,22 @@ export class AircraftController {
                 return res.status(404).json({ message: `${error.message}`});
             }
             return res.status(500).json({ message: `Server Error failed to get Aircraft.` })
+        }
+    }
+
+    async create(req: Request, res: Response): Promise<Response<AircraftDto>> {
+        try {
+            const aircraftDto: CreateAircraftDto = plainToInstance(CreateAircraftDto, req.body);
+            const errors: ValidationError[] = await validate(aircraftDto);
+
+            if (errors.length > 0)
+                return res.status(400).json({ message: 'Bad Request Body.' });
+
+            const aircraft: Aircraft = await this.service.createAircraft(aircraftDto);
+            return res.status(201).json(AircraftMappers.toAircraftDto(aircraft));
+        } catch (error) {
+            console.log(`Error at Create: ${error}`);
+            return res.status(500).json({ message: `Failed to add aircraft.` })
         }
     }
 }

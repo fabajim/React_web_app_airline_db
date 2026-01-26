@@ -26,7 +26,7 @@ implements AircraftAttributes {
 
 AircraftModel.init({
     aircraftID: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    serialNum: { type: DataTypes.STRING, unique: true },
+    serialNum: { type: DataTypes.STRING },
     lastService: DataTypes.DATE,
     totalHourFlown: DataTypes.INTEGER,
     aircraftTypeID: DataTypes.INTEGER,

@@ -2,11 +2,13 @@ import { Router } from "express";
 import { SequelizeAircraftRepository } from "../database/repositories/SequelizeAircraftRepository";
 import { AircraftServices } from "../services/AircraftServices";
 import { AircraftController } from "../controllers/AircraftController";
+import { SequelizeAircraftTypeRepository } from "../database/repositories/SequelizeAircraftTypeRepository";
 
 const aircraftRouter: Router = Router();
 
 const repo: SequelizeAircraftRepository = new SequelizeAircraftRepository();
-const service: AircraftServices = new AircraftServices(repo);
+const typeRepo: SequelizeAircraftTypeRepository = new SequelizeAircraftTypeRepository();
+const service: AircraftServices = new AircraftServices(repo, typeRepo);
 const controller: AircraftController = new AircraftController(service);
 
 /**
@@ -43,5 +45,26 @@ aircraftRouter.get('/', controller.getAll.bind(controller));
  *         description: Aircraft Not Found.
  */
 aircraftRouter.get('/:id', controller.getById.bind(controller));
+
+
+/**
+ * @openapi
+ * /api/aircraft/:
+ *   post:
+ *     summary: Create a new aircraft
+ *     tags: [Aircraft]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateAircraftDto'
+ *     responses:
+ *       201:
+ *         description: Aircraft created
+ *       500:
+ *         description: Failed to add aircraft
+ */
+aircraftRouter.post('/', controller.create.bind(controller));
 
 export default aircraftRouter;

@@ -1,12 +1,7 @@
-export interface AircraftTypeInfoProps {
+export interface AircraftTypeProps {
+    aircraftTypeID: number,
     make: string;
     model: string;
-}
-
-export interface AircraftTypeProps {
-    aircraftID: number;
-    serialNum: string;
-    lastService: Date;
-    totalHourFlown: number;
-    typeInfo: AircraftTypeInfoProps;
+    licenseID: number,
+    totalSeating: number
 }

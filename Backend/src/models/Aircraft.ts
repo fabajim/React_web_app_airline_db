@@ -1,8 +1,8 @@
 import { AircraftTypeInfo } from "../dtos/aircraft/AircraftDto";
-import { AircraftTypeProps } from "./props/AircraftTypeProps";
+import { AircraftProps } from "./props/AircraftProps";
 
 export class Aircraft {
-    constructor(private props: AircraftTypeProps) {}
+    constructor(private props: AircraftProps) {}
 
     get aircraftId(): number {
         return this.props.aircraftID;
