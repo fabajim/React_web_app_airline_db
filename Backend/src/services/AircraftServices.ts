@@ -1,10 +1,11 @@
 import { AircraftDto } from "../dtos/aircraft/AircraftDto";
 import { CreateAircraftDto } from "../dtos/aircraft/CreateAircraftDto";
+import { UpdateAircraftDto } from "../dtos/aircraft/UpdateAircraftDto";
 import { IAircraftRepository } from "../iRepositories/IAircraftRepository";
 import { IAircraftTypeRepository } from "../iRepositories/IAircraftTypeRepository";
 import { Aircraft } from "../models/Aircraft";
 import { AircraftType } from "../models/AircraftType";
-import { NotFoundError } from "../shared/Errors";
+import { DateAndHoursError, NotFoundError } from "../shared/Errors";
 
 export class AircraftServices {
     constructor(private readonly aircraftRepo: IAircraftRepository,
@@ -29,7 +30,22 @@ export class AircraftServices {
           if (aircraftType === null)
             throw new NotFoundError('AircraftType', aircraftTypeId);
 
-        const newAircraft: Aircraft = await this.aircraftRepo.create(data);
-        return this.getAircraftById(newAircraft.aircraftId);
+        return await this.aircraftRepo.create(data);
+    }
+
+    async UpdateAircraftById(id: number, data: UpdateAircraftDto): Promise<Aircraft> {
+        const aircraft: Aircraft = await this.aircraftRepo.getById(id);
+
+        const savedDate: Date = new Date(aircraft.lastServiceDate);
+        const savedHours: number = aircraft.hoursFlown;
+
+        // Can't update to previous date or less hours!
+        if (savedDate.getTime() > data.lastService.getTime() || 
+            savedHours > data.totalHourFlown) {
+            throw new DateAndHoursError();
+        }
+
+        await this.aircraftRepo.updateById(id, data);
+        return await this.getAircraftById(id);
     }
 }

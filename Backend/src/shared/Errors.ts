@@ -6,8 +6,18 @@ export class NotFoundError extends Error {
 }
 
 export class BadRequestError extends Error {
-    constructor(entity: string) {
+    public readonly statusCode: number;
+
+    constructor(statusCode: number, entity: string) {
         super(`${entity} is an invalid request.`)
         this.name = 'BadRequestError';
+        this.statusCode = statusCode;
+    }
+}
+
+export class DateAndHoursError extends Error {
+    constructor() {
+        super("Date and Hours cannot be less then what is currently saved.")
+        this.name = 'DateAndHoursError';
     }
 }

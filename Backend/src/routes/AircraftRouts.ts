@@ -67,4 +67,27 @@ aircraftRouter.get('/:id', controller.getById.bind(controller));
  */
 aircraftRouter.post('/', controller.create.bind(controller));
 
+
+/**
+ * @openapi
+ * /api/aircraft/{id}:
+ *   put:
+ *     summary: Update existing aircraft by id.
+ *     tags: [Aircraft]
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *     requestBody:
+ *        required: true
+ *        content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateAircraftDto'
+ *     responses:
+ *       201:
+ *         description: Aircraft Updated
+ */
+aircraftRouter.put('/:id', controller.updateAircraft.bind(controller));
+
 export default aircraftRouter;
