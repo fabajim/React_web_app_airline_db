@@ -13,7 +13,6 @@ export class LicenseDetailsController {
 
     async create(req: Request, res: Response): Promise<Response<LicenseDetailsDto>> {
         try {
-            console.log(req.body);
             const createLicenseDetailDto: CreateLicenseDetailsDto = 
               plainToInstance(CreateLicenseDetailsDto, req.body);
             const errors: ValidationError[] = await validate(createLicenseDetailDto);
@@ -29,6 +28,7 @@ export class LicenseDetailsController {
         catch (error) {
             if (error instanceof HttpError)
                 return res.status(error.statusCode).json({ name: error.name, message: error.message });
+            console.log(error);
             return res.status(500).json({ message: 'Server Error: Could not add license to pilot.' });
         }
     }

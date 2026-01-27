@@ -3,12 +3,14 @@ import { SequelizeLicenseDetailRepository } from "../database/repositories/Seque
 import { LicenseDetailsServices } from "../services/LicenseDetailsServices";
 import { SequelizePilotRepository } from "../database/repositories/SequelizePilotRepository";
 import { LicenseDetailsController } from "../controllers/LicenseDetailsController";
+import { SequelizeLicenseRepository } from "../database/repositories/SequelizeLicenseRepository";
 
 const licenseDetailsRouter: Router = Router();
 
 const detailsRepo: SequelizeLicenseDetailRepository = new SequelizeLicenseDetailRepository();
 const pilotRepo: SequelizePilotRepository = new SequelizePilotRepository()
-const service: LicenseDetailsServices = new LicenseDetailsServices(detailsRepo, pilotRepo);
+const licenseRepo: SequelizeLicenseRepository = new SequelizeLicenseRepository();
+const service: LicenseDetailsServices = new LicenseDetailsServices(detailsRepo, pilotRepo, licenseRepo);
 const controller: LicenseDetailsController = new LicenseDetailsController(service);
 
 /**
