@@ -7,7 +7,7 @@ import { CreateAircraftDto } from "../dtos/aircraft/CreateAircraftDto";
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import { UpdateAircraftDto } from "../dtos/aircraft/UpdateAircraftDto";
-import { BadRequestError } from "../shared/Errors";
+import { BadRequestError, HttpError } from "../shared/Errors";
 
 export class AircraftController {
     constructor(private readonly service: AircraftServices) {}
@@ -20,6 +20,8 @@ export class AircraftController {
             return res.status(200).json(aircraftDto);
         } 
         catch (error) {
+            if (error instanceof HttpError)
+                return res.status(error.statusCode).json({ name: error.name, message: error.message })
             return res.status(500).json({ message: `Server Error Failed to get Aircraft.` })
         }
     }
@@ -29,7 +31,7 @@ export class AircraftController {
             const id: number = Number(req.params.id);
 
             if (isNaN(id))
-                return res.status(400).json({ message: `Bad Request` })
+                throw new BadRequestError('Aircraft id');
 
             const aircraft: Aircraft = await this.service.getAircraftById(id);
             const aircraftDto: AircraftDto = AircraftMappers.toAircraftDto(aircraft);
@@ -37,8 +39,8 @@ export class AircraftController {
             return res.status(200).json(aircraftDto);
         } 
         catch (error) {
-            if (error instanceof Error && error.name == 'NotFoundError') {
-                return res.status(404).json({ message: `${error.message}`});
+            if (error instanceof HttpError) {
+                return res.status(error.statusCode).json({ name: error.name, message: error.message});
             }
             return res.status(500).json({ message: `Server Error failed to get Aircraft.` })
         }
@@ -50,13 +52,15 @@ export class AircraftController {
             const errors: ValidationError[] = await validate(aircraftDto);
 
             if (errors.length > 0)
-                return res.status(400).json({ message: 'Bad Request Body.' });
+                throw new BadRequestError('Aircraft')
 
             const aircraft: Aircraft = await this.service.createAircraft(aircraftDto);
             return res.status(201).json(AircraftMappers.toAircraftDto(aircraft));
         } 
         catch (error) {
-            return res.status(500).json({ message: `Failed to add aircraft.` })
+            if (error instanceof HttpError)
+                return res.status(error.statusCode).json({ name: error.name, message: error.message });
+            return res.status(500).json({ message: `Server Error: Failed to add aircraft.` })
         }
     }
 
@@ -65,18 +69,17 @@ export class AircraftController {
             const updateDto: UpdateAircraftDto = plainToInstance(UpdateAircraftDto, req.body);
             const errors: ValidationError[] = await validate(updateDto);
             const id: number = Number(req.params.id);
-            
+
             if (errors.length > 0 || isNaN(id))
-                throw new BadRequestError(400, 'Aircraft');
+                throw new BadRequestError('Aircraft');
 
             const aircraft: Aircraft = await this.service.UpdateAircraftById(id, updateDto);
 
             return res.status(201).json(AircraftMappers.toAircraftDto(aircraft));
         } 
         catch (error) {
-            if (error instanceof Error) {
-                return res.json({error});
-            }
+            if (error instanceof HttpError) 
+                return res.status(error.statusCode).json({ name: error.name ,message: error.message });
             return res.status(500).json({ message: `Server error Failed to update aircraft.` })
         }
     }

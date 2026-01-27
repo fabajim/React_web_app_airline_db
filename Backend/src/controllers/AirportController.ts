@@ -9,6 +9,7 @@ import { Airport } from "../models/Airport";
 import { AirportQueryObject } from "../helpers/queryObjects/AirportQueryObject";
 import { UpdateAirportDto } from "../dtos/airport/UpdateAirportDto";
 import { AirportDto } from "../dtos/airport/AirportDto";
+import { BadRequestError, HttpError } from "../shared/Errors";
 
 
 export class AirportController {
@@ -31,9 +32,10 @@ export class AirportController {
             const airports = await this.service.getAllAirports(airportQuery);
             const airportDto = AirportMappers.toAirportDtoList(airports);
             return res.status(200).json(airportDto)
-        } catch (error) {
-            if (error instanceof Error && error.name === 'BadRequestError')
-                return res.status(400).json({ message: error.message })
+        } 
+        catch (error) {
+            if (error instanceof HttpError)
+                return res.status(error.statusCode).json({ name: error.name, message: error.message })
             return res.status(500).json({ message: 'Failed to get all airports' })
         }
     }
@@ -44,13 +46,13 @@ export class AirportController {
             const errors = await validate(airportDto);
 
             if (errors.length > 0) {
-                console.log(`Airport create error with validate.`)
-                return res.status(400).json({ message: 'Bad request' })
+                throw new BadRequestError('Airport');
             }
 
             const airport: Airport = await this.service.createAirport(airportDto);
             return res.status(201).json(AirportMappers.toAirportDto(airport))
-        } catch (error) {
+        } 
+        catch (error) {
             return res.status(500).json({ message: `Failed to create new airport.` })
         }
     }
@@ -66,12 +68,15 @@ export class AirportController {
             const errors: ValidationError[] = await validate(airportDto);
 
             if (errors.length > 0)
-                return res.status(400).json({ message: `Bad request` });
+                throw new BadRequestError('Airport');
 
             const updatedAirport: Airport = await this.service.updateAirport(id, airportDto);
             return res.status(201).json(AirportMappers.toAirportDto(updatedAirport));
 
-        } catch (error) {
+        } 
+        catch (error) {
+            if (error instanceof HttpError)
+                return res.status(error.statusCode).json({ name: error.name, message: error.message })
             return res.status(500).json({ message: `Server Error: Failed to update airport.` } )
         }
     }
@@ -81,13 +86,14 @@ export class AirportController {
             const id: number = Number(req.params.id);
 
             if (isNaN(id))
-                return res.status(400).json({ message: `Bad Request` })
+                throw new BadRequestError('Airport id')
 
             await this.service.deleteAirportById(id);
             return res.status(200).json({ message: `Airport Deleted: ${id}` });
-        } catch (error) {
-            if (error instanceof Error && error.name === 'NotFoundError')
-                return res.status(404).json({ message: `Airport not found` });
+        } 
+        catch (error) {
+            if (error instanceof HttpError)
+                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server Error: Failed to Delete airport` });
         }
     }

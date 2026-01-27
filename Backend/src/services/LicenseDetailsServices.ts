@@ -3,6 +3,7 @@ import { ILicenseDetailsRepository } from "../iRepositories/ILicenseDetailsRepos
 import { IPilotRepository } from "../iRepositories/IPilotRepository";
 import { LicenseDetails } from "../models/LicenseDetails";
 import { Pilot } from "../models/Pilot";
+import { ConflictError } from "../shared/Errors";
 
 export class LicenseDetailsServices{
     constructor(private readonly licenseDetailRepo: ILicenseDetailsRepository, 
@@ -16,7 +17,7 @@ export class LicenseDetailsServices{
         console.log(`Pilot Licenses: ${pilot.pilotLicense}`);
         
         if (pilot.hasLicense(licenseId))
-            throw new Error('Pilot Has This license')
+            throw new ConflictError('Duplicate: pilot already has license')
 
         return this.licenseDetailRepo.createLicenseDetail(licenseDetail);
     }
