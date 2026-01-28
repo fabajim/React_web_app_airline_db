@@ -9,6 +9,19 @@ import { PilotModel } from "../models/PilotModel";
 export class SequelizeAssignmentDetailsRepository implements
 IAssignmentDetailsRepository {
 
+    async getAllMissingPilotView(): Promise<AssignmentDetailsDto[]> {
+        const rows = await AssignmentDetailsModel.findAll({
+            where: { isActive: true, pilotID: null },
+            include: [
+                { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
+                { model: AircraftModel, as: 'aircraft', attributes: ['aircraftID', 'serialNum'] },
+                { model: AirportModel, as: 'airport', attributes: ['airportID', 'cityCode'] }
+            ]
+        });
+
+        return rows.map( r => this.toAssignmentDetailsDtoView(r));
+    }
+
     async getAllView(): Promise<AssignmentDetailsDto[]> {
         const rows = await AssignmentDetailsModel.findAll({
             include: [

@@ -11,4 +11,8 @@ export class AssignmentDetailsServices {
     async getActiveAssignmentsToView(): Promise<AssignmentDetailsDto[]> {
         return this.repo.getAllActiveView();
     }
+
+    async getPilotNeededToView(): Promise<AssignmentDetailsDto[]> {
+        return this.repo.getAllMissingPilotView();
+    }
 }

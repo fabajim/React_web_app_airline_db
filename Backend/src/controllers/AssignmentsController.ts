@@ -32,4 +32,18 @@ export class AssignmentsController {
             return res.status(500).json({ message: `Server error failed to get assignments.` })
         }
     }
+
+    async getAllNeedsPilotView(req: Request, res: Response): 
+    Promise<Response<AssignmentDetailsDto[]>> {
+        try{
+            const assignmentsDto: 
+              AssignmentDetailsDto[] = await this.service.getPilotNeededToView();
+
+            return res.status(200).json(assignmentsDto);
+        }
+        catch (error) {
+            console.log(error);
+            return res.status(500).json({ message: `Server error failed to get assignments.` })
+        }
+    }
 }

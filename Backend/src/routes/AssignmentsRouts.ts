@@ -34,4 +34,16 @@ assignmentsRouter.get('/current', controller.getAllActiveView.bind(controller));
  */
 assignmentsRouter.get('/all', controller.getAllView.bind(controller));
 
+/**
+ * @openapi
+ * /api/assignments/pilot-needed:
+ *   get:
+ *     summary: Get all assignments
+ *     tags: [Assignments]
+ *     responses:
+ *       200:
+ *         description: List of current Assignments that need pilot 
+ */
+assignmentsRouter.get('/pilot-needed', controller.getAllNeedsPilotView.bind(controller));
+
 export default assignmentsRouter;
