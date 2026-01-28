@@ -46,4 +46,26 @@ assignmentsRouter.get('/all', controller.getAllView.bind(controller));
  */
 assignmentsRouter.get('/pilot-needed', controller.getAllNeedsPilotView.bind(controller));
 
+/**
+ * @openapi
+ * /api/assignments/{id}:
+ *   get:
+ *     summary: Get a assignment by ID
+ *     tags:
+ *       - Assignments
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Assignment ID
+ *     responses:
+ *       200:
+ *         description: Assignment found
+ *       404:
+ *         description: Assignment not found
+ */
+assignmentsRouter.get('/:id', controller.getAssignmentVewById.bind(controller));
+
 export default assignmentsRouter;

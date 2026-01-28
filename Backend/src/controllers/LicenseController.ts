@@ -16,8 +16,8 @@ export class LicenseController {
         } 
         catch (error) {
             if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message })
-            return res.status(500).json({ message: `Server Error: Failed to get Licenses.` })
+                return res.status(error.statusCode).json({ name: error.name, message: error.message });
+            return res.status(500).json({ message: `Server Error: Failed to get Licenses.` });
         }
     }
 }

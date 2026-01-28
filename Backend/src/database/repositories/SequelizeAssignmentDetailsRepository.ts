@@ -10,7 +10,7 @@ export class SequelizeAssignmentDetailsRepository implements
 IAssignmentDetailsRepository {
 
     async getAllMissingPilotView(): Promise<AssignmentDetailsDto[]> {
-        const rows = await AssignmentDetailsModel.findAll({
+        const rows: AssignmentDetailsModel[] = await AssignmentDetailsModel.findAll({
             where: { isActive: true, pilotID: null },
             include: [
                 { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
@@ -23,7 +23,7 @@ IAssignmentDetailsRepository {
     }
 
     async getAllView(): Promise<AssignmentDetailsDto[]> {
-        const rows = await AssignmentDetailsModel.findAll({
+        const rows: AssignmentDetailsModel[] = await AssignmentDetailsModel.findAll({
             include: [
                 { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
                 { model: AircraftModel, as: 'aircraft', attributes: ['aircraftID', 'serialNum'] },
@@ -35,7 +35,7 @@ IAssignmentDetailsRepository {
     }
 
     async getAllActiveView(): Promise<AssignmentDetailsDto[]> {
-        const rows = await AssignmentDetailsModel.findAll({
+        const rows: AssignmentDetailsModel[] = await AssignmentDetailsModel.findAll({
             where: { isActive: true },
             include: [
                 { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
@@ -47,8 +47,16 @@ IAssignmentDetailsRepository {
         return rows.map( r => this.toAssignmentDetailsDtoView(r));
     }
 
-    async getByIdView(id: number): Promise<AssignmentDetailsDto> {
-        throw new Error("Method not implemented.");
+    async getByIdView(id: number): Promise<AssignmentDetailsDto | null> {
+        const row: AssignmentDetailsModel | null = await AssignmentDetailsModel.findByPk(id, {
+            include: [
+                { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
+                { model: AircraftModel, as: 'aircraft', attributes: ['aircraftID', 'serialNum'] },
+                { model: AirportModel, as: 'airport', attributes: ['airportID', 'cityCode'] }
+            ]
+        });
+
+        return row ? this.toAssignmentDetailsDtoView(row) : null;
     }
 
     async getByIdDomain(Id: number): Promise<AssignmentDetails> {
