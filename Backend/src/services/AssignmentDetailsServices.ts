@@ -7,4 +7,8 @@ export class AssignmentDetailsServices {
     async getAllAssignmentsToView(): Promise<AssignmentDetailsDto[]> {
         return this.repo.getAllView();   
     }
+
+    async getActiveAssignmentsToView(): Promise<AssignmentDetailsDto[]> {
+        return this.repo.getAllActiveView();
+    }
 }

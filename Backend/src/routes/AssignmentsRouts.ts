@@ -11,7 +11,20 @@ const controller: AssignmentsController = new AssignmentsController(service);
 
 /**
  * @openapi
- * /api/assignments:
+ * /api/assignments/current:
+ *   get:
+ *     summary: Get all assignments
+ *     tags: [Assignments]
+ *     responses:
+ *       200:
+ *         description: List of current Assignments
+ */
+assignmentsRouter.get('/current', controller.getAllActiveView.bind(controller));
+
+
+/**
+ * @openapi
+ * /api/assignments/all:
  *   get:
  *     summary: Get all assignments
  *     tags: [Assignments]
@@ -19,6 +32,6 @@ const controller: AssignmentsController = new AssignmentsController(service);
  *       200:
  *         description: List of Assignments
  */
-assignmentsRouter.get('/', controller.getAllView.bind(controller));
+assignmentsRouter.get('/all', controller.getAllView.bind(controller));
 
 export default assignmentsRouter;

@@ -5,8 +5,12 @@ export interface IAssignmentDetailsRepository {
 
     // Get assignments for dto view only
     getAllView(): Promise<AssignmentDetailsDto[]>
-    getByIdView(): Promise<AssignmentDetailsDto>
+    getAllActiveView(): Promise<AssignmentDetailsDto[]>
+    getByIdView(id: number): Promise<AssignmentDetailsDto>
 
     // get assignment for domain model only
-    getByIdDomain(): Promise<AssignmentDetails>
+    getByIdDomain(id: number): Promise<AssignmentDetails>
+
+    updateStatus(): Promise<void>
+    createAssignment(): Promise<AssignmentDetails>
 }

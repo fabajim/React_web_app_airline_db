@@ -1,5 +1,6 @@
 import { AssignmentDetailsDto } from "../../dtos/assignmentDetails/AssignmentDetailsDto";
 import { IAssignmentDetailsRepository } from "../../iRepositories/IAssignmentDetailsRepository";
+import { AssignmentDetails } from "../../models/AssignmentDetails";
 import { AircraftModel } from "../models/AircraftModel";
 import { AirportModel } from "../models/AirportModel";
 import { AssignmentDetailsModel } from "../models/AssignmentDetailsModel";
@@ -20,6 +21,35 @@ IAssignmentDetailsRepository {
         return rows.map(r => this.toAssignmentDetailsDtoView(r));
     }
 
+    async getAllActiveView(): Promise<AssignmentDetailsDto[]> {
+        const rows = await AssignmentDetailsModel.findAll({
+            where: { isActive: true },
+            include: [
+                { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
+                { model: AircraftModel, as: 'aircraft', attributes: ['aircraftID', 'serialNum'] },
+                { model: AirportModel, as: 'airport', attributes: ['airportID', 'cityCode'] }
+            ]
+        });
+
+        return rows.map( r => this.toAssignmentDetailsDtoView(r));
+    }
+
+    async getByIdView(id: number): Promise<AssignmentDetailsDto> {
+        throw new Error("Method not implemented.");
+    }
+
+    async getByIdDomain(Id: number): Promise<AssignmentDetails> {
+        throw new Error("Method not implemented.");
+    }
+
+    async updateStatus(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    
+    async createAssignment(): Promise<AssignmentDetails> {
+        throw new Error("Method not implemented.");
+    }
+
     private toAssignmentDetailsDtoView(model: AssignmentDetailsModel): AssignmentDetailsDto {
         return {
             assignmentId: model.assignmentDetailID,
@@ -33,6 +63,18 @@ IAssignmentDetailsRepository {
             airportCode: model.airport!.cityCode,
             isActive: model.isActive
         }
+    }
+
+    private toDomainModel(model: AssignmentDetailsModel): AssignmentDetails {
+        return new AssignmentDetails({
+            assignmentId: model.assignmentDetailID,
+            pilotId: model.pilotID
+                     ? model.pilotID
+                     : null,
+            aircraftId: model.aircraftID,
+            airportId: model.airportID,
+            isActive: model.isActive
+        })
     }
 
 }
