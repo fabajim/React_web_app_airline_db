@@ -41,6 +41,7 @@ import licenseRouter from './routes/LicenseRoute';
 import { initDatabase } from './database';
 import licenseDetailsRouter from './routes/LicenseDetailsRout';
 import aircraftRouter from './routes/AircraftRouts';
+import assignmentsRouter from './routes/AssignmentsRouts';
 
 
 app.use('/api/pilots', pilotRouter);
@@ -48,6 +49,7 @@ app.use('/api/airports', airportRouter);
 app.use('/api/licenses', licenseRouter);
 app.use('/api/licenseDetails', licenseDetailsRouter)
 app.use('/api/aircraft', aircraftRouter);
+app.use('/api/assignments', assignmentsRouter);
 
 // api routes
 // app.use('/pilots', pilotRoute);

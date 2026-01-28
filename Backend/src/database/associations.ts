@@ -3,6 +3,8 @@ import { LicenseModel } from './models/LicenseModel';
 import { LicenseDetailModel } from './models/LicenseDetailModel';
 import { AircraftModel } from './models/AircraftModel';
 import { AircraftTypeModel } from './models/AircraftTypeModel';
+import { AssignmentDetailsModel } from './models/AssignmentDetailsModel';
+import { AirportModel } from './models/AirportModel';
 
 export const setupAssociations = (): void => {
 
@@ -35,4 +37,31 @@ export const setupAssociations = (): void => {
     as: 'aircraft'
   });
 
+  // Pilot <-> Aircraft <-> Airport (AssignmentDetails)
+  PilotModel.hasMany(AssignmentDetailsModel, { 
+    foreignKey: 'pilotID',
+    as: 'assignments' 
+  });
+  AssignmentDetailsModel.belongsTo(PilotModel, { 
+    foreignKey: 'pilotID',
+    as: 'pilot' 
+  });
+
+  AircraftModel.hasMany(AssignmentDetailsModel, { 
+    foreignKey: 'aircraftID',
+    as: 'assignments' 
+  });
+  AssignmentDetailsModel.belongsTo(AircraftModel, { 
+    foreignKey: 'aircraftID',
+    as: 'aircraft' 
+  });
+
+  AirportModel.hasMany(AssignmentDetailsModel, { 
+    foreignKey: 'airportID',
+    as: 'assignments' 
+  });
+  AssignmentDetailsModel.belongsTo(AirportModel, { 
+    foreignKey: 'airportID',
+    as: 'airport' 
+  });
 };
