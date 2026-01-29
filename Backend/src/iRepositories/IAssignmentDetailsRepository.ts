@@ -1,4 +1,5 @@
 import { AssignmentDetailsDto } from "../dtos/assignmentDetails/AssignmentDetailsDto";
+import { createAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { AssignmentDetails } from "../models/AssignmentDetails";
 
 export interface IAssignmentDetailsRepository {
@@ -10,8 +11,8 @@ export interface IAssignmentDetailsRepository {
     getByIdView(id: number): Promise<AssignmentDetailsDto | null>
 
     // get assignment for domain model only
-    getByIdDomain(id: number): Promise<AssignmentDetails>
+    getByIdDomain(id: number): Promise<AssignmentDetails | null>
 
-    updateStatus(): Promise<void>
-    createAssignment(): Promise<AssignmentDetails>
+    updateStatus(id: number): Promise<void>
+    createAssignment(data: createAssignmentDto): Promise<AssignmentDetails>
 }

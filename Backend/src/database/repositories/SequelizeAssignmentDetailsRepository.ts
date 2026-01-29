@@ -1,6 +1,8 @@
 import { AssignmentDetailsDto } from "../../dtos/assignmentDetails/AssignmentDetailsDto";
+import { createAssignmentDto } from "../../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { IAssignmentDetailsRepository } from "../../iRepositories/IAssignmentDetailsRepository";
 import { AssignmentDetails } from "../../models/AssignmentDetails";
+import { NotFoundError } from "../../shared/Errors";
 import { AircraftModel } from "../models/AircraftModel";
 import { AirportModel } from "../models/AirportModel";
 import { AssignmentDetailsModel } from "../models/AssignmentDetailsModel";
@@ -59,16 +61,33 @@ IAssignmentDetailsRepository {
         return row ? this.toAssignmentDetailsDtoView(row) : null;
     }
 
-    async getByIdDomain(Id: number): Promise<AssignmentDetails> {
-        throw new Error("Method not implemented.");
+    async getByIdDomain(id: number): Promise<AssignmentDetails | null> {
+        const row: AssignmentDetailsModel | null = await AssignmentDetailsModel.findByPk(id, {
+            include: [
+                { model: PilotModel, as: 'pilot', attributes: ['pilotID', 'fname', 'lname'] },
+                { model: AircraftModel, as: 'aircraft', attributes: ['aircraftID', 'serialNum'] },
+                { model: AirportModel, as: 'airport', attributes: ['airportID', 'cityCode'] }
+            ]
+        });
+
+        return row ? this.toDomainModel(row) : null
     }
 
-    async updateStatus(): Promise<void> {
-        throw new Error("Method not implemented.");
+    async updateStatus(id: number): Promise<void> {
+        const row: AssignmentDetailsModel | null = 
+            await AssignmentDetailsModel.findByPk(id);
+        
+        if (row === null)
+            throw new NotFoundError('Assignment', id);
+
+        await row.update({
+            isActive: false
+        });
     }
     
-    async createAssignment(): Promise<AssignmentDetails> {
-        throw new Error("Method not implemented.");
+    async createAssignment(data: createAssignmentDto): Promise<AssignmentDetails> {
+        const assignment: AssignmentDetailsModel = await AssignmentDetailsModel.create(data);
+        return this.toDomainModel(assignment);
     }
 
     private toAssignmentDetailsDtoView(model: AssignmentDetailsModel): AssignmentDetailsDto {

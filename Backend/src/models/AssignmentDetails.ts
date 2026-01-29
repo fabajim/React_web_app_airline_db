@@ -7,7 +7,7 @@ export class AssignmentDetails {
         return this.props.assignmentId;
     }
 
-    get pilotId(): number {
+    get pilotId(): number | null {
         return this.props.pilotId;
     }
 
@@ -21,5 +21,9 @@ export class AssignmentDetails {
 
     get isActive(): boolean {
         return this.props.isActive;
+    }
+
+    public closeAssignment(): void {
+        this.props.isActive = false;
     }
 }

@@ -68,4 +68,29 @@ assignmentsRouter.get('/pilot-needed', controller.getAllNeedsPilotView.bind(cont
  */
 assignmentsRouter.get('/:id', controller.getAssignmentVewById.bind(controller));
 
+/**
+ * @openapi
+ * /api/assignments/{id}:
+ *   post:
+ *     summary: Create a new assignment
+ *     tags: [Assignments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: tru
+ *         schema:
+ *           type: integer
+ *         description: Assignment ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/CreateAssignmentDetailDto'
+ *     responses:
+ *       201:
+ *         description: Assignment Updated
+ */
+assignmentsRouter.post('/:id', controller.UpdateAndCreateNewAssignment.bind(controller));
+
 export default assignmentsRouter;

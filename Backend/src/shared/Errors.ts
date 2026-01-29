@@ -39,3 +39,10 @@ export class ConflictError extends HttpError {
         this.name = 'ConflictError'
     }
 }
+
+export class UnauthorizedError extends HttpError {
+    constructor() {
+        super(`Unauthorized update!`, 401);
+        this.name = 'UnauthorizedError';
+    }
+}
