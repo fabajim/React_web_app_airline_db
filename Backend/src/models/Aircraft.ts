@@ -28,6 +28,10 @@ export class Aircraft {
         return this.props.typeInfo.model
     }
 
+    get licenseNeeded(): number {
+        return this.props.typeInfo.licenseNeeded
+    }
+
     getTypeInfo(): AircraftTypeInfo {
         return this.props.typeInfo;
     }

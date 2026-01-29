@@ -38,7 +38,7 @@ export class SequelizeAircraftRepository implements IAircraftRepository {
             include: [{
                 model: AircraftTypeModel,
                 as: 'typeInfo',
-                attributes: ['make', 'model']
+                attributes: ['make', 'model', 'licenseID']
             }]
         });
 
@@ -68,7 +68,8 @@ export class SequelizeAircraftRepository implements IAircraftRepository {
             totalHourFlown: model.totalHourFlown,
             typeInfo: {
                 make: model.typeInfo!.make,
-                model: model.typeInfo!.model
+                model: model.typeInfo!.model,
+                licenseNeeded: model.typeInfo!.licenseID
             }
         })
     }

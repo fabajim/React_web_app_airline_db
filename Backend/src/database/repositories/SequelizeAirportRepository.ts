@@ -9,6 +9,15 @@ import { NotFoundError } from "../../shared/Errors";
 
 export class SequelizeAirportRepository implements IAirportRepository {
 
+    async getById(id: number): Promise<Airport> {
+        const airport: AirportModel | null = await AirportModel.findByPk(id);
+
+        if (!airport)
+            throw new NotFoundError('Airport', id);
+
+        return this.toAirport(airport);
+    }
+
     async deleteAirport(id: number): Promise<void> {
         const airportToDelete: AirportModel | null = await AirportModel.findByPk(id);
 

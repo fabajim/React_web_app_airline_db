@@ -2,11 +2,17 @@ import { Router } from "express";
 import { SequelizeAssignmentDetailsRepository } from "../database/repositories/SequelizeAssignmentDetailsRepository";
 import { AssignmentDetailsServices } from "../services/AssignmentDetailsServices";
 import { AssignmentsController } from "../controllers/AssignmentsController";
+import { SequelizePilotRepository } from "../database/repositories/SequelizePilotRepository";
+import { SequelizeAircraftRepository } from "../database/repositories/SequelizeAircraftRepository";
+import { SequelizeAirportRepository } from "../database/repositories/SequelizeAirportRepository";
 
 const assignmentsRouter: Router = Router();
 
 const repo: SequelizeAssignmentDetailsRepository = new SequelizeAssignmentDetailsRepository();
-const service: AssignmentDetailsServices = new AssignmentDetailsServices(repo);
+const pilotRepo: SequelizePilotRepository = new SequelizePilotRepository();
+const aircraftRepo: SequelizeAircraftRepository = new SequelizeAircraftRepository();
+const airportRepo: SequelizeAirportRepository = new SequelizeAirportRepository();
+const service: AssignmentDetailsServices = new AssignmentDetailsServices(repo, pilotRepo, aircraftRepo, airportRepo);
 const controller: AssignmentsController = new AssignmentsController(service);
 
 /**
