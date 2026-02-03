@@ -9,11 +9,11 @@ import { NotFoundError } from "../../shared/Errors";
 
 export class SequelizeAirportRepository implements IAirportRepository {
 
-    async getById(id: number): Promise<Airport> {
+    async getById(id: number): Promise<Airport | null> {
         const airport: AirportModel | null = await AirportModel.findByPk(id);
 
         if (!airport)
-            throw new NotFoundError('Airport', id);
+            return null;
 
         return this.toAirport(airport);
     }

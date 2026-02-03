@@ -5,7 +5,7 @@ import { Airport } from "../models/Airport";
 
 export interface IAirportRepository {
     findAll(query: AirportQueryObject): Promise<Airport[]>;
-    getById(id: number): Promise<Airport>;
+    getById(id: number): Promise<Airport | null>;
     createAirport(data: CreateAirportDto): Promise<Airport>;
     updateAirport(id: number, data: UpdateAirportDto): Promise<Airport>;
     deleteAirport(id: number): void;

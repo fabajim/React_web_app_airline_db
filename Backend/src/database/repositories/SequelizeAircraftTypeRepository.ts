@@ -7,7 +7,7 @@ export class SequelizeAircraftTypeRepository implements IAircraftTypeRepository 
     async getAircraftTypeByID(id: number): Promise<AircraftType | null> {
         const row: AircraftTypeModel | null = await AircraftTypeModel.findByPk(id);
         
-        if( row === null)
+        if (row === null)
               return row
         
         return this.toAircraftType(row);
@@ -22,5 +22,4 @@ export class SequelizeAircraftTypeRepository implements IAircraftTypeRepository 
             totalSeating: model.totalSeating
         });
     }
-
 }

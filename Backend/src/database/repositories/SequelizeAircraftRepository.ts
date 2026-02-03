@@ -9,7 +9,7 @@ import { AircraftTypeModel } from "../models/AircraftTypeModel";
 export class SequelizeAircraftRepository implements IAircraftRepository {
 
 
-    async updateById(id: number, data: UpdateAircraftDto): Promise<void> {
+    async updateById(id: number, data: UpdateAircraftDto): Promise<Aircraft> {
         const aircraftToUpdate: AircraftModel | null = await AircraftModel.findByPk(id);
 
         if (aircraftToUpdate === null)
@@ -20,9 +20,10 @@ export class SequelizeAircraftRepository implements IAircraftRepository {
             totalHourFlown: data.totalHourFlown
         });
 
+        return this.toAircraft(aircraftToUpdate)
     }
 
-    async create(data: CreateAircraftDto): Promise<Aircraft> {
+    async create(data: CreateAircraftDto): Promise<Aircraft | null> {
         const aircraft: AircraftModel = await AircraftModel.create({
             serialNum: data.serialNum,
             lastService: data.lastService,
@@ -33,7 +34,7 @@ export class SequelizeAircraftRepository implements IAircraftRepository {
         return await this.getById(aircraft.aircraftID);
     }
 
-    async getById(id: number): Promise<Aircraft> {
+    async getById(id: number): Promise<Aircraft | null> {
         const row: AircraftModel | null = await AircraftModel.findByPk(id, {
             include: [{
                 model: AircraftTypeModel,
@@ -43,7 +44,7 @@ export class SequelizeAircraftRepository implements IAircraftRepository {
         });
 
         if (row === null)
-            throw new NotFoundError("Aircraft", id);
+            return null;
 
         return this.toAircraft(row);
     }

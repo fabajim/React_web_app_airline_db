@@ -10,12 +10,11 @@ import { LicenseModel } from "../models/LicenseModel";
 
 export class SequelizePilotRepository implements IPilotRepository {
 
-    async update(id: number, pilot: UpdatePilotDto): Promise<Pilot> {
+    async update(id: number, pilot: UpdatePilotDto): Promise<Pilot | null> {
         const pilotToUpdate: PilotModel | null = await PilotModel.findByPk(id);
 
-        if (!pilotToUpdate) {
-            throw new NotFoundError('Pilot', id);
-        }
+        if (!pilotToUpdate) 
+            return null;
         
         await pilotToUpdate.update({
             fname: pilot.fname,
@@ -29,14 +28,14 @@ export class SequelizePilotRepository implements IPilotRepository {
 
     async deleteById(id: number): Promise<void> {
         const pilotToDelete: PilotModel | null = await PilotModel.findByPk(id);
-        if (!pilotToDelete) {
+
+        if (!pilotToDelete)
             throw new NotFoundError('Pilot', id);
-        }
 
         await pilotToDelete.destroy();
     }
 
-    async findById(id: number): Promise<Pilot> {
+    async findById(id: number): Promise<Pilot | null> {
         const pilot: PilotModel | null = await PilotModel.findByPk(id, {
             include: [{
                 model: LicenseModel,
@@ -47,9 +46,8 @@ export class SequelizePilotRepository implements IPilotRepository {
             }]
         });
 
-        if (!pilot) {
-            throw new NotFoundError('Pilot', id);
-        }
+        if (!pilot) 
+            return null;
 
         return this.toPilot(pilot);
     }

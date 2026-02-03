@@ -12,6 +12,7 @@ export interface IAssignmentDetailsRepository {
 
     // get assignment for domain model only
     getByIdDomain(id: number): Promise<AssignmentDetails | null>
+    getAllActiveDomain(): Promise<AssignmentDetails[]>
 
     updateStatus(id: number): Promise<void>
     createAssignment(data: createAssignmentDto): Promise<AssignmentDetails>

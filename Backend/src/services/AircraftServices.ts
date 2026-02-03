@@ -5,7 +5,7 @@ import { IAircraftRepository } from "../iRepositories/IAircraftRepository";
 import { IAircraftTypeRepository } from "../iRepositories/IAircraftTypeRepository";
 import { Aircraft } from "../models/Aircraft";
 import { AircraftType } from "../models/AircraftType";
-import { DateAndHoursError, NotFoundError } from "../shared/Errors";
+import { BadRequestError, DateAndHoursError, NotFoundError } from "../shared/Errors";
 
 export class AircraftServices {
     constructor(private readonly aircraftRepo: IAircraftRepository,
@@ -17,7 +17,12 @@ export class AircraftServices {
     }
 
     async getAircraftById(id: number): Promise<Aircraft> {
-        return this.aircraftRepo.getById(id)
+        const aircraft: Aircraft | null = await this.aircraftRepo.getById(id)
+
+        if (!aircraft)
+            throw new NotFoundError('Aircraft', id);
+
+        return aircraft
     }
 
     async createAircraft(data: CreateAircraftDto): Promise<Aircraft> {
@@ -27,14 +32,23 @@ export class AircraftServices {
         const aircraftType: AircraftType | null = 
           await this.aircraftTypeRepo.getAircraftTypeByID(aircraftTypeId);
         
-          if (aircraftType === null)
-            throw new NotFoundError('AircraftType', aircraftTypeId);
+        if (aircraftType === null)
+            throw new BadRequestError('Aircraft Type Does Not Exists');
 
-        return await this.aircraftRepo.create(data);
+        const newAircraft: Aircraft | null =  await this.aircraftRepo.create(data);
+
+        if (newAircraft === null)
+            throw new BadRequestError('Could not get new aircraft');
+
+        return newAircraft;
+
     }
 
     async UpdateAircraftById(id: number, data: UpdateAircraftDto): Promise<Aircraft> {
-        const aircraft: Aircraft = await this.aircraftRepo.getById(id);
+        const aircraft: Aircraft | null = await this.aircraftRepo.getById(id);
+
+        if (!aircraft)
+            throw new NotFoundError('Aircraft', id);
 
         const savedDate: Date = new Date(aircraft.lastServiceDate);
         const savedHours: number = aircraft.hoursFlown;
@@ -45,7 +59,7 @@ export class AircraftServices {
             throw new DateAndHoursError();
         }
 
-        await this.aircraftRepo.updateById(id, data);
-        return await this.getAircraftById(id);
+        const updatedAircraft: Aircraft = await this.aircraftRepo.updateById(id, data);
+        return updatedAircraft;
     }
 }

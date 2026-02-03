@@ -7,6 +7,7 @@ export class SequelizeLicenseDetailRepository implements ILicenseDetailsReposito
 
     async createLicenseDetail(data: CreateLicenseDetailsDto): Promise<LicenseDetails> {
         const licenseDetail: LicenseDetailModel = await LicenseDetailModel.create(data);
+        
         return new LicenseDetails({
             licenseDetailsID: licenseDetail.licenseDetailsID,
             pilotID: licenseDetail.pilotID,
@@ -14,5 +15,4 @@ export class SequelizeLicenseDetailRepository implements ILicenseDetailsReposito
             dateReceived: new Date(licenseDetail.dateReceived)
         });
     }
-
 }

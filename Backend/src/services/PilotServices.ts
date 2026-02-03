@@ -3,6 +3,7 @@ import { UpdatePilotDto } from '../dtos/Pilot/UpdatePilotDto';
 import { PilotQueryObject } from '../helpers/queryObjects/PilotQueryObject';
 import { IPilotRepository } from '../iRepositories/IPilotRepository'
 import { Pilot } from '../models/Pilot';
+import { NotFoundError } from '../shared/Errors';
 
 export class PilotServices {
     constructor(private readonly pilotRepo: IPilotRepository) {}
@@ -13,7 +14,11 @@ export class PilotServices {
     }
 
     async updatePilot(id: number, dto: UpdatePilotDto): Promise<Pilot> {
-        const pilot: Pilot = await this.pilotRepo.update(id, dto);
+        const pilot: Pilot | null = await this.pilotRepo.update(id, dto);
+
+        if (!pilot)
+            throw new NotFoundError('Pilot', id);
+
         return pilot;
     }
 
@@ -22,7 +27,12 @@ export class PilotServices {
     }
 
     async getPilotById(id: number): Promise<Pilot> {
-        return this.pilotRepo.findById(id);
+        const pilot: Pilot | null = await this.pilotRepo.findById(id);
+
+        if (!pilot)
+            throw new NotFoundError('Pilot', id);
+
+        return pilot;
     }
 
     async deletePilotById(id: number) {

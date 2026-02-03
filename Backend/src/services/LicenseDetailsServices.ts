@@ -15,11 +15,14 @@ export class LicenseDetailsServices{
     async createLicenseDetail(licenseDetail: CreateLicenseDetailsDto, 
         pilotId: number, licenseId:number): Promise<LicenseDetails> {
         
-        const pilot: Pilot = await this.pilotRepo.findById(pilotId);
+        const pilot: Pilot | null = await this.pilotRepo.findById(pilotId);
         const license: License | null = await this.licenseRepo.getById(licenseId);
 
         if (license === null)
             throw new NotFoundError('License', licenseId);
+
+        if (pilot === null)
+            throw new NotFoundError('Pilot', pilotId);
         
         if (pilot.hasLicense(licenseId))
             throw new ConflictError('Duplicate: pilot already has license')

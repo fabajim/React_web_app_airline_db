@@ -41,6 +41,7 @@ export class PilotController {
                 throw new BadRequestError('Pilot');
             
             const pilot: Pilot = await this.service.updatePilot(id, pilotDto);
+
             return res.status(201).json(PilotMappers.toPilotDto(pilot));
         } 
         catch (error) {
@@ -79,7 +80,7 @@ export class PilotController {
 
             const pilot: Pilot = await this.service.getPilotById(value);
 
-            const pilotDto: PilotDto = PilotMappers.toPilotDto(pilot);
+            const pilotDto: PilotDto =  PilotMappers.toPilotDto(pilot);
             return res.status(200).json(pilotDto);
         } 
         catch (error) {

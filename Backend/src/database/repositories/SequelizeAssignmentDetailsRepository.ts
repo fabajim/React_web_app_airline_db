@@ -36,6 +36,14 @@ IAssignmentDetailsRepository {
         return rows.map(r => this.toAssignmentDetailsDtoView(r));
     }
 
+    async getAllActiveDomain(): Promise<AssignmentDetails[]> {
+        const rows: AssignmentDetailsModel[] = await AssignmentDetailsModel.findAll({
+            where: { isActive: true },
+        });
+
+        return rows.map( r => this.toDomainModel(r));
+    }
+
     async getAllActiveView(): Promise<AssignmentDetailsDto[]> {
         const rows: AssignmentDetailsModel[] = await AssignmentDetailsModel.findAll({
             where: { isActive: true },

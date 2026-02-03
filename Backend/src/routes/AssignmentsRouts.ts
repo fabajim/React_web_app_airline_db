@@ -76,17 +76,10 @@ assignmentsRouter.get('/:id', controller.getAssignmentVewById.bind(controller));
 
 /**
  * @openapi
- * /api/assignments/{id}:
+ * /api/assignments/:
  *   post:
  *     summary: Create a new assignment
  *     tags: [Assignments]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: tru
- *         schema:
- *           type: integer
- *         description: Assignment ID
  *     requestBody:
  *       required: true
  *       content:
@@ -95,8 +88,35 @@ assignmentsRouter.get('/:id', controller.getAssignmentVewById.bind(controller));
  *             $ref: '#/components/schemas/CreateAssignmentDetailDto'
  *     responses:
  *       201:
- *         description: Assignment Updated
+ *         description: Assignment Created
  */
-assignmentsRouter.post('/:id', controller.UpdateAndCreateNewAssignment.bind(controller));
+assignmentsRouter.post('/', controller.createNewAssignment.bind(controller));
+
+/**
+ * @openapi
+ * /api/assignments/{id}:
+ *   put:
+ *     summary: Create a new assignment
+ *     tags: [Assignments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Assignment ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/RemovePilotDto'
+ *     responses:
+ *       201:
+ *         description: Assignment Created
+ */
+assignmentsRouter.put('/:id', controller.removePilotFromAssignment.bind(controller));
+
+
 
 export default assignmentsRouter;

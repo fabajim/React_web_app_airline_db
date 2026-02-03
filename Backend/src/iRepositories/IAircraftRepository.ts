@@ -4,7 +4,7 @@ import { Aircraft } from "../models/Aircraft";
 
 export interface IAircraftRepository {
     findAll(): Promise<Aircraft[]>;
-    getById(id: number): Promise<Aircraft>;
-    create(data: CreateAircraftDto): Promise<Aircraft>;
-    updateById(id: number, data: UpdateAircraftDto): Promise<void>;
+    getById(id: number): Promise<Aircraft | null>;
+    create(data: CreateAircraftDto): Promise<Aircraft | null>;
+    updateById(id: number, data: UpdateAircraftDto): Promise<Aircraft>;
 }
