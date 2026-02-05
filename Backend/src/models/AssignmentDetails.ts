@@ -23,7 +23,7 @@ export class AssignmentDetails {
         return this.props.isActive;
     }
 
-    public closeAssignment(): void {
+    public updateAssignmentStatus(active: boolean): void {
         this.props.isActive = false;
     }
 }

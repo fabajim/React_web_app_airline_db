@@ -142,4 +142,29 @@ assignmentsRouter.put('/remove-pilot/:id', controller.removePilotFromAssignment.
  */
 assignmentsRouter.put('/add-pilot/:id', controller.addPilotToAssignment.bind(controller));
 
+/**
+ * @openapi
+ * /api/assignments/update-location/{id}:
+ *   put:
+ *     summary: Adds new pilot to assignment.
+ *     tags: [Assignments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Assignment ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateAssignmentLocation'
+ *     responses:
+ *       201:
+ *         description: Assignment Location Updated
+ */
+assignmentsRouter.put('/update-location/:id', controller.updateAssignmentLocation.bind(controller));
+
 export default assignmentsRouter;

@@ -2,6 +2,7 @@ import { AddPilotAssignmentDto } from "../dtos/assignmentDetails/AddPilotAssignm
 import { AssignmentDetailsDto } from "../dtos/assignmentDetails/AssignmentDetailsDto";
 import { CreateAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { RemovePilotDto } from "../dtos/assignmentDetails/RemovePilotDto";
+import { UpdateAssignmentLocation } from "../dtos/assignmentDetails/UpdateAssignmentLocation";
 import { IAircraftRepository } from "../iRepositories/IAircraftRepository";
 import { IAirportRepository } from "../iRepositories/IAirportRepository";
 import { IAssignmentDetailsRepository } from "../iRepositories/IAssignmentDetailsRepository";
@@ -78,10 +79,10 @@ export class AssignmentDetailsServices {
         if (!this.isSameAirportAndAircraft(current, dto))
             throw new BadRequestError('Aircraft and airport must be the same.');
 
-        if (!this.validateCreateDtoData(createDto))
+        if (!await this.validateCreateDtoData(createDto))
             throw new BadRequestError('Invalid data for creating new assignment.');
         
-        current.closeAssignment();
+        current.updateAssignmentStatus(false);
         await this.repo.closeAssignment(id);
 
         const newAssignment = await this.repo.createAssignment(createDto);
@@ -113,11 +114,53 @@ export class AssignmentDetailsServices {
             isActive: true        
         }
 
-        if (!this.validateCreateDtoData(createDto))
+        if (!await this.validateCreateDtoData(createDto))
             throw new BadRequestError('New assignment details not valid.');
         
-        current.closeAssignment();
+        current.updateAssignmentStatus(false);
         await this.repo.closeAssignment(id);
+
+        const newAssignment = await this.repo.createAssignment(createDto);
+        const newDto: AssignmentDetailsDto|null = await this.repo.getByIdView(newAssignment.assignmentId)
+        
+        if (!newDto)
+            throw new NotFoundError('New Assignment', 0);
+
+        return newDto;
+    }
+
+    async updateLocation(id: number, dto: UpdateAssignmentLocation):
+    Promise<AssignmentDetailsDto> {
+        const current: AssignmentDetails|null = await this.repo.getByIdDomain(id);
+
+        if (!current)
+            throw new NotFoundError('Assignment to update not found', id);
+
+        if (current.aircraftId !== dto.aircraftID) 
+            throw new BadRequestError('Aircraft cannot change!');
+
+        if (current.pilotId !== dto.pilotID)
+            throw new BadRequestError('Pilot must remain the same!')
+
+        if (current.airportId === dto.airportID)
+            throw new BadRequestError('Airport must update!');
+
+        const createDto: CreateAssignmentDto = {
+            pilotID: dto.pilotID,
+            aircraftID: dto.aircraftID,
+            airportID: dto.airportID,
+            isActive: true   
+        }
+
+        await this.repo.closeAssignment(id);
+        current.updateAssignmentStatus(false);
+
+        if (!await this.validateCreateDtoData(createDto)){
+            await this.repo.undoClosedAssignment(id);
+            current.updateAssignmentStatus(true);
+            throw new BadRequestError("Could not validate new data.");
+        }
+            
 
         const newAssignment = await this.repo.createAssignment(createDto);
         const newDto: AssignmentDetailsDto|null = await this.repo.getByIdView(newAssignment.assignmentId)

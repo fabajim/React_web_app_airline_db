@@ -8,6 +8,7 @@ import { validate, ValidationError } from "class-validator";
 import { RemovePilotDto } from "../dtos/assignmentDetails/RemovePilotDto";
 import { error } from "node:console";
 import { AddPilotAssignmentDto } from "../dtos/assignmentDetails/AddPilotAssignmentDto";
+import { UpdateAssignmentLocation } from "../dtos/assignmentDetails/UpdateAssignmentLocation";
 
 export class AssignmentsController {
     constructor(private readonly service: AssignmentDetailsServices) {}
@@ -136,10 +137,38 @@ export class AssignmentsController {
             const errors: ValidationError[] = await validate(pilot);
 
             if (errors.length > 0)
-                throw new BadRequestError("Pilot id not valid.");
+                throw new BadRequestError("Assignment data not valid.");
 
             const pilotAdded: AssignmentDetailsDto = await this.service.addPilot(assignmentId, pilot);
             return res.status(201).json({ pilotAdded })
+        }
+        catch (error) {
+            if (error instanceof HttpError)
+                return res.status(error.statusCode).json({ name: error.name, message: error.message });
+            return res.status(500).json({ message: `Server error failed to get assignments.` });
+        }
+    }
+
+    async updateAssignmentLocation(req: Request, res: Response):
+    Promise<Response<AddPilotAssignmentDto>> {
+        try {
+            const assignmentId: number = Number(req.params.id);
+
+            if (isNaN(assignmentId))
+                throw new BadRequestError('Assignment Id needed.');
+
+            const dto: UpdateAssignmentLocation = 
+              plainToInstance(UpdateAssignmentLocation, req.body);
+            
+            const errors: ValidationError[] = await validate(dto);
+
+            if (errors.length > 0)
+                throw new BadRequestError('Assignment data not valid.')
+
+            const newLocationDto: AssignmentDetailsDto = 
+              await this.service.updateLocation(assignmentId,dto);
+              
+            return res.status(201).json({ newLocationDto });
         }
         catch (error) {
             if (error instanceof HttpError)

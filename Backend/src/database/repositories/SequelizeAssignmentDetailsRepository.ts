@@ -92,6 +92,18 @@ IAssignmentDetailsRepository {
             isActive: false
         });
     }
+
+        async undoClosedAssignment(id: number): Promise<void> {
+        const row: AssignmentDetailsModel | null = 
+            await AssignmentDetailsModel.findByPk(id);
+        
+        if (row === null)
+            throw new NotFoundError('Assignment', id);
+
+        await row.update({
+            isActive: true
+        });
+    }
     
     async createAssignment(data: CreateAssignmentDto): Promise<AssignmentDetails> {
         const assignment: AssignmentDetailsModel = await AssignmentDetailsModel.create(data);
