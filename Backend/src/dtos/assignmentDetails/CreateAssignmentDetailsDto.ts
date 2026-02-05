@@ -9,7 +9,7 @@ import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, Min, ValidateIf } 
  * @member airportID!: number
  * @member isActive!: boolean = true
  */
-export class createAssignmentDto {
+export class CreateAssignmentDto {
     @Transform(({ value }) => 
         value === "" || value === null
         ? null 

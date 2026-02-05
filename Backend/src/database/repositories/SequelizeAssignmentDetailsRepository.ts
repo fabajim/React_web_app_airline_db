@@ -1,5 +1,5 @@
 import { AssignmentDetailsDto } from "../../dtos/assignmentDetails/AssignmentDetailsDto";
-import { createAssignmentDto } from "../../dtos/assignmentDetails/CreateAssignmentDetailsDto";
+import { CreateAssignmentDto } from "../../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { IAssignmentDetailsRepository } from "../../iRepositories/IAssignmentDetailsRepository";
 import { AssignmentDetails } from "../../models/AssignmentDetails";
 import { NotFoundError } from "../../shared/Errors";
@@ -81,7 +81,7 @@ IAssignmentDetailsRepository {
         return row ? this.toDomainModel(row) : null
     }
 
-    async updateStatus(id: number): Promise<void> {
+    async closeAssignment(id: number): Promise<void> {
         const row: AssignmentDetailsModel | null = 
             await AssignmentDetailsModel.findByPk(id);
         
@@ -93,7 +93,7 @@ IAssignmentDetailsRepository {
         });
     }
     
-    async createAssignment(data: createAssignmentDto): Promise<AssignmentDetails> {
+    async createAssignment(data: CreateAssignmentDto): Promise<AssignmentDetails> {
         const assignment: AssignmentDetailsModel = await AssignmentDetailsModel.create(data);
         return this.toDomainModel(assignment);
     }

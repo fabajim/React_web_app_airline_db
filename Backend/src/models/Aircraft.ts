@@ -1,4 +1,5 @@
 import { AircraftTypeInfo } from "../dtos/aircraft/AircraftDto";
+import { AssignmentDetails } from "./AssignmentDetails";
 import { AircraftProps } from "./props/AircraftProps";
 
 export class Aircraft {
@@ -32,8 +33,12 @@ export class Aircraft {
         return this.props.typeInfo.licenseNeeded
     }
 
-    getTypeInfo(): AircraftTypeInfo {
+    public getTypeInfo(): AircraftTypeInfo {
         return this.props.typeInfo;
+    }
+
+    public isAssigned(assignments: AssignmentDetails[]): boolean {
+        return assignments.some(a => a.aircraftId === this.props.aircraftID)
     }
 
 }

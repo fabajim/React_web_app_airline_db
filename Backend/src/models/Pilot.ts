@@ -1,3 +1,4 @@
+import { AssignmentDetails } from "./AssignmentDetails";
 import { PilotLicense, PilotProps } from "./props/PilotProps"
 
 export class Pilot {
@@ -32,5 +33,9 @@ export class Pilot {
         return this.props.licenses.some(l => 
             l.licenseID === licenseId
         );
+    }
+
+    public isAssigned(assignments: AssignmentDetails[]): boolean {
+        return assignments.some(a => a.pilotId === this.props.pilotID);
     }
 }

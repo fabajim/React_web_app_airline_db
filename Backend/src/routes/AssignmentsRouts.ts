@@ -94,9 +94,9 @@ assignmentsRouter.post('/', controller.createNewAssignment.bind(controller));
 
 /**
  * @openapi
- * /api/assignments/{id}:
+ * /api/assignments/remove-pilot/{id}:
  *   put:
- *     summary: Create a new assignment
+ *     summary: Removes Pilot from assignment
  *     tags: [Assignments]
  *     parameters:
  *       - in: path
@@ -113,10 +113,33 @@ assignmentsRouter.post('/', controller.createNewAssignment.bind(controller));
  *             $ref: '#/components/schemas/RemovePilotDto'
  *     responses:
  *       201:
- *         description: Assignment Created
+ *         description: Assignment Updated
  */
-assignmentsRouter.put('/:id', controller.removePilotFromAssignment.bind(controller));
+assignmentsRouter.put('/remove-pilot/:id', controller.removePilotFromAssignment.bind(controller));
 
-
+/**
+ * @openapi
+ * /api/assignments/add-pilot/{id}:
+ *   put:
+ *     summary: Adds new pilot to assignment.
+ *     tags: [Assignments]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Assignment ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AddPilotToAssignmentPilotDto'
+ *     responses:
+ *       201:
+ *         description: Assignment Updated
+ */
+assignmentsRouter.put('/add-pilot/:id', controller.addPilotToAssignment.bind(controller));
 
 export default assignmentsRouter;

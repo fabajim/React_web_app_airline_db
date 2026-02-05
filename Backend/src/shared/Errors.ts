@@ -19,7 +19,7 @@ export class NotFoundError extends HttpError {
 
 export class BadRequestError extends HttpError {
     constructor(entity: string,
-                message: string = `Validation failed for ${entity}`
+                message: string = `Validation failed for: ${entity}`
     ) {
         super(message, 400)
         this.name = 'BadRequestError';

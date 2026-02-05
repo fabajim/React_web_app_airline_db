@@ -1,6 +1,6 @@
-import { plainToInstance } from "class-transformer";
+import { AddPilotAssignmentDto } from "../dtos/assignmentDetails/AddPilotAssignmentDto";
 import { AssignmentDetailsDto } from "../dtos/assignmentDetails/AssignmentDetailsDto";
-import { createAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
+import { CreateAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { RemovePilotDto } from "../dtos/assignmentDetails/RemovePilotDto";
 import { IAircraftRepository } from "../iRepositories/IAircraftRepository";
 import { IAirportRepository } from "../iRepositories/IAirportRepository";
@@ -10,8 +10,7 @@ import { Aircraft } from "../models/Aircraft";
 import { Airport } from "../models/Airport";
 import { AssignmentDetails } from "../models/AssignmentDetails";
 import { Pilot } from "../models/Pilot";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../shared/Errors";
-import { validate, ValidationError } from "class-validator";
+import { BadRequestError, NotFoundError } from "../shared/Errors";
 
 export class AssignmentDetailsServices {
     constructor(private readonly repo: IAssignmentDetailsRepository,
@@ -41,43 +40,9 @@ export class AssignmentDetailsServices {
         return viewDto;
     }
 
-    async removePilotFromAssignment(id: number, dto: RemovePilotDto): 
+    async createAssignmentDetail(assignmentDto: CreateAssignmentDto): 
     Promise<AssignmentDetailsDto> {
-        const createDto: createAssignmentDto = {
-            pilotID: dto.pilotID,
-            aircraftID: dto.aircraftID,
-            airportID: dto.airportID,
-            isActive: dto.isActive
-        }
-
-        if (createDto.pilotID !== null) {
-            console.log("Pilot was not null");
-            throw new BadRequestError('AssignmentDetails');
-        }
-
-        const assignment: AssignmentDetails | null = await this.repo.getByIdDomain(id);
-
-        if (!assignment){
-            console.log("Assignment was not found in remove");
-            throw new BadRequestError('AssignmentDetails');
-        }
-
-        if (assignment.aircraftId !== createDto.aircraftID ||
-            assignment.airportId !== createDto.airportID ||
-            !assignment.isActive) {
-            console.log('aircraft and airport not matching!');
-            throw new BadRequestError('AssignmentDetails');
-        }
-        
-        this.repo.updateStatus(id);
-        assignment.closeAssignment();
-
-        return this.createAssignmentDetail(createDto);
-    }
-
-    async createAssignmentDetail(assignmentDto: createAssignmentDto): 
-    Promise<AssignmentDetailsDto> {
-        if (!await this.isValidDataForNewAssignment(assignmentDto))
+        if (!await this.validateCreateDtoData(assignmentDto))
             throw new BadRequestError('AssignmentDetails');
 
         const newAssignment: AssignmentDetails = await this.repo.createAssignment(assignmentDto);
@@ -85,53 +50,119 @@ export class AssignmentDetailsServices {
         const dto: AssignmentDetailsDto | null = await this.repo.getByIdView(newAssignment.assignmentId);
 
         if(dto === null)
-            throw new NotFoundError('Assignment', newAssignment.assignmentId);
+            throw new NotFoundError('Assignment', 0);
 
         return dto;
     }
 
-    private async isValidDataForNewAssignment(dto: createAssignmentDto):
-     Promise<boolean> {
-        const activeAssignments: AssignmentDetails[] = await this.repo.getAllActiveDomain();
-        const aircraft: Aircraft | null = await this.aircraftRepo.getById(dto.aircraftID);
-        const airport: Airport | null = await this.airportRepo.getById(dto.airportID);
-
-        if (!aircraft || !airport) return false;
-
-        if (!await this.validateAircraftData(dto, activeAssignments)) return false;
-
-        if (dto.pilotID && !await this.validatePilotData(dto.pilotID, dto.aircraftID, activeAssignments)) {
-            return false
+    async removePilotFromAssignment(id: number, dto: RemovePilotDto): 
+    Promise<AssignmentDetailsDto> {
+        const createDto: CreateAssignmentDto = {
+            pilotID: dto.pilotID,
+            aircraftID: dto.aircraftID,
+            airportID: dto.airportID,
+            isActive: dto.isActive
         }
+
+        if (createDto.pilotID !== null) 
+            throw new BadRequestError('AssignmentDetails - Pilot must be removed.');
+
+        const current: AssignmentDetails | null = await this.repo.getByIdDomain(id);
+
+        if (!current)
+            throw new BadRequestError('Assignment to update not found');
+
+        if (current.pilotId === null)
+            throw new BadRequestError('Cannot remove null pilot!');
+
+        if (!this.isSameAirportAndAircraft(current, dto))
+            throw new BadRequestError('Aircraft and airport must be the same.');
+
+        if (!this.validateCreateDtoData(createDto))
+            throw new BadRequestError('Invalid data for creating new assignment.');
+        
+        current.closeAssignment();
+        await this.repo.closeAssignment(id);
+
+        const newAssignment = await this.repo.createAssignment(createDto);
+        const newDto: AssignmentDetailsDto|null = await this.repo.getByIdView(newAssignment.assignmentId)
+        
+        if (!newDto)
+            throw new NotFoundError('New Assignment', 0);
+
+        return newDto;
+    }
+
+    async addPilot(id: number, dto: AddPilotAssignmentDto): 
+    Promise<AssignmentDetailsDto> {
+        const current: AssignmentDetails | null = await this.repo.getByIdDomain(id);
+        
+        if(!current)
+            throw new BadRequestError('Assignment to update not found.');
+
+        if(current.pilotId !== null)
+            throw new BadRequestError('Current pilot must be removed first.')
+
+        if (!this.isSameAirportAndAircraft(current, dto))
+            throw new BadRequestError('Aircraft and airport must be the same.');
+
+        const createDto: CreateAssignmentDto = {
+            pilotID: dto.pilotID,
+            aircraftID: dto.aircraftID,
+            airportID: dto.airportID,
+            isActive: true        
+        }
+
+        if (!this.validateCreateDtoData(createDto))
+            throw new BadRequestError('New assignment details not valid.');
+        
+        current.closeAssignment();
+        await this.repo.closeAssignment(id);
+
+        const newAssignment = await this.repo.createAssignment(createDto);
+        const newDto: AssignmentDetailsDto|null = await this.repo.getByIdView(newAssignment.assignmentId)
+        
+        if (!newDto)
+            throw new NotFoundError('New Assignment', 0);
+
+        return newDto;
+    }
+
+    private async validateCreateDtoData(dto: CreateAssignmentDto): Promise<boolean> {
+        const current: AssignmentDetails[] = await this.repo.getAllActiveDomain();
+
+        const aircraft: Aircraft|null = await this.aircraftRepo.getById(dto.aircraftID);
+        const airport: Airport|null = await this.airportRepo.getById(dto.airportID);
+
+        if (!aircraft || !airport) { return false; }
+
+        if (aircraft.isAssigned(current)) { return false; }
+
+        if(!dto.pilotID) { return true; }
+        
+        const pilot: Pilot|null = await this.pilotRepo.findById(dto.pilotID);
+
+        if (!pilot) { throw new BadRequestError('Pilot not in database.'); }
+
+        if (!pilot.hasLicense(aircraft.licenseNeeded) ||
+            pilot.isAssigned(current)
+        ) { 
+            return false;
+         }
+
         return true
     }
 
-    private async validatePilotData(
-        pilotId: number, 
-        aircraftId: number, 
-        currentAssignments: AssignmentDetails[]): 
-    Promise<boolean> {
+    private isSameAirportAndAircraft(
+      currentAssignment: AssignmentDetails, 
+      update: RemovePilotDto | AddPilotAssignmentDto): 
+      boolean {
 
-        const pilot: Pilot | null = await this.pilotRepo.findById(pilotId);
-        if (!pilot) return false;
-        const isQualified: boolean =  pilot.hasLicense(aircraftId);
+        if (currentAssignment.aircraftId !== update.aircraftID ||
+            currentAssignment.airportId !== update.airportID ||
+            !currentAssignment.isActive) 
+            return false;
         
-        const isNotAssigned: boolean = currentAssignments.some(a =>
-            a.pilotId !== pilotId
-        );
-
-        return isQualified && isNotAssigned
-    }
-
-    private async validateAircraftData(
-         dto: createAssignmentDto,
-         currentAssignments: AssignmentDetails[]
-        ): Promise<Boolean> {
-
-        const isAssigned: boolean = currentAssignments.some(a =>
-            a.aircraftId === dto.aircraftID
-        );
-
-        return isAssigned ? false : true;
+        return true;
     }
 }

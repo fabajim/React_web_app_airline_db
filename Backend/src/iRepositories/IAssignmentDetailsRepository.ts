@@ -1,5 +1,5 @@
 import { AssignmentDetailsDto } from "../dtos/assignmentDetails/AssignmentDetailsDto";
-import { createAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
+import { CreateAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { AssignmentDetails } from "../models/AssignmentDetails";
 
 export interface IAssignmentDetailsRepository {
@@ -14,6 +14,6 @@ export interface IAssignmentDetailsRepository {
     getByIdDomain(id: number): Promise<AssignmentDetails | null>
     getAllActiveDomain(): Promise<AssignmentDetails[]>
 
-    updateStatus(id: number): Promise<void>
-    createAssignment(data: createAssignmentDto): Promise<AssignmentDetails>
+    closeAssignment(id: number): Promise<void>
+    createAssignment(data: CreateAssignmentDto): Promise<AssignmentDetails>
 }
