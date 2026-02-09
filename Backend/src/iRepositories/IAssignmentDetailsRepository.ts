@@ -14,7 +14,7 @@ export interface IAssignmentDetailsRepository {
     getByIdDomain(id: number): Promise<AssignmentDetails | null>
     getAllActiveDomain(): Promise<AssignmentDetails[]>
 
-    closeAssignment(id: number): Promise<void>
-    undoClosedAssignment(id: number): Promise<void>
+    closeAssignment(id: number): Promise<boolean>
+    undoClosedAssignment(id: number): Promise<boolean>
     createAssignment(data: CreateAssignmentDto): Promise<AssignmentDetails>
 }

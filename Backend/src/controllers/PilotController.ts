@@ -8,7 +8,8 @@ import { Pilot } from "../models/Pilot";
 import { PilotDto } from "../dtos/Pilot/PilotDto";
 import { UpdatePilotDto } from "../dtos/Pilot/UpdatePilotDto";
 import { PilotQueryObject } from "../helpers/queryObjects/PilotQueryObject";
-import { BadRequestError, HttpError } from "../shared/Errors";
+import { Result } from "../responses/types";
+import { BadRequest } from "../responses/Responses";
 
 export class PilotController {
     constructor(private readonly service: PilotServices) {}
@@ -18,15 +19,15 @@ export class PilotController {
             const pilotDto: CreatePilotDto = plainToInstance(CreatePilotDto, req.body);
             const errors: ValidationError[] = await validate(pilotDto);
 
-            if (errors.length > 0)
-                throw new BadRequestError('Pilot');
+            if (errors.length > 0) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
             const pilot: Pilot = await this.service.createPilot(pilotDto);
             return res.status(201).json(PilotMappers.toPilotDto(pilot));
         } 
         catch(error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({name: error.name, message: error.message});
             return res.status(500).json({ message: 'Server Error: Failed to create pilots.' });
         }
     }
@@ -37,16 +38,19 @@ export class PilotController {
             const pilotDto: UpdatePilotDto = plainToInstance(UpdatePilotDto, req.body);
             const errors: ValidationError[] = await validate(pilotDto);
 
-            if (errors.length > 0 || isNaN(id))
-                throw new BadRequestError('Pilot');
+            if (isNaN(id) || errors.length > 0) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
             
-            const pilot: Pilot = await this.service.updatePilot(id, pilotDto);
+            const result: Result<Pilot> = await this.service.updatePilot(id, pilotDto);
 
-            return res.status(201).json(PilotMappers.toPilotDto(pilot));
+            if (!result.ok)
+                return res.status(result.error.code).json(result);
+
+            return res.status(201).json(PilotMappers.toPilotDto(result.value));
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({name: error.name, message: error.message});
             return res.status(500).json({ message: 'Server Error: Failed to update pilots.' });
         }
     }
@@ -65,28 +69,30 @@ export class PilotController {
             return res.status(200).json(pilotDto)
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({name: error.name, message: error.message});
             return res.status(500).json({ message: 'Failed to get pilots.' });
         }
     }
 
-    async getById(req: Request, res: Response): Promise<Response> {
+    async getById(req: Request, res: Response): Promise<Response<PilotDto>> {
         try {
             const value: number | any = Number(req.params.id);
 
-            if (isNaN(value))
-                throw new BadRequestError('Pilot id');
+            if (isNaN(value)) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
+                
 
-            const pilot: Pilot = await this.service.getPilotById(value);
+            const result: Result<Pilot> = await this.service.getPilotById(value);
 
-            const pilotDto: PilotDto =  PilotMappers.toPilotDto(pilot);
+            if (!result.ok)
+                return res.status(result.error.code).json(result);
+
+            const pilotDto: PilotDto =  PilotMappers.toPilotDto(result.value);
             return res.status(200).json(pilotDto);
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({name: error.name, message: error.message});
-            return res.status(500).json({ message: 'Failed to get pilot.' });
+            return res.status(500).json({ message: 'Server Error: Failed to get pilot.' });
         }
     }
 
@@ -94,17 +100,20 @@ export class PilotController {
         try{
             const id: number = Number(req.params.id);
 
-            if (isNaN(id)) 
-                throw new BadRequestError('Pilot id');
+            if (isNaN(id)) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
+                
+            const result: Result<string> = await this.service.deletePilotById(id);
 
-            await this.service.deletePilotById(id);
+            if (!result.ok)
+                return res.status(result.error.code).json(result);
 
-            return res.status(200).json({ message: 'Pilot Deleted' });
+            return res.status(200).json({ result });
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({name: error.name, message: error.message});
-            return res.status(500).json({ message: 'Failed to delete pilot.'});
+            return res.status(500).json({ message: 'Server Error: Failed to delete pilot.'});
         }
     }
 }

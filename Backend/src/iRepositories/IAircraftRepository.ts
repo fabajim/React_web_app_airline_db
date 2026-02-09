@@ -6,5 +6,5 @@ export interface IAircraftRepository {
     findAll(): Promise<Aircraft[]>;
     getById(id: number): Promise<Aircraft | null>;
     create(data: CreateAircraftDto): Promise<Aircraft | null>;
-    updateById(id: number, data: UpdateAircraftDto): Promise<Aircraft>;
+    updateById(id: number, data: UpdateAircraftDto): Promise<Aircraft | null>;
 }

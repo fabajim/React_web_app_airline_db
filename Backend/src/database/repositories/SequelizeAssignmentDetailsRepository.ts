@@ -2,7 +2,6 @@ import { AssignmentDetailsDto } from "../../dtos/assignmentDetails/AssignmentDet
 import { CreateAssignmentDto } from "../../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { IAssignmentDetailsRepository } from "../../iRepositories/IAssignmentDetailsRepository";
 import { AssignmentDetails } from "../../models/AssignmentDetails";
-import { NotFoundError } from "../../shared/Errors";
 import { AircraftModel } from "../models/AircraftModel";
 import { AirportModel } from "../models/AirportModel";
 import { AssignmentDetailsModel } from "../models/AssignmentDetailsModel";
@@ -81,28 +80,32 @@ IAssignmentDetailsRepository {
         return row ? this.toDomainModel(row) : null
     }
 
-    async closeAssignment(id: number): Promise<void> {
+    async closeAssignment(id: number): Promise<boolean> {
         const row: AssignmentDetailsModel | null = 
             await AssignmentDetailsModel.findByPk(id);
         
         if (row === null)
-            throw new NotFoundError('Assignment', id);
+            return false;
 
         await row.update({
             isActive: false
         });
+
+        return true;
     }
 
-        async undoClosedAssignment(id: number): Promise<void> {
+        async undoClosedAssignment(id: number): Promise<boolean> {
         const row: AssignmentDetailsModel | null = 
             await AssignmentDetailsModel.findByPk(id);
         
         if (row === null)
-            throw new NotFoundError('Assignment', id);
+            return false;
 
         await row.update({
             isActive: true
         });
+
+        return true;
     }
     
     async createAssignment(data: CreateAssignmentDto): Promise<AssignmentDetails> {

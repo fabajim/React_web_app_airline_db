@@ -7,7 +7,8 @@ import { CreateAircraftDto } from "../dtos/aircraft/CreateAircraftDto";
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
 import { UpdateAircraftDto } from "../dtos/aircraft/UpdateAircraftDto";
-import { BadRequestError, HttpError } from "../shared/Errors";
+import { Result } from "../responses/types";
+import { BadRequest, BadValidation } from "../responses/Responses";
 
 export class AircraftController {
     constructor(private readonly service: AircraftServices) {}
@@ -20,8 +21,6 @@ export class AircraftController {
             return res.status(200).json(aircraftDto);
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message })
             return res.status(500).json({ message: `Server Error Failed to get Aircraft.` })
         }
     }
@@ -30,18 +29,21 @@ export class AircraftController {
         try {
             const id: number = Number(req.params.id);
 
-            if (isNaN(id))
-                throw new BadRequestError('Aircraft id');
+            if (isNaN(id)) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const aircraft: Aircraft = await this.service.getAircraftById(id);
-            const aircraftDto: AircraftDto = AircraftMappers.toAircraftDto(aircraft);
+            const aircraft: Result<Aircraft> = await this.service.getAircraftById(id);
+
+            if (!aircraft.ok)
+                return res.status(aircraft.error.code).json(aircraft);
+
+            const aircraftDto: AircraftDto = AircraftMappers.toAircraftDto(aircraft.value);
 
             return res.status(200).json(aircraftDto);
         } 
         catch (error) {
-            if (error instanceof HttpError) {
-                return res.status(error.statusCode).json({ name: error.name, message: error.message});
-            }
             return res.status(500).json({ message: `Server Error failed to get Aircraft.` })
         }
     }
@@ -51,15 +53,18 @@ export class AircraftController {
             const aircraftDto: CreateAircraftDto = plainToInstance(CreateAircraftDto, req.body);
             const errors: ValidationError[] = await validate(aircraftDto);
 
-            if (errors.length > 0)
-                throw new BadRequestError('Aircraft')
+            if (errors.length > 0){
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const aircraft: Aircraft = await this.service.createAircraft(aircraftDto);
-            return res.status(201).json(AircraftMappers.toAircraftDto(aircraft));
+            const aircraft: Result<Aircraft> = await this.service.createAircraft(aircraftDto);
+
+            if (!aircraft.ok)
+                return res.status(aircraft.error.code).json(aircraft)
+            return res.status(201).json(AircraftMappers.toAircraftDto(aircraft.value));
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server Error: Failed to add aircraft.` })
         }
     }
@@ -70,16 +75,19 @@ export class AircraftController {
             const errors: ValidationError[] = await validate(updateDto);
             const id: number = Number(req.params.id);
 
-            if (errors.length > 0 || isNaN(id))
-                throw new BadRequestError('Aircraft');
+            if (errors.length > 0 || isNaN(id)) {
+                const response: BadRequest = new BadValidation();
+                return res.status(response.code).json(response);
+            }
 
-            const aircraft: Aircraft = await this.service.UpdateAircraftById(id, updateDto);
+            const aircraft: Result<Aircraft> = await this.service.UpdateAircraftById(id, updateDto);
 
-            return res.status(201).json(AircraftMappers.toAircraftDto(aircraft));
+            if (!aircraft.ok)
+                return res.status(aircraft.error.code).json(aircraft);
+
+            return res.status(201).json(AircraftMappers.toAircraftDto(aircraft.value));
         } 
         catch (error) {
-            if (error instanceof HttpError) 
-                return res.status(error.statusCode).json({ name: error.name ,message: error.message });
             return res.status(500).json({ message: `Server error Failed to update aircraft.` })
         }
     }

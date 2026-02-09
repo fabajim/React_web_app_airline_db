@@ -5,7 +5,6 @@ import { Airport } from "../../models/Airport";
 import { AirportAttributes, AirportModel } from "../models/AirportModel";
 import { CreateAirportDto } from "../../dtos/airport/CreateAirportDto";
 import { UpdateAirportDto } from "../../dtos/airport/UpdateAirportDto";
-import { NotFoundError } from "../../shared/Errors";
 
 export class SequelizeAirportRepository implements IAirportRepository {
 
@@ -18,20 +17,21 @@ export class SequelizeAirportRepository implements IAirportRepository {
         return this.toAirport(airport);
     }
 
-    async deleteAirport(id: number): Promise<void> {
+    async deleteAirport(id: number): Promise<boolean> {
         const airportToDelete: AirportModel | null = await AirportModel.findByPk(id);
 
         if (!airportToDelete)
-            throw new NotFoundError('Airport', id);
+            return false;
 
         await airportToDelete.destroy();
+        return true;
     }
 
-    async updateAirport(id: number, data: UpdateAirportDto): Promise<Airport> {
+    async updateAirport(id: number, data: UpdateAirportDto): Promise<Airport|null> {
         const airportToUpdate: AirportModel | null = await AirportModel.findByPk(id);
 
         if (!airportToUpdate)
-            throw new NotFoundError('Airport', id);
+            return null;
 
         await airportToUpdate.update({
             city: data.city,

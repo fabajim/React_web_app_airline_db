@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { AssignmentDetailsDto } from "../dtos/assignmentDetails/AssignmentDetailsDto";
 import { AssignmentDetailsServices } from "../services/AssignmentDetailsServices";
-import { BadRequestError, HttpError } from "../shared/Errors";
 import { CreateAssignmentDto } from "../dtos/assignmentDetails/CreateAssignmentDetailsDto";
 import { plainToInstance } from "class-transformer";
 import { validate, ValidationError } from "class-validator";
@@ -9,6 +8,8 @@ import { RemovePilotDto } from "../dtos/assignmentDetails/RemovePilotDto";
 import { error } from "node:console";
 import { AddPilotAssignmentDto } from "../dtos/assignmentDetails/AddPilotAssignmentDto";
 import { UpdateAssignmentLocation } from "../dtos/assignmentDetails/UpdateAssignmentLocation";
+import { BadRequest, HTTP_Error_Response } from "../responses/Responses";
+import { Result } from "../responses/types";
 
 export class AssignmentsController {
     constructor(private readonly service: AssignmentDetailsServices) {}
@@ -22,8 +23,6 @@ export class AssignmentsController {
             return res.status(200).json(assignmentsDto);
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }
@@ -37,8 +36,6 @@ export class AssignmentsController {
             return res.status(200).json(assignmentsDto);
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }
@@ -52,8 +49,6 @@ export class AssignmentsController {
             return res.status(200).json(assignmentsDto);
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }
@@ -63,17 +58,22 @@ export class AssignmentsController {
         try{
             const id: number = Number(req.params.id);
 
-            if (isNaN(id))
-                throw new BadRequestError('Assignment');
+            if (isNaN(id)) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const viewDto: AssignmentDetailsDto =
+            const viewDto: Result<AssignmentDetailsDto> =
                 await this.service.getByIdToView(id);
             
-            return res.status(200).json(viewDto);
+            if(!viewDto.ok) {
+                const err: HTTP_Error_Response = viewDto.error;
+                return res.status(err.code).json(err);
+            }
+            
+            return res.status(200).json(viewDto.value);
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }
@@ -85,16 +85,21 @@ export class AssignmentsController {
             const errors: ValidationError[] = await validate(newDto);
 
             if (errors.length > 0) {
-                console.log("Error found", errors)
-                throw new BadRequestError('Assignment');
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
             }
 
-            const newAssignment: AssignmentDetailsDto = await this.service.createAssignmentDetail(newDto);
-            return res.status(201).json({ newAssignment });
+            const newAssignment: Result<AssignmentDetailsDto> = 
+              await this.service.createAssignmentDetail(newDto);
+            
+            if (!newAssignment.ok) {
+                const err: HTTP_Error_Response = newAssignment.error
+                return res.status(err.code).json(err);
+            }  
+              
+            return res.status(201).json( newAssignment.value );
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to create assignments.` });
         }
     }
@@ -102,25 +107,25 @@ export class AssignmentsController {
     async removePilotFromAssignment(req: Request, res: Response):
     Promise<Response<AssignmentDetailsDto>> {
         try {
-            const currentId = Number(req.params.id);
-
-            if (isNaN(currentId))
-                throw new BadRequestError('Id missing from assignment.');
+            const id = Number(req.params.id);
 
             const removeDto: RemovePilotDto = plainToInstance(RemovePilotDto, req.body);
             const errors: ValidationError[] = await validate(removeDto);
 
-            if (errors.length > 0) 
-                throw new BadRequestError('New Assignment DTO');
+            if (isNaN(id)  ||errors.length > 0) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const updatedAssignment: AssignmentDetailsDto = 
-            await this.service.removePilotFromAssignment(currentId, removeDto); 
+            const updatedDto: Result<AssignmentDetailsDto> = 
+              await this.service.removePilotFromAssignment(id, removeDto);
+              
+            if (!updatedDto.ok)
+                return res.status(updatedDto.error.code).json(updatedDto.error);
             
-            return res.status(200).json({ updatedAssignment });
+            return res.status(200).json(updatedDto.value);
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }
@@ -128,23 +133,26 @@ export class AssignmentsController {
     async addPilotToAssignment(req: Request, res: Response):
     Promise<Response<AssignmentDetailsDto>> {
         try {
-            const assignmentId: number = Number(req.params.id);
-
-            if (isNaN(assignmentId))
-                throw new BadRequestError('Assignment Id needed.');
-
+            const id: number = Number(req.params.id);
             const pilot: AddPilotAssignmentDto = plainToInstance(AddPilotAssignmentDto, req.body);
             const errors: ValidationError[] = await validate(pilot);
 
-            if (errors.length > 0)
-                throw new BadRequestError("Assignment data not valid.");
+            if (isNaN(id)  || errors.length > 0) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const pilotAdded: AssignmentDetailsDto = await this.service.addPilot(assignmentId, pilot);
-            return res.status(201).json({ pilotAdded })
+            const pilotAdded: Result<AssignmentDetailsDto> = 
+              await this.service.addPilot(id, pilot);
+            
+            if (!pilotAdded.ok) {
+                const err: HTTP_Error_Response = pilotAdded.error
+                return res.status(err.code).json(err)
+            }
+
+            return res.status(201).json( pilotAdded.value )
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }
@@ -152,27 +160,27 @@ export class AssignmentsController {
     async updateAssignmentLocation(req: Request, res: Response):
     Promise<Response<AddPilotAssignmentDto>> {
         try {
-            const assignmentId: number = Number(req.params.id);
-
-            if (isNaN(assignmentId))
-                throw new BadRequestError('Assignment Id needed.');
-
+            const id: number = Number(req.params.id);
             const dto: UpdateAssignmentLocation = 
               plainToInstance(UpdateAssignmentLocation, req.body);
-            
             const errors: ValidationError[] = await validate(dto);
 
-            if (errors.length > 0)
-                throw new BadRequestError('Assignment data not valid.')
+            if (isNaN(id)  ||errors.length > 0) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const newLocationDto: AssignmentDetailsDto = 
-              await this.service.updateLocation(assignmentId,dto);
+            const newLocationDto: Result<AssignmentDetailsDto> = 
+              await this.service.updateLocation(id, dto);
+
+            if (!newLocationDto.ok) {
+                const err: HTTP_Error_Response = newLocationDto.error;
+                return res.status(err.code).json(err);
+            }
               
-            return res.status(201).json({ newLocationDto });
+            return res.status(201).json( newLocationDto.value );
         }
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
             return res.status(500).json({ message: `Server error failed to get assignments.` });
         }
     }

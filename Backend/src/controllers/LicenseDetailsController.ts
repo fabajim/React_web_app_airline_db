@@ -6,7 +6,8 @@ import { validate, ValidationError } from "class-validator";
 import { LicenseDetailsDto } from "../dtos/licenseDetails/LicenseDetailDto";
 import { LicenseDetailsMapper } from "../mappers/LicenseDetailsMapper";
 import { LicenseDetails } from "../models/LicenseDetails";
-import { BadRequestError, HttpError } from "../shared/Errors";
+import { BadRequest } from "../responses/Responses";
+import { Result } from "../responses/types";
 
 export class LicenseDetailsController {
     constructor(private readonly service: LicenseDetailsServices) {}
@@ -17,18 +18,23 @@ export class LicenseDetailsController {
               plainToInstance(CreateLicenseDetailsDto, req.body);
             const errors: ValidationError[] = await validate(createLicenseDetailDto);
 
-            if (errors.length > 0) 
-                throw new BadRequestError('LicenseDetail');
+            if (errors.length > 0) {
+                const response: BadRequest = new BadRequest();
+                return res.status(response.code).json(response);
+            }
 
-            const licenseDetail: LicenseDetails = await this.service.createLicenseDetail(createLicenseDetailDto,
-                Number(createLicenseDetailDto.pilotID), Number(createLicenseDetailDto.licenseID));
+            const licenseDetail: Result<LicenseDetails> = 
+              await this.service.createLicenseDetail(
+              createLicenseDetailDto,
+              Number(createLicenseDetailDto.pilotID),
+              Number(createLicenseDetailDto.licenseID));
             
-            return res.status(201).json(LicenseDetailsMapper.toLicenseDetailsDto(licenseDetail));
+            if (!licenseDetail.ok)
+                return res.status(licenseDetail.error.code).json(licenseDetail);
+            
+            return res.status(201).json(LicenseDetailsMapper.toLicenseDetailsDto(licenseDetail.value));
         } 
         catch (error) {
-            if (error instanceof HttpError)
-                return res.status(error.statusCode).json({ name: error.name, message: error.message });
-            console.log(error);
             return res.status(500).json({ message: 'Server Error: Could not add license to pilot.' });
         }
     }

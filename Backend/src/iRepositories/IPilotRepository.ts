@@ -8,5 +8,5 @@ export interface IPilotRepository {
     update(id: number, data: UpdatePilotDto): Promise<Pilot | null>;
     findAll(query: PilotQueryObject): Promise<Pilot[]>;
     findById(id: number): Promise<Pilot | null>;
-    deleteById(id: number): void;
+    deleteById(id: number): Promise<boolean>;
 }

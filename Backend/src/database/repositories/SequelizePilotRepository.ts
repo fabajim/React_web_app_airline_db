@@ -3,7 +3,6 @@ import { CreatePilotDto } from "../../dtos/Pilot/CreatePilotDto";
 import { IPilotRepository } from "../../iRepositories/IPilotRepository";
 import { Pilot } from "../../models/Pilot";
 import { PilotAttributes, PilotModel } from "../models/PilotModel";
-import { NotFoundError } from "../../shared/Errors";
 import { UpdatePilotDto } from "../../dtos/Pilot/UpdatePilotDto";
 import { PilotQueryObject } from "../../helpers/queryObjects/PilotQueryObject";
 import { LicenseModel } from "../models/LicenseModel";
@@ -26,13 +25,15 @@ export class SequelizePilotRepository implements IPilotRepository {
         return this.toPilot(pilotToUpdate);
     }
 
-    async deleteById(id: number): Promise<void> {
+    async deleteById(id: number): Promise<boolean> {
         const pilotToDelete: PilotModel | null = await PilotModel.findByPk(id);
 
         if (!pilotToDelete)
-            throw new NotFoundError('Pilot', id);
+            return false;
 
         await pilotToDelete.destroy();
+
+        return true;
     }
 
     async findById(id: number): Promise<Pilot | null> {
@@ -54,7 +55,6 @@ export class SequelizePilotRepository implements IPilotRepository {
     
     async create(data: CreatePilotDto): Promise<Pilot> {
         const pilot: PilotModel = await PilotModel.create(data);
-
         return this.toPilot(pilot);
     }
     

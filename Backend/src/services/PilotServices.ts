@@ -3,7 +3,8 @@ import { UpdatePilotDto } from '../dtos/Pilot/UpdatePilotDto';
 import { PilotQueryObject } from '../helpers/queryObjects/PilotQueryObject';
 import { IPilotRepository } from '../iRepositories/IPilotRepository'
 import { Pilot } from '../models/Pilot';
-import { NotFoundError } from '../shared/Errors';
+import { NotFound } from '../responses/Responses';
+import { Result } from '../responses/types';
 
 export class PilotServices {
     constructor(private readonly pilotRepo: IPilotRepository) {}
@@ -13,29 +14,34 @@ export class PilotServices {
         return pilot;
     }
 
-    async updatePilot(id: number, dto: UpdatePilotDto): Promise<Pilot> {
+    async updatePilot(id: number, dto: UpdatePilotDto): Promise<Result<Pilot>> {
         const pilot: Pilot | null = await this.pilotRepo.update(id, dto);
 
         if (!pilot)
-            throw new NotFoundError('Pilot', id);
+            return { ok: false, error: new NotFound(id, 'Pilot') }
 
-        return pilot;
+        return { ok: true, value:pilot };
     }
 
     async getAllPilots(pilotQuery: PilotQueryObject): Promise<Pilot[]> {
         return this.pilotRepo.findAll(pilotQuery);
     }
 
-    async getPilotById(id: number): Promise<Pilot> {
+    async getPilotById(id: number): Promise<Result<Pilot>> {
         const pilot: Pilot | null = await this.pilotRepo.findById(id);
 
         if (!pilot)
-            throw new NotFoundError('Pilot', id);
+            return { ok: false, error: new NotFound(id, 'Pilot') };
 
-        return pilot;
+        return { ok: true, value: pilot };
     }
 
-    async deletePilotById(id: number) {
-        await this.pilotRepo.deleteById(id);
+    async deletePilotById(id: number): Promise<Result<string>> {
+        const isDeleted: boolean = await this.pilotRepo.deleteById(id);
+
+        if(!isDeleted)
+            return { ok: false, error: new NotFound(id, 'Pilot') }
+
+        return { ok: true, value: "Delete Successful." }
     }
 }
