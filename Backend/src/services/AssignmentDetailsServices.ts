@@ -84,15 +84,6 @@ export class AssignmentDetailsServices {
                  or invalid data for creating a new assignment.`
             ) }
         }
-
-        // if (current.pilotId === null)
-        //     throw new BadRequestError('Cannot remove null pilot!');
-
-        // if (!this.isSameAirportAndAircraft(current, dto))
-        //     throw new BadRequestError('Aircraft and airport must be the same.');
-
-        // if (!await this.validateCreateDtoData(createDto))
-        //     throw new BadRequestError('Invalid data for creating new assignment.');
         
         current.updateAssignmentStatus(false);
         await this.repo.closeAssignment(id);
@@ -114,17 +105,11 @@ export class AssignmentDetailsServices {
             return { ok: false, error: new NotFound(id, "Assignment") };
 
         if (
-            current.pilotId !== null                    ||
+            current.pilotId !== null ||
             !this.isSameAirportAndAircraft(current, dto)
         ) {
             return { ok: false, error: new BadValidation() }
         }
-
-        // if(current.pilotId !== null)
-        //     throw new BadRequestError('Current pilot must be removed first.')
-
-        // if (!this.isSameAirportAndAircraft(current, dto))
-        //     throw new BadRequestError('Aircraft and airport must be the same.');
 
         const createDto: CreateAssignmentDto = {
             pilotID: dto.pilotID,
@@ -162,15 +147,6 @@ export class AssignmentDetailsServices {
         ){
             return { ok: false, error: new BadValidation("Aircraft, Pilot, and Airport cannot change.") } ;
         }
-
-        // if (current.aircraftId !== dto.aircraftID)
-        //     return { ok: false, error: new BadValidation("Aircraft cannot change.") } ;
-
-        // if (current.pilotId !== dto.pilotID)
-        //     return { ok: false, error: new BadValidation("Pilot cannot change.") };
-
-        // if (current.airportId === dto.airportID)
-        //     return { ok: false, error: new BadValidation("Airport cannot change.") };
 
         const createDto: CreateAssignmentDto = {
             pilotID: dto.pilotID,
@@ -229,7 +205,7 @@ export class AssignmentDetailsServices {
       boolean {
 
         if (currentAssignment.aircraftId !== update.aircraftID ||
-            currentAssignment.airportId !== update.airportID ||
+            currentAssignment.airportId !== update.airportID   ||
             !currentAssignment.isActive) 
             return false;
         
